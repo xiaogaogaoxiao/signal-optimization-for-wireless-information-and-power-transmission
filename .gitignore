@@ -35,3 +35,4 @@ slprj/
 sccprj/
 codegen/
 octave-workspace
+*.ini
