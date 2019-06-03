@@ -1,5 +1,6 @@
 #ignore thumbnails created by windows
 Thumbs.db
+*.ini
 
 #Ignore files build by Visual Studio
 *.obj
@@ -35,4 +36,3 @@ slprj/
 sccprj/
 codegen/
 octave-workspace
-*.ini
