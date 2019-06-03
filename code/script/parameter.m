@@ -1,3 +1,5 @@
+clc; clear; close all;
+
 % diode k-parameter
 k2 = 0.0034; k4 = 0.3829;
 % truncation order
@@ -28,6 +30,7 @@ fCarrier = fCenter: fGap: fCenter + (nSubband - 1) * fGap;
 pNoiseDbm = -40; pNoise = dbm2pow(pNoiseDbm);
 % SNR
 snrDb = pTxDbm - pNoiseDbm;
+% power splitting ratio
+rho = 1;
 
-
-save('..\data\param.mat');
+save('..\data\parameter.mat');

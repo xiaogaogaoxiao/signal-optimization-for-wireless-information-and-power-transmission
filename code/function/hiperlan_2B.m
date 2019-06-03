@@ -1,6 +1,6 @@
-function [dTap, gTap] = hyperlan2B()
+function [dTap, gTap] = hiperlan_2B()
 % Function:
-%   - simulate a multipath channel based on HIPERLAN/2, model B
+%   - generate complex gain and delay of taps based on HIPERLAN/2, model B
 %
 % InputArg(s):
 %   - none
