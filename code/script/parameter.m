@@ -15,7 +15,7 @@ gRxDbi = 2; gRx = db2pow(gRxDbi);
 % path loss
 plDb = 58; pl = db2pow(plDb);
 % average transmit power
-pTxDbm = -20; powerTx = dbm2pow(pTxDbm);
+pTxDbm = -20; pTx = dbm2pow(pTxDbm);
 % bandwidth
 b = 1e6;
 % number of transmit antenna
@@ -31,6 +31,6 @@ pNoiseDbm = -40; pNoise = dbm2pow(pNoiseDbm);
 % SNR
 snrDb = pTxDbm - pNoiseDbm;
 % power splitting ratio
-rho = 1;
+rho = 0.5;
 
 save('..\data\parameter.mat');

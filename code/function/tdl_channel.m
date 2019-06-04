@@ -1,6 +1,6 @@
-function [hChannel] = channel(nSubband, nTx, fCarrier)
+function [hChannel] = tdl_channel(nSubband, nTx, fCarrier)
 % Function:
-%   - simulate a multipath channel based on tapped-delay line
+%   - simulate a multipath channel based on tapped-delay line model
 %
 % InputArg(s):
 %   - nSubband: number of subbands/subcarriers

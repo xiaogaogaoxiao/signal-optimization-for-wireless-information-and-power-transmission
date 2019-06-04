@@ -1,21 +1,31 @@
-function [temp] = waveform(nSubband, nTx, fCarrier)
-%POWER_WAVEFORM Summary of this function goes here
-%   Detailed explanation goes here
+function [zDc] = target_function(nSubband, nTx, sPower, sInfo, psiPower, psiInfo, aChannel, k2, k4, rho, rAntenna)
+% Function:
+%   - obtain the 2nd-order (linear) and 4th-order (fundamental nonlinear)
+%     characteristics of multicarrier unmodulated (multisine) power  
+%     waveform and modulated information waveform
+%
+% InputArg(s):
+%   - nSubband: number of subbands/subcarriers
+%   - nTx: number of transmit antennas
+%   - sPower: optimum power amplitude as CVX variable
+%   - sInfo: optimum information amplitude as CVX variable
+%   - psiPower: combined (channel + power waveform) phase
+%   - psiInfo: combined (channel + information waveform) phase
+%   - aChannel: amplitude of channel impulse response
+%   - k2, k4: diode k-parameters
+%   - rho: power splitting ratio
+%   - rAntenna: antenna resistance
+%
+% OutputArg(s):
+%   - zDc: target posynomial to maximise the output current
+%
+% Comments:
+%   - only consider the most fundamental nonlinear model (i.e. truncate at 
+%     order 4)
+%
+% Author & Date: Yang (i@snowztail.com) - 04 Jun 19
 
-% simulate the multipath channel
-[hChannel] = channel(nSubband, nTx, fCarrier);
-% amplitude of the impulse response
-aChannel = abs(hChannel);
-%% waveform optimisation
-cvx_begin gp
-% optimum tone amplitude: to solve
-variables sPower(nSubband, nTx) sInfo(nSubband, nTx)
-% optimum tone phase: negative channel phase
-phiPower = -angle(hChannel); phiInfo = -angle(hChannel);
-% combined (channel + power/info waveform) phase: zero
-psiPower = phiPower + angle(hChannel); psiInfo = phiInfo + angle(hChannel);
-
-% time-average of power(multisine) signal to the second order
+% time-average of power (multisine) signal to the second order
 yPower2 = 0;
 for n = 1: nSubband
     for m0 = 1: nTx
@@ -26,7 +36,7 @@ for n = 1: nSubband
 end
 clearvars n m0 m1;
 
-% time-average of power(multisine) signal to the fourth order
+% time-average of power (multisine) signal to the fourth order
 yPower4 = 0;
 for n0 = 1: nSubband
     for n1 = 1: nSubband
@@ -50,7 +60,7 @@ for n0 = 1: nSubband
 end
 clearvars n0 n1 n2 n3 m0 m1 m2 m3;
 
-% expectation of time-average of information(modulated) signal to the second order
+% expectation of time-average of information (modulated) signal to the second order
 yInfo2 = 0;
 for n = 1: nSubband
     for m0 = 1: nTx
@@ -61,7 +71,7 @@ for n = 1: nSubband
 end
 clearvars n m0 m1;
 
-% expectation of time-average of information(modulated) signal to the fourth order
+% expectation of time-average of information (modulated) signal to the fourth order
 yInfo4 = 0;
 for n0 = 1: nSubband
     for n1 = 1: nSubband
@@ -77,5 +87,8 @@ for n0 = 1: nSubband
     end
 end
 clearvars n0 n1 m0 m1 m2 m3;
+
+% target function
+zDc = k2 * rho * rAntenna * yPower2 + k4 * rho ^ 2 * rAntenna ^ 2 * yPower4 + k2 * rho * rAntenna * yInfo2 + k4 * rho ^ 2 * rAntenna ^ 2 * yInfo4 + 6 * k4 * rho ^ 2 * rAntenna ^ 2 * yPower2 * yInfo2;
 end
 
