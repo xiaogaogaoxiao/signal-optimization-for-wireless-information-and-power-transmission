@@ -1,48 +1,48 @@
-function [iMutual, gn, nTermGn] = mutual_information(nSubband, nTx, sInfo, aChannel, pNoise, rho)
+function [mutualInfo, monomialOfMutualInfo] = mutual_information(nSubbands, nTxs, infoAmplitude, channelAmplitude, noisePower, splitRatio)
 % Function:
-%   - calculate the maximum achievable mutual information
-%   - decomposite the posynomials that contribute to mutual information
+%   - formulate the maximum achievable mutual information with the provided parameters
+%   - decomposite the posynomials that contribute to mutual information as sum of monomials
 %
 % InputArg(s):
-%   - nSubband: number of subbands/subcarriers
-%   - nTx: number of transmit antennas
-%   - sInfo: optimum information amplitude as CVX variable
-%   - aChannel: amplitude of channel impulse response
-%   - pNoise: noise power
-%   - rho: power splitting ratio
+%   - nSubbands: number of subbands (subcarriers)
+%   - nTxs: number of transmit antennas
+%   - infoAmplitude: optimum amplitude assigned to information waveform [CVX variable]
+%   - channelAmplitude: amplitude of channel impulse response
+%   - noisePower: noise power
+%   - splitRatio: power splitting ratio
 %
 % OutputArg(s):
-%   - iMutual: mutual information in Nats
-%   - gn: monomial components of posynomials that contribute to mutual 
-%   information
-%   - nTermGn: number of terms in the posynomial iMutual (Kn)
+%   - mutualInfo: maximum achievable mutual information
+%   - monomialOfMutualInfo: monomial components of posynomials that contribute to mutual information
 %
 % Comments:
-%   - there is always a constant term (i.e. 1) in each posynomials
+%   - there is a constant term (i.e. 1) in each posynomial
 %
 % Author & Date: Yang (i@snowztail.com) - 04 Jun 19
 
 
-% number of terms in the result posynomial (Kn)
-nTermGn = 1 + nTx ^ 2;
+% number of terms (Kn) in the result posynomials
+nTerms = 1 + nTxs ^ 2;
 
 cvx_begin gp
-variable gn(nSubband, nTermGn)
-% constant term 1
-gn(:, 1) = 1;
 
-for n = 1: nSubband
-%     c = 0; 
-    iTerm = 1;
-    for m0 = 1: nTx
-        for m1 = 1: nTx
-            iTerm = iTerm + 1;
-            gn(n, iTerm) = (1 - rho) / pNoise * (sInfo(n, m0) * aChannel(n, m0)) * (sInfo(n, m1) * aChannel(n, m1));
-%             c = c + (sInfo(n, m0) * aChannel(n, m0)) * (sInfo(n, m1) * aChannel(n, m1));
+    variable monomialOfMutualInfo(nSubbands, nTerms)
+
+    % a constant term 1 exists in each posynomial
+    monomialOfMutualInfo(:, 1) = 1;
+
+    for iSubband = 1: nSubbands
+        iTerm = 1;
+        for iTx0 = 1: nTxs
+            for iTx1 = 1: nTxs
+                iTerm = iTerm + 1;
+                monomialOfMutualInfo(iSubband, iTerm) = (1 - splitRatio) / noisePower * (infoAmplitude(iSubband, iTx0) * channelAmplitude(iSubband, iTx0)) * (infoAmplitude(iSubband, iTx1) * channelAmplitude(iSubband, iTx1));
+            end
         end
     end
-%     iMutual = iMutual + log(1 + (1 - rho) / pNoise * c);
-end
-iMutual = log(prod(sum(gn, 2))) / log(2);
+    mutualInfo = log(prod(sum(monomialOfMutualInfo, 2))) / log(2);
+    
+cvx_end
+
 end
 
