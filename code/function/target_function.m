@@ -1,8 +1,8 @@
 function [zDc, g, nTerm] = target_function(nSubband, nTx, sPower, sInfo, psiPower, psiInfo, aChannel, k2, k4, rho, rAntenna)
 % Function:
-%   - obtain the 2nd-order (linear) and 4th-order (fundamental nonlinear)
-%     characteristics of multicarrier unmodulated (multisine) power
-%     waveform and modulated information waveform
+%   - link the target function zDc to multicarrier unmodulated (multisine)
+%   power waveform and modulated information waveform
+%   - decomposite zDc as sum of monomials
 %
 % InputArg(s):
 %   - nSubband: number of subbands/subcarriers

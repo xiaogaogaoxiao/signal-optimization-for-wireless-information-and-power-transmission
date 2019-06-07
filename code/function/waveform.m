@@ -16,7 +16,7 @@ cvx_begin gp
     % combined (channel + power/info waveform) phase: zero
     psiPower = phiPower + angle(hChannel); psiInfo = phiInfo + angle(hChannel);
     % model target function as posynomial
-    [zDc, g, nTerm] = target_function(nSubband, nTx, sPower, sInfo, psiPower, psiInfo, aChannel, k2, k4, rho, rAntenna);
+%     [zDc, g, nTerm] = target_function(nSubband, nTx, sPower, sInfo, psiPower, psiInfo, aChannel, k2, k4, rho, rAntenna);
     % calculate the achievable mutual information
     [iMutual] = mutual_information(nSubband, nTx, sInfo, aChannel, pNoise, rho);
     
