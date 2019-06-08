@@ -32,5 +32,9 @@ noisePowerDbm = -40; noisePower = dbm2pow(noisePowerDbm);
 snrDb = txPowerDbm - noisePowerDbm; snr = db2pow(snrDb);
 % power splitting ratio
 splitRatio = 0.5;
+% max number of iterations
+iterMax = 1e5;
+% rate constraint
+rateMin = 1;
 
 clearvars eirpDbm rxGainDbi pathLossDb txPowerDbm noisePowerDbm snrDb

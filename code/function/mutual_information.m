@@ -1,4 +1,4 @@
-function [mutualInfo, monomialOfMutualInfo] = mutual_information(nSubbands, nTxs, infoAmplitude, channelAmplitude, noisePower, splitRatio)
+function [mutualInfo, monomialOfMutualInfo, exponentOfMutualInfo] = mutual_information(nSubbands, nTxs, infoAmplitude, channelAmplitude, noisePower, splitRatio)
 % Function:
 %   - formulate the maximum achievable mutual information with the provided parameters
 %   - decomposite the posynomials that contribute to mutual information as sum of monomials
@@ -14,6 +14,7 @@ function [mutualInfo, monomialOfMutualInfo] = mutual_information(nSubbands, nTxs
 % OutputArg(s):
 %   - mutualInfo: maximum achievable mutual information
 %   - monomialOfMutualInfo: monomial components of posynomials that contribute to mutual information
+%   - exponentOfMutualInfo: exponent of the mutual information in the geometric mean
 %
 % Comments:
 %   - there is a constant term (i.e. 1) in each posynomial
@@ -40,7 +41,10 @@ cvx_begin gp
             end
         end
     end
-    mutualInfo = log(prod(sum(monomialOfMutualInfo, 2))) / log(2);
+    posynomialOfMutualInfo = sum(monomialOfMutualInfo, 2);
+    exponentOfMutualInfo = monomialOfMutualInfo ./ repmat(posynomialOfMutualInfo, [1, nTerms]);
+    
+    mutualInfo = log(prod(posynomialOfMutualInfo)) / log(2);
     
 cvx_end
 

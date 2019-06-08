@@ -1,4 +1,4 @@
-function [target, monomialOfTarget] = target(nSubbands, nTxs, powerAmplitude, infoAmplitude, channelAmplitude, k2, k4, splitRatio, resistance)
+function [targetFun, monomialOfTarget, exponentOfTarget] = target(nSubbands, nTxs, powerAmplitude, infoAmplitude, channelAmplitude, k2, k4, splitRatio, resistance)
 % Function:
 %   - formulate the target proportional to the output current as a function of amplitudes of multicarrier unmodulated (multisine) power waveform and modulated information waveform
 %   - decomposite target posynomial as sum of monomials
@@ -16,6 +16,7 @@ function [target, monomialOfTarget] = target(nSubbands, nTxs, powerAmplitude, in
 % OutputArg(s):
 %   - target: target posynomial (zDc) that proportional to the output current
 %   - monomialOfTarget: monomials (g) as components of the target posynomial
+%   - exponentOfTarget: exponent of the target function in the geometric mean
 %
 % Comments:
 %   - only consider the most fundamental nonlinear model (i.e. truncate at the fourth order)
@@ -113,7 +114,10 @@ cvx_begin gp
 
     monomialOfTarget = [monomialOfTargetP2; monomialOfTargetP4; monomialOfTargetI2; monomialOfTargetI4; monomialOfTargetP2I2];
     % sum monomials to obtain target posynomial
-    target = sum(monomialOfTarget);
+    targetFun = sum(monomialOfTarget);
+    
+    % exponents of geometric means
+    exponentOfTarget = monomialOfTarget / targetFun;
 
 cvx_end
 
