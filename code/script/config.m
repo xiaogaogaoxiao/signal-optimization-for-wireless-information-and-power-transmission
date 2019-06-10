@@ -30,11 +30,9 @@ carrierFreq = centerFreq: gapFreq: centerFreq + (nSubbands - 1) * gapFreq;
 noisePowerDbm = -40; noisePower = dbm2pow(noisePowerDbm);
 % SNR
 snrDb = txPowerDbm - noisePowerDbm; snr = db2pow(snrDb);
-% power splitting ratio
-splitRatio = 0.5;
 % max number of iterations
 iterMax = 1e5;
 % rate constraint
-rateMin = 1;
+rateMin = 1e0;
 
 clearvars eirpDbm rxGainDbi pathLossDb txPowerDbm noisePowerDbm snrDb
