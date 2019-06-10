@@ -32,12 +32,25 @@ nTermsI2 = nSubbands * nTxs ^ 2;
 nTermsI4 = (nSubbands * nTxs ^ 2) ^ 2;
 nTermsP2I2 = (nSubbands * nTxs ^ 2) ^ 2;
 
+% type of variables
+isKnown = isa(infoAmplitude, 'double');
+
 % initialize
-monomialOfTargetP2 = zeros(1, nTermsP2);
-monomialOfTargetP4 = zeros(1, nTermsP4);
-monomialOfTargetI2 = zeros(1, nTermsI2);
-monomialOfTargetI4 = zeros(1, nTermsI4);
-monomialOfTargetP2I2 = zeros(1, nTermsP2I2);
+if isKnown
+    % placeholder for actual values (doubles)
+    monomialOfTargetP2 = zeros(1, nTermsP2);
+    monomialOfTargetP4 = zeros(1, nTermsP4);
+    monomialOfTargetI2 = zeros(1, nTermsI2);
+    monomialOfTargetI4 = zeros(1, nTermsI4);
+    monomialOfTargetP2I2 = zeros(1, nTermsP2I2);
+else
+    % placeholder for CVX variables (expressions)
+    monomialOfTargetP2 = cvx(zeros(1, nTermsP2));
+    monomialOfTargetP4 = cvx(zeros(1, nTermsP4));
+    monomialOfTargetI2 = cvx(zeros(1, nTermsI2));
+    monomialOfTargetI4 = cvx(zeros(1, nTermsI4));
+    monomialOfTargetP2I2 = cvx(zeros(1, nTermsP2I2));
+end
 
 % monomials related to the time-average of power (multisine) signal to the second order
 iTermP2 = 0;

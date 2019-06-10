@@ -24,17 +24,24 @@ function [mutualInfo, monomialOfMutualInfo, exponentOfMutualInfo] = mutual_infor
 
 % number of terms (Kn) in the result posynomials
 nTerms = 1 + nTxs ^ 2;
-% nTerms = nTxs ^ 2;
+
+% type of variables
+isKnown = isa(infoAmplitude, 'double');
 
 % initialize
-monomialOfMutualInfo = zeros(nSubbands, nTerms);
+if isKnown
+    % placeholder for actual values (doubles)
+    monomialOfMutualInfo = zeros(nSubbands, nTerms);
+else
+    % placeholder for CVX variables (expressions)
+    monomialOfMutualInfo = cvx(zeros(nSubbands, nTerms));
+end
 
 % a constant term 1 exists in each posynomial
 monomialOfMutualInfo(:, 1) = 1;
 
 for iSubband = 1: nSubbands
     iTerm = 1;
-%     iTerm = 0;
     for iTx0 = 1: nTxs
         for iTx1 = 1: nTxs
             iTerm = iTerm + 1;
