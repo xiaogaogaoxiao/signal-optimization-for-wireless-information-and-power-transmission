@@ -1,4 +1,4 @@
-function [targetFun, monomialOfTarget, exponentOfTarget] = target(nSubbands, nTxs, powerAmplitude, infoAmplitude, channelAmplitude, k2, k4, powerSplitRatio, resistance)
+function [targetFun, monomialOfTarget, exponentOfTarget] = target_function_general(nSubbands, nTxs, powerAmplitude, infoAmplitude, channelAmplitude, k2, k4, powerSplitRatio, resistance)
 % Function:
 %   - formulate the target proportional to the output current as a function of amplitudes of multicarrier unmodulated (multisine) power waveform and modulated information waveform
 %   - decomposite target posynomial as sum of monomials
@@ -19,6 +19,7 @@ function [targetFun, monomialOfTarget, exponentOfTarget] = target(nSubbands, nTx
 %   - exponentOfTarget: exponent of the target function in the geometric mean
 %
 % Comments:
+%   - a general approach
 %   - only consider the most fundamental nonlinear model (i.e. truncate at the fourth order)
 %   - for the single-user case, the optimum phases of power and information waveforms equal the negative phase of channel impulse response
 %
