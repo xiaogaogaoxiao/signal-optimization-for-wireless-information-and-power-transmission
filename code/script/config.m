@@ -31,7 +31,7 @@ noisePowerDbm = -40; noisePower = dbm2pow(noisePowerDbm);
 % SNR
 snrDb = txPowerDbm - noisePowerDbm; snr = db2pow(snrDb);
 % max number of iterations
-iterMax = 1e5;
+iterMax = 1e2;
 % rate constraint
 rateMin = 1e0;
 

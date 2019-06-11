@@ -5,4 +5,8 @@ initialize; config;
 % obtain the absolute value of channel impulse response
 channelAmplitude = abs(impulseResponse);
 
-[mutualInfo] = wipt_siso(nSubbands, nTxs, channelAmplitude, k2, k4, txPower, noisePower, resistance, iterMax, rateMin);
+
+[dcCurrentGeneral, rateGeneral] = wipt_general(nSubbands, nTxs, channelAmplitude, k2, k4, txPower, noisePower, resistance, iterMax, rateMin);
+[dcCurrentDecoupling, rateDecoupling] = wipt_decoupling(nSubbands, channelAmplitude, k2, k4, txPower, noisePower, resistance, iterMax, rateMin);
+
+flag = 1;
