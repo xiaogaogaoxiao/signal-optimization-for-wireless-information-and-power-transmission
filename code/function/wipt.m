@@ -1,4 +1,4 @@
-function [current, rate] = wipt_lower_bound(nSubbands, nTxs, channelAmplitude, k2, k4, txPower, noisePower, resistance, maxIter, minRate, minCurrentGainRatio)
+function [current, rate] = wipt(nSubbands, nTxs, channelAmplitude, k2, k4, txPower, noisePower, resistance, maxIter, minRate, minCurrentGainRatio)
 % Function:
 %   - characterizing the rate-energy region of MISO transmission based on the proposed WIPT architecture
 %
@@ -15,16 +15,14 @@ function [current, rate] = wipt_lower_bound(nSubbands, nTxs, channelAmplitude, k
 %   - minCurrentGainRatio: minimum gain ratio of the harvested current in each iteration
 %
 % OutputArg(s):
-%   - dcCurrent: maximum achievable DC current
+%   - current: maximum achievable DC current at the output of the harvester
 %   - rate: mutual information based on the designed waveform
 %
 % Comments:
-%   - assume the power waveform is CSCG that creates an interference and rate loss
+%   - a general approach
 %   - the power is maximized but the rate can be higher than the constraint
-%   - assume same phase as in general case: optimal for single transmit antenna but no guarantee optimal for MISO
 %
 % Author & Date: Yang (i@snowztail.com) - 11 Jun 19
-
 
 % initialize with matched filters
 powerAmplitude = channelAmplitude;
@@ -38,7 +36,7 @@ for iIter = 1: maxIter
     %% condition [known]
     % calculate the exponent of geometric mean based on existing solutions
     [~, ~, exponentOfTarget] = target_function(nSubbands, nTxs, powerAmplitude, infoAmplitude, channelAmplitude, k2, k4, powerSplitRatio, resistance);
-    [~, ~, ~, exponentOfMutualInfo] = mutual_information_lower_bound(nSubbands, nTxs, powerAmplitude, infoAmplitude, channelAmplitude, noisePower, infoSplitRatio);
+    [~, ~, exponentOfMutualInfo] = mutual_information(nSubbands, nTxs, infoAmplitude, channelAmplitude, noisePower, infoSplitRatio);
     
     clearvars t0 powerAmplitude infoAmplitude powerSplitRatio infoSplitRatio
     %% optimization [unknown]
@@ -53,19 +51,19 @@ for iIter = 1: maxIter
 
         % formulate the expression of monomials
         [~, monomialOfTarget, ~] = target_function(nSubbands, nTxs, powerAmplitude, infoAmplitude, channelAmplitude, k2, k4, powerSplitRatio, resistance);
-        [~, monomialOfMutualInfo, posynomialOfPowerTerms, ~] = mutual_information_lower_bound(nSubbands, nTxs, powerAmplitude, infoAmplitude, channelAmplitude, noisePower, infoSplitRatio);
+        [~, monomialOfMutualInfo, ~] = mutual_information(nSubbands, nTxs, infoAmplitude, channelAmplitude, noisePower, infoSplitRatio);
 
         minimize (1 / t0)
         subject to
             0.5 * (norm(powerAmplitude, 'fro') ^ 2 + norm(infoAmplitude, 'fro') ^ 2) <= txPower;
             t0 * prod((monomialOfTarget ./ exponentOfTarget) .^ (-exponentOfTarget)) <= 1;
-            2 ^ minRate * prod((1 + infoSplitRatio / noisePower * posynomialOfPowerTerms) .* prod((monomialOfMutualInfo ./ exponentOfMutualInfo) .^ (-exponentOfMutualInfo), 2)) <= 1;
+            2 ^ minRate * prod(prod((monomialOfMutualInfo ./ exponentOfMutualInfo) .^ (-exponentOfMutualInfo))) <= 1;
             powerSplitRatio + infoSplitRatio <= 1;
     cvx_end
     
     % update achievable rate and power successively
     [targetFun, ~, ~] = target_function(nSubbands, nTxs, powerAmplitude, infoAmplitude, channelAmplitude, k2, k4, powerSplitRatio, resistance);
-    [rate, ~, ~, ~] = mutual_information_lower_bound(nSubbands, nTxs, powerAmplitude, infoAmplitude, channelAmplitude, noisePower, infoSplitRatio);
+    [rate, ~, ~] = mutual_information(nSubbands, nTxs, infoAmplitude, channelAmplitude, noisePower, infoSplitRatio);
     %% stopping criteria
     doExit = (targetFun - current) / current < minCurrentGainRatio;
     % update optimum DC current

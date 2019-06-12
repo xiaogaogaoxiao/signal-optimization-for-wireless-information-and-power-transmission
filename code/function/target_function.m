@@ -1,4 +1,4 @@
-function [targetFun, monomialOfTarget, exponentOfTarget] = target_function_lower_bound(nSubbands, nTxs, powerAmplitude, infoAmplitude, channelAmplitude, k2, k4, powerSplitRatio, resistance)
+function [targetFun, monomialOfTarget, exponentOfTarget] = target_function(nSubbands, nTxs, powerAmplitude, infoAmplitude, channelAmplitude, k2, k4, powerSplitRatio, resistance)
 % Function:
 %   - formulate the target proportional to the output current as a function of amplitudes of multicarrier unmodulated (multisine) power waveform and modulated information waveform
 %   - decomposite target posynomial as sum of monomials
@@ -14,16 +14,16 @@ function [targetFun, monomialOfTarget, exponentOfTarget] = target_function_lower
 %   - resistance: antenna resistance
 %
 % OutputArg(s):
-%   - target: target posynomial (zDc) that proportional to the output current
+%   - targetFun: target posynomial (zDc) that proportional to the output current
 %   - monomialOfTarget: monomials (g) as components of the target posynomial
 %   - exponentOfTarget: exponent of the target function in the geometric mean
 %
 % Comments:
-%   - assume the power waveform is CSCG that creates an interference and rate loss
+%   - a general approach that is also suitable for lower-bound algorithm
 %   - only consider the most fundamental nonlinear model (i.e. truncate at the fourth order)
 %   - for the single-user case, the optimum phases of power and information waveforms equal the negative phase of channel impulse response
 %
-% Author & Date: Yang (i@snowztail.com) - 04 Jun 19
+% Author & Date: Yang (i@snowztail.com) - 11 Jun 19
 
 
 % number of terms in each expression

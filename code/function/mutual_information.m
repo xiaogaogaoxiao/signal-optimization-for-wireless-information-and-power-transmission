@@ -1,4 +1,4 @@
-function [mutualInfo, monomialOfMutualInfo, exponentOfMutualInfo] = mutual_information_general(nSubbands, nTxs, infoAmplitude, channelAmplitude, noisePower, infoSplitRatio)
+function [mutualInfo, monomialOfMutualInfo, exponentOfMutualInfo] = mutual_information(nSubbands, nTxs, infoAmplitude, channelAmplitude, noisePower, infoSplitRatio)
 % Function:
 %   - formulate the maximum achievable mutual information with the provided parameters
 %   - decomposite the posynomials that contribute to mutual information as sum of monomials

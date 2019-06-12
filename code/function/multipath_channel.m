@@ -1,4 +1,4 @@
-function [impulseResponse] = impulse_response(nSubbands, nTxs, carrierFreq)
+function [channelAmplitude] = multipath_channel(nSubbands, nTxs, carrierFreq)
 % Function:
 %   - simulate a multipath channel based on tapped-delay line model
 %
@@ -12,6 +12,8 @@ function [impulseResponse] = impulse_response(nSubbands, nTxs, carrierFreq)
 %
 % Comments:
 %   - assume transmit antennas are close enough and no phase shift
+%   - the optimum phases of information and power waveforms for single-user systems are fixed as the negative phase of channel impulse response
+%   - therefore, the optimization is all about the amplitudes and this function only returns the channel amplitude
 %
 % Author & Date: Yang (i@snowztail.com) - 02 Jun 19
 
@@ -25,6 +27,9 @@ for iTx = 1: nTxs
         impulseResponse(iSubband, iTx) = sum(tapGain .* exp(-1i * 2 * pi * carrierFreq(iSubband) * tapDelay));
     end
 end
+
+% obtain the absolute value of channel impulse response
+channelAmplitude = abs(impulseResponse);
 
 end
 

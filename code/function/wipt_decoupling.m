@@ -1,4 +1,4 @@
-function [dcCurrent, rate] = wipt_decoupling(nSubbands, channelAmplitude, k2, k4, txPower, noisePower, resistance, iterMax, rateMin)
+function [current, rate] = wipt_decoupling(nSubbands, channelAmplitude, k2, k4, txPower, noisePower, resistance, maxIter, minRate, minCurrentGainRatio)
 % Function:
 %   - characterizing the rate-energy region of MISO transmission based on the proposed WIPT architecture
 %
@@ -9,11 +9,12 @@ function [dcCurrent, rate] = wipt_decoupling(nSubbands, channelAmplitude, k2, k4
 %   - txPower: average transmit power
 %   - noisePower: average noise power
 %   - resistance: antenna resistance
-%   - iterMax: max number of iterations for sequential convex optimization
-%   - rateMin: rate constraint
+%   - maxIter: max number of iterations for sequential convex optimization
+%   - minRate: rate constraint
+%   - minCurrentGainRatio: minimum gain ratio of the harvested current in each iteration
 %
 % OutputArg(s):
-%   - dcCurrent: maximum achievable DC current
+%   - current: maximum achievable DC current at the output of the harvester
 %   - rate: mutual information based on the designed waveform
 %
 % Comments:
@@ -23,15 +24,15 @@ function [dcCurrent, rate] = wipt_decoupling(nSubbands, channelAmplitude, k2, k4
 %
 % Author & Date: Yang (i@snowztail.com) - 11 Jun 19
 
-% initialize (matched filters)
+% initialize with matched filters
 powerAmplitude = channelAmplitude;
 infoAmplitude = channelAmplitude;
 powerSplitRatio = 0.5;
 infoSplitRatio = 1 - powerSplitRatio;
-dcCurrent = 0;
+current = 0;
 
 % iterate until optimum
-for iIter = 1: iterMax
+for iIter = 1: maxIter
     %% condition [known]
     % calculate the exponent of geometric mean based on existing solutions
     [~, ~, exponentOfTarget] = target_function_decoupling(nSubbands, powerAmplitude, infoAmplitude, channelAmplitude, k2, k4, powerSplitRatio, resistance);
@@ -40,7 +41,7 @@ for iIter = 1: iterMax
     clearvars t0 powerAmplitude infoAmplitude powerSplitRatio infoSplitRatio
     %% optimization [unknown]
     cvx_begin gp
-        cvx_solver sedumi
+        cvx_solver mosek
         
         variable t0
         variable powerAmplitude(nSubbands, 1) nonnegative
@@ -54,19 +55,19 @@ for iIter = 1: iterMax
 
         minimize (1 / t0)
         subject to
-        0.5 * (norm(powerAmplitude, 'fro') ^ 2 + norm(infoAmplitude, 'fro') ^ 2) <= txPower;
-        t0 * prod((monomialOfTarget ./ exponentOfTarget) .^ (-exponentOfTarget)) <= 1;
-        2 ^ rateMin * prod(prod((monomialOfMutualInfo ./ exponentOfMutualInfo) .^ (-exponentOfMutualInfo))) <= 1;
-        powerSplitRatio + infoSplitRatio <= 1;
+            0.5 * (norm(powerAmplitude, 'fro') ^ 2 + norm(infoAmplitude, 'fro') ^ 2) <= txPower;
+            t0 * prod((monomialOfTarget ./ exponentOfTarget) .^ (-exponentOfTarget)) <= 1;
+            2 ^ minRate * prod(prod((monomialOfMutualInfo ./ exponentOfMutualInfo) .^ (-exponentOfMutualInfo))) <= 1;
+            powerSplitRatio + infoSplitRatio <= 1;
     cvx_end
     
     % update achievable rate and power successively
     [targetFun, ~, ~] = target_function_decoupling(nSubbands, powerAmplitude, infoAmplitude, channelAmplitude, k2, k4, powerSplitRatio, resistance);
     [rate, ~, ~] = mutual_information_decoupling(nSubbands, infoAmplitude, channelAmplitude, noisePower, infoSplitRatio);
     %% stopping criteria
-    doExit = (targetFun - dcCurrent) < eps;
+    doExit = (targetFun - current) / current < minCurrentGainRatio;
     % update optimum DC current
-    dcCurrent = targetFun;
+    current = targetFun;
     if doExit
         break;
     end

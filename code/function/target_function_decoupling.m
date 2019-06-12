@@ -13,7 +13,7 @@ function [targetFun, monomialOfTarget, exponentOfTarget] = target_function_decou
 %   - resistance: antenna resistance
 %
 % OutputArg(s):
-%   - target: target posynomial (zDc) that proportional to the output current
+%   - targetFun: target posynomial (zDc) that proportional to the output current
 %   - monomialOfTarget: monomials (g) as components of the target posynomial
 %   - exponentOfTarget: exponent of the target function in the geometric mean
 %
