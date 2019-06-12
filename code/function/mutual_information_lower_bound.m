@@ -1,4 +1,4 @@
-function [mutualInfo, monomialOfMutualInfo, exponentOfMutualInfo] = mutual_information_lower_bound(nSubbands, nTxs, powerAmplitude, infoAmplitude, channelAmplitude, noisePower, infoSplitRatio)
+function [mutualInfo, monomialOfMutualInfo, posynomialOfPowerTerms, exponentOfMutualInfo] = mutual_information_lower_bound(nSubbands, nTxs, powerAmplitude, infoAmplitude, channelAmplitude, noisePower, infoSplitRatio)
 % Function:
 %   - formulate the maximum achievable mutual information with the provided parameters
 %   - decomposite the posynomials that contribute to mutual information as sum of monomials
@@ -15,6 +15,7 @@ function [mutualInfo, monomialOfMutualInfo, exponentOfMutualInfo] = mutual_infor
 % OutputArg(s):
 %   - mutualInfo: maximum achievable mutual information
 %   - monomialOfMutualInfo: monomial components of posynomials that contribute to mutual information
+%   - posynomialOfPowerTerms: power posynomials that contribute to mutual information as interference
 %   - exponentOfMutualInfo: exponent of the mutual information in the geometric mean
 %
 % Comments:
@@ -65,8 +66,13 @@ posynomialOfMutualInfo = sum(monomialOfMutualInfo, 2);
 % exponents of geometric means
 exponentOfMutualInfo = monomialOfMutualInfo ./ repmat(posynomialOfMutualInfo, [1 nTerms]);
 
-% mutual information
-mutualInfo = log(prod(1 + infoSplitRatio * posynomialOfPowerTerms ./ (noisePower + infoSplitRatio * posynomialOfInfoTerms))) / log(2);
+if isKnown
+    % numerical solutions
+    mutualInfo = log(prod(1 + infoSplitRatio * posynomialOfInfoTerms ./ (noisePower + infoSplitRatio * posynomialOfPowerTerms))) / log(2);
+else
+    % the expression is neither supported by CVX nor to be used by the algorithm
+    mutualInfo = NaN;
+end
 
 end
 
