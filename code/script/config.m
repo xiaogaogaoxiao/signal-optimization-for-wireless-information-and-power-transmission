@@ -25,7 +25,7 @@ nSubbands = 4;
 % gap frequency
 gapFrequency = bandwidth / nSubbands;
 % carrier frequency
-carrierFrequency = centerFrequency: gapFrequency: centerFrequency + (nSubbands - 1) * gapFrequency;
+carrierFrequency = centerFrequency - (nSubbands - 1) / 2 * gapFrequency: gapFrequency: centerFrequency + (nSubbands - 1) / 2 * gapFrequency;
 % average noise power
 noisePowerDbm = -40; noisePower = dbm2pow(noisePowerDbm);
 % SNR
