@@ -56,7 +56,7 @@ end
 monomialOfMutualInfo = [ones(nSubbands, 1), infoSplitRatio / noisePower * monomialOfPowerTerms, infoSplitRatio / noisePower * monomialOfInfoTerms];
 
 % number of terms (Jn) in the result posynomials
-nTerms = length(monomialOfMutualInfo);
+nTerms = size(monomialOfMutualInfo, 2);
 
 % components inside log are based on posynomials
 posynomialOfPowerTerms = sum(monomialOfPowerTerms, 2);

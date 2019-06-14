@@ -30,16 +30,13 @@ infoAmplitude = channelAmplitude;
 powerSplitRatio = 0.5;
 infoSplitRatio = 1 - powerSplitRatio;
 current = 0;
+[~, ~, exponentOfTarget] = target_function(nSubbands, nTxs, powerAmplitude, infoAmplitude, channelAmplitude, k2, k4, powerSplitRatio, resistance);
+[~, ~, exponentOfMutualInfo] = mutual_information(nSubbands, nTxs, infoAmplitude, channelAmplitude, noisePower, infoSplitRatio);
 
 % iterate until optimum
 for iIter = 1: maxIter
-    %% condition [known]
-    % calculate the exponent of geometric mean based on existing solutions
-    [~, ~, exponentOfTarget] = target_function(nSubbands, nTxs, powerAmplitude, infoAmplitude, channelAmplitude, k2, k4, powerSplitRatio, resistance);
-    [~, ~, exponentOfMutualInfo] = mutual_information(nSubbands, nTxs, infoAmplitude, channelAmplitude, noisePower, infoSplitRatio);
-    
     clearvars t0 powerAmplitude infoAmplitude powerSplitRatio infoSplitRatio
-    %% optimization [unknown]
+    
     cvx_begin gp
         cvx_solver mosek
         
@@ -62,12 +59,15 @@ for iIter = 1: maxIter
     cvx_end
     
     % update achievable rate and power successively
-    [targetFun, ~, ~] = target_function(nSubbands, nTxs, powerAmplitude, infoAmplitude, channelAmplitude, k2, k4, powerSplitRatio, resistance);
-    [rate, ~, ~] = mutual_information(nSubbands, nTxs, infoAmplitude, channelAmplitude, noisePower, infoSplitRatio);
-    %% stopping criteria
+    [targetFun, ~, exponentOfTarget] = target_function(nSubbands, nTxs, powerAmplitude, infoAmplitude, channelAmplitude, k2, k4, powerSplitRatio, resistance);
+    [rate, ~, exponentOfMutualInfo] = mutual_information(nSubbands, nTxs, infoAmplitude, channelAmplitude, noisePower, infoSplitRatio);
+    
+    % stopping criteria
     doExit = (targetFun - current) / current < minCurrentGainRatio;
+    
     % update optimum DC current
     current = targetFun;
+    
     if doExit
         break;
     end
