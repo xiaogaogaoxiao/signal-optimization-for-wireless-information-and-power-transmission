@@ -9,31 +9,33 @@ resistance = 50;
 % center frequency
 centerFrequency = 5.18e9;
 % equivalent isotropically radiated power
-eirpDbm = 36; eirp = dbm2pow(eirpDbm);
+eirpDbm = 36;
 % receive antenna gain
-rxGainDbi = 2; rxGain = db2pow(rxGainDbi);
+rxGainDbi = 2;
 % path loss
-pathLossDb = 58; pathLoss = db2pow(pathLossDb);
+pathLossDb = 58;
 % average transmit power
 txPowerDbm = -20; txPower = dbm2pow(txPowerDbm);
+% average receive power
+rxPowerDbm = eirpDbm + rxGainDbi - pathLossDb; rxPower = dbm2pow(rxPowerDbm);
 % bandwidth
 bandwidth = 1e6;
 % number of transmit antenna
-nTxs = 2;
+nTxs = 1;
 % number of subbands
 nSubbands = 4;
 % gap frequency
 gapFrequency = bandwidth / nSubbands;
 % carrier frequency
 carrierFrequency = centerFrequency - (nSubbands - 1) / 2 * gapFrequency: gapFrequency: centerFrequency + (nSubbands - 1) / 2 * gapFrequency;
-% average noise power
-noisePowerDbm = -40; noisePower = dbm2pow(noisePowerDbm);
 % SNR
-snrDb = txPowerDbm - noisePowerDbm; snr = db2pow(snrDb);
+snrDb = 20;
+% average noise power
+noisePowerDbm = rxPowerDbm - snrDb; noisePower = dbm2pow(noisePowerDbm);
 % max number of iterations
 maxIter = 1e2;
 % rate constraint
-minRate = 1e0;
+minRate = 0;
 % minimum gain ratio of the harvested current in each iteration (successive approximation)
 minCurrentGainRatio = 1e-2;
 
