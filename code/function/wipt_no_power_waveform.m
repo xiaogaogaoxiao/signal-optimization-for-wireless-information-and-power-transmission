@@ -24,12 +24,11 @@ function [current, rate] = wipt_no_power_waveform(nSubbands, nTxs, channelAmplit
 % Author & Date: Yang (i@snowztail.com) - 17 Jun 19
 
 % initialize with matched filters
-powerAmplitude = zeros(size(channelAmplitude)) + eps;
 infoAmplitude = channelAmplitude;
 powerSplitRatio = 0.5;
 infoSplitRatio = 1 - powerSplitRatio;
 current = 0;
-[~, ~, exponentOfTarget] = target_function(nSubbands, nTxs, powerAmplitude, infoAmplitude, channelAmplitude, k2, k4, powerSplitRatio, resistance);
+[~, ~, exponentOfTarget] = target_function_no_power_waveform(nSubbands, nTxs, infoAmplitude, channelAmplitude, k2, k4, powerSplitRatio, resistance);
 [~, ~, exponentOfMutualInfo] = mutual_information(nSubbands, nTxs, infoAmplitude, channelAmplitude, noisePower, infoSplitRatio);
 
 % iterate until optimum
@@ -45,7 +44,7 @@ for iIter = 1: maxIter
         variable infoSplitRatio nonnegative
 
         % formulate the expression of monomials
-        [~, monomialOfTarget, ~] = target_function(nSubbands, nTxs, powerAmplitude, infoAmplitude, channelAmplitude, k2, k4, powerSplitRatio, resistance);
+        [~, monomialOfTarget, ~] = target_function_no_power_waveform(nSubbands, nTxs, infoAmplitude, channelAmplitude, k2, k4, powerSplitRatio, resistance);
         [~, monomialOfMutualInfo, ~] = mutual_information(nSubbands, nTxs, infoAmplitude, channelAmplitude, noisePower, infoSplitRatio);
 
         minimize (1 / t0)
@@ -57,7 +56,7 @@ for iIter = 1: maxIter
     cvx_end
     
     % update achievable rate and power successively
-    [targetFun, ~, exponentOfTarget] = target_function(nSubbands, nTxs, powerAmplitude, infoAmplitude, channelAmplitude, k2, k4, powerSplitRatio, resistance);
+    [targetFun, ~, exponentOfTarget] = target_function_no_power_waveform(nSubbands, nTxs, infoAmplitude, channelAmplitude, k2, k4, powerSplitRatio, resistance);
     [rate, ~, exponentOfMutualInfo] = mutual_information(nSubbands, nTxs, infoAmplitude, channelAmplitude, noisePower, infoSplitRatio);
     
     % stopping criteria
