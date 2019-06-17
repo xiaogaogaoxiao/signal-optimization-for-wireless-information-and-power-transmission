@@ -56,7 +56,7 @@ end
 iTermP2 = 0;
 for iSubband = 1: nSubbands
     iTermP2 = iTermP2 + 1;
-    monomialOfTargetP2(iTermP2) = 0.5 * k2 * powerSplitRatio * resistance * norm(channelAmplitude(iSubband, :)) ^ 2 * powerAmplitude(iSubband) ^ 2;
+    monomialOfTargetP2(iTermP2) = norm(channelAmplitude(iSubband, :)) ^ 2 * powerAmplitude(iSubband) ^ 2;
 end
 clearvars iSubband;
 
@@ -66,11 +66,16 @@ for iSubband0 = 1: nSubbands
     for iSubband1 = 1: nSubbands
         for iSubband2 = 1: nSubbands
             iSubband3 = iSubband0 + iSubband1 - iSubband2;
-            if iSubband3 < 1 || iSubband3 > nSubbands
-                continue;
-            else
+            isValid = iSubband3 >= 1 && iSubband3 <= nSubbands;
+            if isValid
                 iTermP4 = iTermP4 + 1;
-                monomialOfTargetP4(iTermP4) = 0.375 * k4 * powerSplitRatio ^ 2 * resistance ^ 2 * (powerAmplitude(iSubband0) * norm(channelAmplitude(iSubband0, :))) * (powerAmplitude(iSubband1) * norm(channelAmplitude(iSubband1, :))) * (powerAmplitude(iSubband2) * norm(channelAmplitude(iSubband2, :))) * (powerAmplitude(iSubband3) * norm(channelAmplitude(iSubband3, :)));
+                monomialOfTargetP4(iTermP4) = ...
+                    (powerAmplitude(iSubband0) * norm(channelAmplitude(iSubband0, :))) * ...
+                    (powerAmplitude(iSubband1) * norm(channelAmplitude(iSubband1, :))) * ...
+                    (powerAmplitude(iSubband2) * norm(channelAmplitude(iSubband2, :))) * ...
+                    (powerAmplitude(iSubband3) * norm(channelAmplitude(iSubband3, :)));
+            else
+                continue;
             end
         end
     end
@@ -81,7 +86,7 @@ clearvars iSubband0 iSubband1 iSubband2 iSubband3;
 iTermI2 = 0;
 for iSubband = 1: nSubbands
     iTermI2 = iTermI2 + 1;
-    monomialOfTargetI2(iTermI2) = 0.5 * k2 * powerSplitRatio * resistance * norm(channelAmplitude(iSubband, :)) ^ 2 * infoAmplitude(iSubband) ^ 2;
+    monomialOfTargetI2(iTermI2) = norm(channelAmplitude(iSubband, :)) ^ 2 * infoAmplitude(iSubband) ^ 2;
 end
 clearvars iSubband;
 
@@ -90,19 +95,38 @@ iTermI4 = 0;
 for iSubband0 = 1: nSubbands
     for iSubband1 = 1: nSubbands
         iTermI4 = iTermI4 + 1;
-        monomialOfTargetI4(iTermI4) = 0.75 * k4 * powerSplitRatio ^ 2 * resistance ^ 2 * (infoAmplitude(iSubband0) ^ 2 * norm(channelAmplitude(iSubband0, :)) ^ 2) * (infoAmplitude(iSubband1) ^ 2 * norm(channelAmplitude(iSubband1, :)) ^ 2);
+        monomialOfTargetI4(iTermI4) = ...
+            (infoAmplitude(iSubband0) ^ 2 * norm(channelAmplitude(iSubband0, :)) ^ 2) * ...
+            (infoAmplitude(iSubband1) ^ 2 * norm(channelAmplitude(iSubband1, :)) ^ 2);
     end
 end
 clearvars iSubband0 iSubband1;
 
+% iTermP2I2 = 0;
+% for iTermP2 = 1: nTermsP2
+%     for iTermI2 = 1: nTermsI2
+%         iTermP2I2 = iTermP2I2 + 1;
+%         monomialOfTargetP2I2(iTermP2I2) = 6 * k4 / k2 ^ 2 * monomialOfTargetP2(iTermP2) * monomialOfTargetI2(iTermI2);
+%     end
+% end
+
 % monomials related to the combined power-info terms
 iTermP2I2 = 0;
-for iTermP2 = 1: nTermsP2
-    for iTermI2 = 1: nTermsI2
+for iSubband0 = 1: nSubbands
+    for iSubband1 = 1: nSubbands
         iTermP2I2 = iTermP2I2 + 1;
-        monomialOfTargetP2I2(iTermP2I2) = 6 * k4 / k2 ^ 2 * monomialOfTargetP2(iTermP2) * monomialOfTargetI2(iTermI2);
+        monomialOfTargetP2I2(iTermP2I2) = ...
+            (norm(channelAmplitude(iSubband0, :)) ^ 2 * powerAmplitude(iSubband0) ^ 2) * ...
+            (norm(channelAmplitude(iSubband1, :)) ^ 2 * infoAmplitude(iSubband1) ^ 2);
     end
 end
+clearvars iSubband0 iSubband1;
+
+monomialOfTargetP2 = monomialOfTargetP2 * 0.5 * k2 * powerSplitRatio * resistance;
+monomialOfTargetP4 = monomialOfTargetP4 * 0.375 * k4 * powerSplitRatio ^ 2 * resistance ^ 2;
+monomialOfTargetI2 = monomialOfTargetI2 * 0.5 * k2 * powerSplitRatio * resistance;
+monomialOfTargetI4 = monomialOfTargetI4 * 0.75 * k4 * powerSplitRatio ^ 2 * resistance ^ 2;
+monomialOfTargetP2I2 = monomialOfTargetP2I2 * 1.5 * k4 * powerSplitRatio ^ 2 * resistance ^ 2;
 
 % group monomials
 monomialOfTarget = [monomialOfTargetP2 monomialOfTargetP4 monomialOfTargetI2 monomialOfTargetI4 monomialOfTargetP2I2];

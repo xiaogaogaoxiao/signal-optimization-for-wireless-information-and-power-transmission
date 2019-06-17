@@ -35,7 +35,7 @@ noisePowerDbm = rxPowerDbm - snrDb; noisePower = dbm2pow(noisePowerDbm);
 % max number of iterations
 maxIter = 1e2;
 % rate constraint
-minRate = 0;
+minRate = 10;
 % minimum gain ratio of the harvested current in each iteration (successive approximation)
 minCurrentGainRatio = 1e-2;
 

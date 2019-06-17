@@ -43,12 +43,16 @@ else
 end
 
 for iSubband = 1: nSubbands
-    iTerm = 0;
+    iSubTerm = 0;
     for iTx0 = 1: nTxs
         for iTx1 = 1: nTxs
-            iTerm = iTerm + 1;
-            monomialOfPowerTerms(iSubband, iTerm) = (powerAmplitude(iSubband, iTx0) * channelAmplitude(iSubband, iTx0)) * (powerAmplitude(iSubband, iTx1) * channelAmplitude(iSubband, iTx1));
-            monomialOfInfoTerms(iSubband, iTerm) = (infoAmplitude(iSubband, iTx0) * channelAmplitude(iSubband, iTx0)) * (infoAmplitude(iSubband, iTx1) * channelAmplitude(iSubband, iTx1));
+            iSubTerm = iSubTerm + 1;
+            monomialOfPowerTerms(iSubband, iSubTerm) = ...
+                (powerAmplitude(iSubband, iTx0) * channelAmplitude(iSubband, iTx0)) * ...
+                (powerAmplitude(iSubband, iTx1) * channelAmplitude(iSubband, iTx1));
+            monomialOfInfoTerms(iSubband, iSubTerm) = ...
+                (infoAmplitude(iSubband, iTx0) * channelAmplitude(iSubband, iTx0)) * ...
+                (infoAmplitude(iSubband, iTx1) * channelAmplitude(iSubband, iTx1));
         end
     end
 end

@@ -46,7 +46,9 @@ for iSubband = 1: nSubbands
     for iTx0 = 1: nTxs
         for iTx1 = 1: nTxs
             iTerm = iTerm + 1;
-            monomialOfMutualInfo(iSubband, iTerm) = infoSplitRatio / noisePower * (infoAmplitude(iSubband, iTx0) * channelAmplitude(iSubband, iTx0)) * (infoAmplitude(iSubband, iTx1) * channelAmplitude(iSubband, iTx1));
+            monomialOfMutualInfo(iSubband, iTerm) = infoSplitRatio / noisePower * ...
+                (infoAmplitude(iSubband, iTx0) * channelAmplitude(iSubband, iTx0)) * ...
+                (infoAmplitude(iSubband, iTx1) * channelAmplitude(iSubband, iTx1));
         end
     end
 end
