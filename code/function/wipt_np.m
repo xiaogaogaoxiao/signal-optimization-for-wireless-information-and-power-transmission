@@ -1,4 +1,4 @@
-function [current, rate] = wipt(nSubbands, nTxs, channelAmplitude, k2, k4, txPower, noisePower, resistance, maxIter, minRate, minCurrentGainRatio)
+function [current, rate] = wipt_np(nSubbands, nTxs, channelAmplitude, k2, k4, txPower, noisePower, resistance, maxIter, minRate, minCurrentGainRatio)
 % Function:
 %   - characterizing the rate-energy region of MISO transmission based on the proposed WIPT architecture
 %
@@ -25,8 +25,8 @@ function [current, rate] = wipt(nSubbands, nTxs, channelAmplitude, k2, k4, txPow
 % Author & Date: Yang (i@snowztail.com) - 11 Jun 19
 
 % initialize with matched filters
-powerAmplitude = channelAmplitude / norm(channelAmplitude, 'fro') * sqrt(txPower);
-infoAmplitude = channelAmplitude / norm(channelAmplitude, 'fro') * sqrt(txPower);
+powerAmplitude = zeros(size(channelAmplitude)) + eps;
+infoAmplitude = 2 * channelAmplitude / norm(channelAmplitude, 'fro') * sqrt(txPower);
 powerSplitRatio = 0.5;
 infoSplitRatio = 1 - powerSplitRatio;
 current = 0;
@@ -35,13 +35,12 @@ current = 0;
 
 % iterate until optimum
 for iIter = 1: maxIter
-    clearvars t0 powerAmplitude infoAmplitude powerSplitRatio infoSplitRatio
+    clearvars t0 infoAmplitude powerSplitRatio infoSplitRatio
     
     cvx_begin gp
         cvx_solver mosek
         
         variable t0
-        variable powerAmplitude(nSubbands, nTxs) nonnegative
         variable infoAmplitude(nSubbands, nTxs) nonnegative
         variable powerSplitRatio nonnegative
         variable infoSplitRatio nonnegative

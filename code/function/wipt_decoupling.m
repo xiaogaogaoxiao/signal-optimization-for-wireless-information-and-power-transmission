@@ -25,8 +25,8 @@ function [current, rate] = wipt_decoupling(nSubbands, channelAmplitude, k2, k4, 
 % Author & Date: Yang (i@snowztail.com) - 11 Jun 19
 
 % initialize with matched filters
-powerAmplitude = channelAmplitude;
-infoAmplitude = channelAmplitude;
+powerAmplitude = channelAmplitude / norm(channelAmplitude, 'fro') * sqrt(txPower);
+infoAmplitude = channelAmplitude / norm(channelAmplitude, 'fro') * sqrt(txPower);
 powerSplitRatio = 0.5;
 infoSplitRatio = 1 - powerSplitRatio;
 current = 0;

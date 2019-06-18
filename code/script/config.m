@@ -23,7 +23,7 @@ bandwidth = 1e6;
 % number of transmit antenna
 nTxs = 1;
 % number of subbands
-nSubbands = 4;
+nSubbands = 2;
 % gap frequency
 gapFrequency = bandwidth / nSubbands;
 % carrier frequency
@@ -35,8 +35,8 @@ noisePowerDbm = rxPowerDbm - snrDb; noisePower = dbm2pow(noisePowerDbm);
 % max number of iterations
 maxIter = 1e2;
 % rate constraint
-minRate = 10;
+minRate = 1;
 % minimum gain ratio of the harvested current in each iteration (successive approximation)
-minCurrentGainRatio = 1e-2;
+minCurrentGainRatio = 1e-3;
 
 clearvars eirpDbm rxGainDbi pathLossDb txPowerDbm noisePowerDbm snrDb

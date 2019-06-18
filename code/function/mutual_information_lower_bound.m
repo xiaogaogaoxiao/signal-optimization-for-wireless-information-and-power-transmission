@@ -47,36 +47,35 @@ for iSubband = 1: nSubbands
     for iTx0 = 1: nTxs
         for iTx1 = 1: nTxs
             iSubTerm = iSubTerm + 1;
-            monomialOfPowerTerms(iSubband, iSubTerm) = infoSplitRatio / noisePower * ...
+            monomialOfPowerTerms(iSubband, iSubTerm) = ...
                 (powerAmplitude(iSubband, iTx0) * channelAmplitude(iSubband, iTx0)) * ...
                 (powerAmplitude(iSubband, iTx1) * channelAmplitude(iSubband, iTx1));
-            monomialOfInfoTerms(iSubband, iSubTerm) = infoSplitRatio / noisePower * ...
+            monomialOfInfoTerms(iSubband, iSubTerm) = ...
                 (infoAmplitude(iSubband, iTx0) * channelAmplitude(iSubband, iTx0)) * ...
                 (infoAmplitude(iSubband, iTx1) * channelAmplitude(iSubband, iTx1));
         end
     end
 end
 
-monomialOfMutualInfo = [ones(nSubbands, 1), monomialOfPowerTerms, monomialOfInfoTerms];
+monomialOfMutualInfo = [ones(nSubbands, 1), infoSplitRatio / noisePower * monomialOfPowerTerms, infoSplitRatio / noisePower * monomialOfInfoTerms];
+
+% number of terms (Jn) in the result posynomials
+nTerms = size(monomialOfMutualInfo, 2);
+
+% components inside log are based on posynomials
+posynomialOfPowerTerms = sum(monomialOfPowerTerms, 2);
+posynomialOfInfoTerms = sum(monomialOfInfoTerms, 2);
+posynomialOfMutualInfo = sum(monomialOfMutualInfo, 2);
+
+% exponents of geometric means
+exponentOfMutualInfo = monomialOfMutualInfo ./ repmat(posynomialOfMutualInfo, [1 nTerms]);
 
 if isKnown
-    % number of terms (Jn) in the result posynomials
-    nTerms = size(monomialOfMutualInfo, 2);
-    
-    % components inside log are based on posynomials
-    posynomialOfPowerTerms = sum(monomialOfPowerTerms, 2);
-    posynomialOfInfoTerms = sum(monomialOfInfoTerms, 2);
-    posynomialOfMutualInfo = sum(monomialOfMutualInfo, 2);
-    
-    % exponents of geometric means
-    exponentOfMutualInfo = monomialOfMutualInfo ./ repmat(posynomialOfMutualInfo, [1 nTerms]);
     % numerical solutions
     mutualInfo = log(prod(1 + infoSplitRatio * posynomialOfInfoTerms ./ (noisePower + infoSplitRatio * posynomialOfPowerTerms))) / log(2);
 else
     % the expression is neither supported by CVX nor to be used by the algorithm
-    exponentOfMutualInfo = NaN;
     mutualInfo = NaN;
 end
 
 end
-

@@ -24,7 +24,7 @@ function [current, rate] = wipt_no_power_waveform(nSubbands, nTxs, channelAmplit
 % Author & Date: Yang (i@snowztail.com) - 17 Jun 19
 
 % initialize with matched filters
-infoAmplitude = channelAmplitude;
+infoAmplitude = 2 * channelAmplitude / norm(channelAmplitude, 'fro') * sqrt(txPower);
 powerSplitRatio = 0.5;
 infoSplitRatio = 1 - powerSplitRatio;
 current = 0;

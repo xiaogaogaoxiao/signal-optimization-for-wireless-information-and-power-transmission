@@ -27,8 +27,8 @@ function [current, rate] = wipt_lower_bound(nSubbands, nTxs, channelAmplitude, k
 
 
 % initialize with matched filters
-powerAmplitude = channelAmplitude;
-infoAmplitude = channelAmplitude;
+powerAmplitude = channelAmplitude / norm(channelAmplitude, 'fro') * sqrt(txPower);
+infoAmplitude = channelAmplitude / norm(channelAmplitude, 'fro') * sqrt(txPower);
 powerSplitRatio = 0.5;
 infoSplitRatio = 1 - powerSplitRatio;
 current = 0;
@@ -63,10 +63,13 @@ for iIter = 1: maxIter
     % update achievable rate and power successively
     [targetFun, ~, exponentOfTarget] = target_function(nSubbands, nTxs, powerAmplitude, infoAmplitude, channelAmplitude, k2, k4, powerSplitRatio, resistance);
     [rate, ~, ~, exponentOfMutualInfo] = mutual_information_lower_bound(nSubbands, nTxs, powerAmplitude, infoAmplitude, channelAmplitude, noisePower, infoSplitRatio);
-    %% stopping criteria
+    
+    % stopping criteria
     doExit = (targetFun - current) / current < minCurrentGainRatio;
+    
     % update optimum DC current
     current = targetFun;
+    
     if doExit
         break;
     end
