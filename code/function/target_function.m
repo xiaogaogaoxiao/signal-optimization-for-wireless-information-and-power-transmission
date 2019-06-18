@@ -164,11 +164,13 @@ monomialOfTargetP2I2 = monomialOfTargetP2I2 * 1.5 * k4 * powerSplitRatio ^ 2 * r
 % group monomials
 monomialOfTarget = [monomialOfTargetP2 monomialOfTargetP4 monomialOfTargetI2 monomialOfTargetI4 monomialOfTargetP2I2];
 
-% sum monomials to obtain target posynomial
-targetFun = sum(monomialOfTarget);
-
-% exponents of geometric means
-exponentOfTarget = monomialOfTarget / targetFun;
+if isKnown
+    targetFun = sum(monomialOfTarget);
+    exponentOfTarget = monomialOfTarget / targetFun;
+else
+    targetFun = NaN;
+    exponentOfTarget = NaN;
+end
 
 end
 

@@ -102,14 +102,6 @@ for iSubband0 = 1: nSubbands
 end
 clearvars iSubband0 iSubband1;
 
-% iTermP2I2 = 0;
-% for iTermP2 = 1: nTermsP2
-%     for iTermI2 = 1: nTermsI2
-%         iTermP2I2 = iTermP2I2 + 1;
-%         monomialOfTargetP2I2(iTermP2I2) = 6 * k4 / k2 ^ 2 * monomialOfTargetP2(iTermP2) * monomialOfTargetI2(iTermI2);
-%     end
-% end
-
 % monomials related to the combined power-info terms
 iTermP2I2 = 0;
 for iSubband0 = 1: nSubbands
@@ -131,11 +123,11 @@ monomialOfTargetP2I2 = monomialOfTargetP2I2 * 1.5 * k4 * powerSplitRatio ^ 2 * r
 % group monomials
 monomialOfTarget = [monomialOfTargetP2 monomialOfTargetP4 monomialOfTargetI2 monomialOfTargetI4 monomialOfTargetP2I2];
 
-% sum monomials to obtain target posynomial
-targetFun = sum(monomialOfTarget);
-
-% exponents of geometric means
-exponentOfTarget = monomialOfTarget / targetFun;
-
+if isKnown
+    targetFun = sum(monomialOfTarget);
+    exponentOfTarget = monomialOfTarget / targetFun;
+else
+    targetFun = NaN;
+    exponentOfTarget = NaN;
 end
 

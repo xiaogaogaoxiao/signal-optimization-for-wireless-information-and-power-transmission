@@ -28,30 +28,27 @@ nTerms = 2;
 % type of variables
 isKnown = isa(infoAmplitude, 'double');
 
-% initialize
+% initialize (a constant term 1 exists in each posynomial)
 if isKnown
     % placeholder for actual values (doubles)
-    monomialOfMutualInfo = zeros(nSubbands, nTerms);
+    monomialOfMutualInfo = ones(nSubbands, nTerms);
 else
     % placeholder for CVX variables (expressions)
-    monomialOfMutualInfo = cvx(zeros(nSubbands, nTerms));
+    monomialOfMutualInfo = cvx(ones(nSubbands, nTerms));
 end
-
-% a constant term 1 exists in each posynomial
-monomialOfMutualInfo(:, 1) = 1;
 
 for iSubband = 1: nSubbands
     monomialOfMutualInfo(iSubband, 2) = infoSplitRatio / noisePower * (infoAmplitude(iSubband) ^ 2 * norm(channelAmplitude(iSubband, :)) ^ 2);
 end
 
-% components inside log are posynomials
-posynomialOfMutualInfo = sum(monomialOfMutualInfo, 2);
-
-% exponents of geometric means
-exponentOfMutualInfo = monomialOfMutualInfo ./ repmat(posynomialOfMutualInfo, [1 nTerms]);
-
-% mutual information
-mutualInfo = log(prod(posynomialOfMutualInfo)) / log(2);
+if isKnown
+    posynomialOfMutualInfo = sum(monomialOfMutualInfo, 2);
+    exponentOfMutualInfo = monomialOfMutualInfo ./ repmat(posynomialOfMutualInfo, [1 nTerms]);
+    mutualInfo = log(prod(posynomialOfMutualInfo)) / log(2);
+else
+    exponentOfMutualInfo = NaN;
+    mutualInfo = NaN;
+end
 
 end
 
