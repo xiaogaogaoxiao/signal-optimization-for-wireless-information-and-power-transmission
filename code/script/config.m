@@ -15,15 +15,15 @@ rxGainDbi = 2;
 % path loss
 pathLossDb = 58;
 % average transmit power
-txPowerDbm = -20; txPower = dbm2pow(txPowerDbm);
+txPowerDb = 0; txPower = db2pow(txPowerDb);
 % average receive power
-rxPowerDbm = eirpDbm + rxGainDbi - pathLossDb; rxPower = dbm2pow(rxPowerDbm);
+rxPowerDbm = txPowerDb + eirpDbm + rxGainDbi - pathLossDb; rxPower = dbm2pow(rxPowerDbm);
 % bandwidth
 bandwidth = 1e6;
 % number of transmit antenna
 nTxs = 1;
 % number of subbands
-nSubbands = 2;
+nSubbands = 4;
 % gap frequency
 gapFrequency = bandwidth / nSubbands;
 % carrier frequency
@@ -38,5 +38,7 @@ maxIter = 1e2;
 minRate = 1;
 % minimum gain ratio of the harvested current in each iteration (successive approximation)
 minCurrentGainRatio = 1e-3;
+% minimum gain of the harvested current in each iteration
+minCurrentGain = 1e-8;
 
 clearvars eirpDbm rxGainDbi pathLossDb txPowerDbm noisePowerDbm snrDb

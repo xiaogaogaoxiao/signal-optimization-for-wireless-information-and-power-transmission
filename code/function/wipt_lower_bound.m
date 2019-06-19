@@ -1,4 +1,4 @@
-function [current, rate] = wipt_lower_bound(nSubbands, nTxs, channelAmplitude, k2, k4, txPower, noisePower, resistance, maxIter, minRate, minCurrentGainRatio)
+function [current, rate] = wipt_lower_bound(nSubbands, nTxs, channelAmplitude, k2, k4, txPower, noisePower, resistance, maxIter, minRate, minCurrentGainRatio, minCurrentGain)
 % Function:
 %   - characterizing the rate-energy region of MISO transmission based on the proposed WIPT architecture
 %
@@ -65,7 +65,7 @@ for iIter = 1: maxIter
     [rate, ~, ~, exponentOfMutualInfo] = mutual_information_lower_bound(nSubbands, nTxs, powerAmplitude, infoAmplitude, channelAmplitude, noisePower, infoSplitRatio);
     
     % stopping criteria
-    doExit = (targetFun - current) / current < minCurrentGainRatio;
+    doExit = (targetFun - current) / current < minCurrentGainRatio || (targetFun - current) < minCurrentGain;
     
     % update optimum DC current
     current = targetFun;
