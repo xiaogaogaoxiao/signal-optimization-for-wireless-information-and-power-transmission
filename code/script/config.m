@@ -15,9 +15,10 @@ rxGainDbi = 2;
 % path loss
 pathLossDb = 58;
 % average transmit power
-txPowerDb = 0; txPower = db2pow(txPowerDb);
+txPowerDbm = -20; txPower = dbm2pow(txPowerDbm);
 % average receive power
-rxPowerDbm = txPowerDb + eirpDbm + rxGainDbi - pathLossDb; rxPower = dbm2pow(rxPowerDbm);
+% rxPowerDbm = txPowerDbm + eirpDbm + rxGainDbi - pathLossDb; rxPower = dbm2pow(rxPowerDbm);
+rxPowerDbm = txPowerDbm; rxPower = dbm2pow(rxPowerDbm);
 % bandwidth
 bandwidth = 1e6;
 % number of transmit antenna
@@ -37,8 +38,8 @@ maxIter = 1e2;
 % rate constraint
 minRate = 1;
 % minimum gain ratio of the harvested current in each iteration (successive approximation)
-minCurrentGainRatio = 1e-3;
+minCurrentGainRatio = 1e-2;
 % minimum gain of the harvested current in each iteration
-minCurrentGain = 1e-8;
+minCurrentGain = 1e-9;
 
 clearvars eirpDbm rxGainDbi pathLossDb txPowerDbm noisePowerDbm snrDb
