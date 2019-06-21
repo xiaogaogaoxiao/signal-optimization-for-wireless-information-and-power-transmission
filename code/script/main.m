@@ -1,9 +1,8 @@
 initialize; config;
 
-% simulate multipath channel based on tapped-delay line model
-[channelAmplitude] = multipath_channel(nSubbands, nTxs, carrierFrequency);
+% simulate multipath flat channel based on tapped-delay line model
+[channelAmplitude] = frequency_flat_channel(nSubbands, nTxs, centerFrequency);
 
-channelAmplitude = [2.1; 2; 1.9; 1.7];
 
 % [current, rate] = wipt(nSubbands, nTxs, channelAmplitude, k2, k4, txPower, noisePower, resistance, maxIter, minRate, minCurrentGainRatio, minCurrentGain);
 [currentDecoupling, rateDecoupling] = wipt_decoupling(nSubbands, channelAmplitude, k2, k4, txPower, noisePower, resistance, maxIter, minRate, minCurrentGainRatio, minCurrentGain);
