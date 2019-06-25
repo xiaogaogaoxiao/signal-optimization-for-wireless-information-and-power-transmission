@@ -56,6 +56,13 @@ for iIter = 1: maxIter
             2 ^ minRate * prod(prod((monomialOfMutualInfo ./ exponentOfMutualInfo) .^ (-exponentOfMutualInfo))) <= 1;
             powerSplitRatio + infoSplitRatio <= 1;
     cvx_end
+        
+    % cannot meet the minimum rate requirement
+    if cvx_status == "Infeasible"
+        current = 0;
+        rate = 0;
+        break;
+    end
     
     % update achievable rate and power successively
     [targetFun, ~, exponentOfTarget] = target_function(nSubbands, nTxs, powerAmplitude, infoAmplitude, channelAmplitude, k2, k4, powerSplitRatio, resistance);

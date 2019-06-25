@@ -163,7 +163,7 @@ monomialOfTargetP2I2 = monomialOfTargetP2I2 * 1.5 * k4 * powerSplitRatio ^ 2 * r
 
 % group monomials
 monomialOfTarget = [monomialOfTargetP2 monomialOfTargetP4 monomialOfTargetI2 monomialOfTargetI4 monomialOfTargetP2I2];
-[sum(monomialOfTargetP2) sum(monomialOfTargetP4) sum(monomialOfTargetI2) sum(monomialOfTargetI4) sum(monomialOfTargetP2I2)]
+% [sum(monomialOfTargetP2) sum(monomialOfTargetP4) sum(monomialOfTargetI2) sum(monomialOfTargetI4) sum(monomialOfTargetP2I2)]
 
 if isKnown
     targetFun = sum(monomialOfTarget);

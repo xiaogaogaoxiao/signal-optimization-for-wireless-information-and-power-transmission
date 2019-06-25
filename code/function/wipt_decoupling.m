@@ -58,6 +58,13 @@ for iIter = 1: maxIter
             powerSplitRatio + infoSplitRatio <= 1;
     cvx_end
     
+    % cannot meet the minimum rate requirement
+    if cvx_status == "Infeasible"
+        current = 0;
+        rate = 0;
+        break;
+    end
+    
     % update achievable rate and power successively
     [targetFun, ~, exponentOfTarget] = target_function_decoupling(nSubbands, powerAmplitude, infoAmplitude, channelAmplitude, k2, k4, powerSplitRatio, resistance);
     [rate, ~, exponentOfMutualInfo] = mutual_information_decoupling(nSubbands, infoAmplitude, channelAmplitude, noisePower, infoSplitRatio);

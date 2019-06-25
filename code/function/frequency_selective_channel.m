@@ -1,11 +1,12 @@
-function [channelAmplitude] = frequency_selective_channel(nSubbands, nTxs, carrierFrequency)
+function [channelAmplitude] = frequency_selective_channel(nSubbands, nTxs, centerFrequency, bandwidth)
 % Function:
 %   - simulate a multipath frequency-selective channel based on tapped-delay line model
 %
 % InputArg(s):
 %   - nSubbands: number of subbands (subcarriers)
 %   - nTxs: number of transmit antennas
-%   - carrierFrequency: carrier frequency
+%   - centerFrequency: center frequency of carriers
+%   - bandwidth: available bandwidth
 %
 % OutputArg(s):
 %   - impulseResponse: channel impluse response
@@ -20,6 +21,10 @@ function [channelAmplitude] = frequency_selective_channel(nSubbands, nTxs, carri
 
 
 impulseResponse = zeros(nSubbands, nTxs);
+% gap frequency
+gapFrequency = bandwidth / nSubbands;
+% carrier frequency
+carrierFrequency = centerFrequency - (nSubbands - 1) / 2 * gapFrequency: gapFrequency: centerFrequency + (nSubbands - 1) / 2 * gapFrequency;
 for iTx = 1: nTxs
     % tapped-delay line by HIPERLAN/2 model B
     [tapDelay, tapGain] = hiperlan2_B();
