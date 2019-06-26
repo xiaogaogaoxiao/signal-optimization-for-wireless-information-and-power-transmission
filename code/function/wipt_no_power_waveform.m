@@ -1,10 +1,9 @@
-function [current, rate] = wipt_no_power_waveform(nSubbands, nTxs, channelAmplitude, k2, k4, txPower, noisePower, resistance, maxIter, minRate, minCurrentGainRatio, minCurrentGain)
+function [current, rate] = wipt_no_power_waveform(nSubbands, channelAmplitude, k2, k4, txPower, noisePower, resistance, maxIter, minRate, minCurrentGainRatio, minCurrentGain)
 % Function:
 %   - characterizing the rate-energy region of MISO transmission based on the proposed WIPT architecture
 %
 % InputArg(s):
 %   - nSubbands: number of subbands (subcarriers)
-%   - nTxs: number of transmit antennas
 %   - channelAmplitude: amplitude of channel impulse response
 %   - k2, k4: diode k-parameters
 %   - txPower: average transmit power
@@ -30,8 +29,8 @@ infoAmplitude = 2 * channelAmplitude / norm(channelAmplitude, 'fro') * sqrt(txPo
 powerSplitRatio = 0.5;
 infoSplitRatio = 1 - powerSplitRatio;
 current = 0;
-[~, ~, exponentOfTarget] = target_function(nSubbands, nTxs, powerAmplitude, infoAmplitude, channelAmplitude, k2, k4, powerSplitRatio, resistance);
-[~, ~, exponentOfMutualInfo] = mutual_information(nSubbands, nTxs, infoAmplitude, channelAmplitude, noisePower, infoSplitRatio);
+[~, ~, exponentOfTarget] = target_function_decoupling(nSubbands, powerAmplitude, infoAmplitude, channelAmplitude, k2, k4, powerSplitRatio, resistance);
+[~, ~, exponentOfMutualInfo] = mutual_information_decoupling(nSubbands, infoAmplitude, channelAmplitude, noisePower, infoSplitRatio);
 
 % iterate until optimum
 for iIter = 1: maxIter
@@ -41,13 +40,13 @@ for iIter = 1: maxIter
         cvx_solver mosek
         
         variable t0
-        variable infoAmplitude(nSubbands, nTxs) nonnegative
+        variable infoAmplitude(nSubbands, 1) nonnegative
         variable powerSplitRatio nonnegative
         variable infoSplitRatio nonnegative
 
         % formulate the expression of monomials
-        [~, monomialOfTarget, ~] = target_function(nSubbands, nTxs, powerAmplitude, infoAmplitude, channelAmplitude, k2, k4, powerSplitRatio, resistance);
-        [~, monomialOfMutualInfo, ~] = mutual_information(nSubbands, nTxs, infoAmplitude, channelAmplitude, noisePower, infoSplitRatio);
+        [~, monomialOfTarget, ~] = target_function_decoupling(nSubbands, powerAmplitude, infoAmplitude, channelAmplitude, k2, k4, powerSplitRatio, resistance);
+        [~, monomialOfMutualInfo, ~] = mutual_information_decoupling(nSubbands, infoAmplitude, channelAmplitude, noisePower, infoSplitRatio);
 
         minimize (1 / t0)
         subject to
@@ -56,25 +55,23 @@ for iIter = 1: maxIter
             2 ^ minRate * prod(prod((monomialOfMutualInfo ./ exponentOfMutualInfo) .^ (-exponentOfMutualInfo))) <= 1;
             powerSplitRatio + infoSplitRatio <= 1;
     cvx_end
-        
+    
+    % valid solution
+    if cvx_status == "Solved"
+        % update achievable rate and power successively
+        [targetFun, ~, exponentOfTarget] = target_function_decoupling(nSubbands, powerAmplitude, infoAmplitude, channelAmplitude, k2, k4, powerSplitRatio, resistance);
+        [rate, ~, exponentOfMutualInfo] = mutual_information_decoupling(nSubbands, infoAmplitude, channelAmplitude, noisePower, infoSplitRatio);
+        % stopping criteria for convergence
+        doExit = (targetFun - current) / current < minCurrentGainRatio || (targetFun - current) < minCurrentGain;
+        % update optimum DC current
+        current = targetFun;
+        if doExit
+            break;
+        end
     % cannot meet the minimum rate requirement
-    if cvx_status == "Infeasible"
-        current = 0;
-        rate = 0;
-        break;
-    end
-    
-    % update achievable rate and power successively
-    [targetFun, ~, exponentOfTarget] = target_function(nSubbands, nTxs, powerAmplitude, infoAmplitude, channelAmplitude, k2, k4, powerSplitRatio, resistance);
-    [rate, ~, exponentOfMutualInfo] = mutual_information(nSubbands, nTxs, infoAmplitude, channelAmplitude, noisePower, infoSplitRatio);
-    
-    % stopping criteria
-    doExit = (targetFun - current) / current < minCurrentGainRatio || (targetFun - current) < minCurrentGain;
-    
-    % update optimum DC current
-    current = targetFun;
-    
-    if doExit
+    else
+        current = NaN;
+        rate = NaN;
         break;
     end
 end

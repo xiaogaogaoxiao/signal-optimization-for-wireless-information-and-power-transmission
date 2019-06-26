@@ -59,25 +59,23 @@ for iIter = 1: maxIter
             2 ^ minRate * prod((1 + infoSplitRatio / noisePower * posynomialOfPowerTerms) .* prod((monomialOfMutualInfo ./ exponentOfMutualInfo) .^ (-exponentOfMutualInfo), 2)) <= 1;
             powerSplitRatio + infoSplitRatio <= 1;
     cvx_end
-        
-    % cannot meet the minimum rate requirement
-    if cvx_status == "Infeasible"
-        current = 0;
-        rate = 0;
-        break;
-    end
-    
-    % update achievable rate and power successively
-    [targetFun, ~, exponentOfTarget] = target_function(nSubbands, nTxs, powerAmplitude, infoAmplitude, channelAmplitude, k2, k4, powerSplitRatio, resistance);
-    [rate, ~, ~, exponentOfMutualInfo] = mutual_information_lower_bound(nSubbands, nTxs, powerAmplitude, infoAmplitude, channelAmplitude, noisePower, infoSplitRatio);
-    
-    % stopping criteria
-    doExit = (targetFun - current) / current < minCurrentGainRatio || (targetFun - current) < minCurrentGain;
-    
-    % update optimum DC current
-    current = targetFun;
-    
-    if doExit
+
+    % valid solution
+    if cvx_status == "Solved"
+        % update achievable rate and power successively
+        [targetFun, ~, exponentOfTarget] = target_function(nSubbands, nTxs, powerAmplitude, infoAmplitude, channelAmplitude, k2, k4, powerSplitRatio, resistance);
+        [rate, ~, ~, exponentOfMutualInfo] = mutual_information_lower_bound(nSubbands, nTxs, powerAmplitude, infoAmplitude, channelAmplitude, noisePower, infoSplitRatio);
+        % stopping criteria
+        doExit = (targetFun - current) / current < minCurrentGainRatio || (targetFun - current) < minCurrentGain;
+        % update optimum DC current
+        current = targetFun;
+        if doExit
+            break;
+        end
+        % cannot meet the minimum rate requirement
+    else
+        current = NaN;
+        rate = NaN;
         break;
     end
 end

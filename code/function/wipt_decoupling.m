@@ -58,24 +58,22 @@ for iIter = 1: maxIter
             powerSplitRatio + infoSplitRatio <= 1;
     cvx_end
     
+    % valid solution
+    if cvx_status == "Solved"
+        % update achievable rate and power successively
+        [targetFun, ~, exponentOfTarget] = target_function_decoupling(nSubbands, powerAmplitude, infoAmplitude, channelAmplitude, k2, k4, powerSplitRatio, resistance);
+        [rate, ~, exponentOfMutualInfo] = mutual_information_decoupling(nSubbands, infoAmplitude, channelAmplitude, noisePower, infoSplitRatio);
+        % stopping criteria
+        doExit = (targetFun - current) / current < minCurrentGainRatio || (targetFun - current) < minCurrentGain;
+        % update optimum DC current
+        current = targetFun;
+        if doExit
+            break;
+        end
     % cannot meet the minimum rate requirement
-    if cvx_status == "Infeasible"
-        current = 0;
-        rate = 0;
-        break;
-    end
-    
-    % update achievable rate and power successively
-    [targetFun, ~, exponentOfTarget] = target_function_decoupling(nSubbands, powerAmplitude, infoAmplitude, channelAmplitude, k2, k4, powerSplitRatio, resistance);
-    [rate, ~, exponentOfMutualInfo] = mutual_information_decoupling(nSubbands, infoAmplitude, channelAmplitude, noisePower, infoSplitRatio);
-    
-    % stopping criteria
-    doExit = (targetFun - current) / current < minCurrentGainRatio || (targetFun - current) < minCurrentGain;
-    
-    % update optimum DC current
-    current = targetFun;
-    
-    if doExit
+    else
+        current = NaN;
+        rate = NaN;
         break;
     end
 end
