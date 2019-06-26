@@ -24,7 +24,8 @@ bandwidth = 1e6;
 % number of transmit antenna
 nTxs = 1;
 % number of subbands
-nSubbands = [2 4 8 16]; nSubbandsRef = nSubbands(4);
+% nSubbands = [2 4 8 16]; nSubbandsRef = nSubbands(4);
+nSubbands = [8];
 % number of different subband cases
 nCases = length(nSubbands);
 % SNR
@@ -36,12 +37,16 @@ noisePowerDbm = rxPowerDbm - snrDb; noisePower = dbm2pow(noisePowerDbm); noisePo
 % max number of iterations
 maxIter = 1e1;
 % rate constraint
-minRate = 0: 0.2: 5;
+minRate = 10: 1: 15;
 % number of samples in each curve
 nSamples = length(minRate);
 % minimum gain ratio of the harvested current in each iteration (successive approximation)
 minCurrentGainRatio = 1e-2;
 % minimum gain of the harvested current in each iteration
 minCurrentGain = 1e-9;
+% number of channel realizations for average
+nRealizations = 1e3;
+% channel mode ("flat" or "selective")
+channelMode = "flat";
 
 clearvars eirpDbm rxGainDbi pathLossDb txPowerDbm noisePowerDbm snrDb
