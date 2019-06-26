@@ -8,7 +8,7 @@ function [channelAmplitude] = frequency_flat_channel(nSubbands, nTxs, centerFreq
 %   - centerFrequency: center frequency of carriers
 %
 % OutputArg(s):
-%   - impulseResponse: channel impluse response
+%   - channelAmplitude: absolute value of channel frequency response
 %
 % Comments:
 %   - flat fading
@@ -19,18 +19,18 @@ function [channelAmplitude] = frequency_flat_channel(nSubbands, nTxs, centerFreq
 % Author & Date: Yang (i@snowztail.com) - 21 Jun 19
 
 
-impulseResponse = zeros(nSubbands, nTxs);
+frequencyResponse = zeros(nSubbands, nTxs);
 for iTx = 1: nTxs
     % tapped-delay line by HIPERLAN/2 model B
     [tapDelay, tapGain] = hiperlan2_B();
     for iSubband = 1: nSubbands
         % sum paths to get complex channel gain
-        impulseResponse(iSubband, iTx) = sum(tapGain .* exp(-1i * 2 * pi * centerFrequency * tapDelay));
+        frequencyResponse(iSubband, iTx) = sum(tapGain .* exp(-1i * 2 * pi * centerFrequency * tapDelay));
     end
 end
 
 % obtain the absolute value of channel impulse response
-channelAmplitude = abs(impulseResponse);
+channelAmplitude = abs(frequencyResponse);
 
 end
 

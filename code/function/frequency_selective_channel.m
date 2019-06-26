@@ -9,7 +9,7 @@ function [channelAmplitude] = frequency_selective_channel(nSubbands, nTxs, cente
 %   - bandwidth: available bandwidth
 %
 % OutputArg(s):
-%   - impulseResponse: channel impluse response
+%   - channelAmplitude: absolute value of channel frequency response
 %
 % Comments:
 %   - frequency-selective fading
@@ -20,7 +20,7 @@ function [channelAmplitude] = frequency_selective_channel(nSubbands, nTxs, cente
 % Author & Date: Yang (i@snowztail.com) - 02 Jun 19
 
 
-impulseResponse = zeros(nSubbands, nTxs);
+frequencyResponse = zeros(nSubbands, nTxs);
 % gap frequency
 gapFrequency = bandwidth / nSubbands;
 % carrier frequency
@@ -30,12 +30,12 @@ for iTx = 1: nTxs
     [tapDelay, tapGain] = hiperlan2_B();
     for iSubband = 1: nSubbands
         % sum paths to get complex channel gain
-        impulseResponse(iSubband, iTx) = sum(tapGain .* exp(-1i * 2 * pi * carrierFrequency(iSubband) * tapDelay));
+        frequencyResponse(iSubband, iTx) = sum(tapGain .* exp(-1i * 2 * pi * carrierFrequency(iSubband) * tapDelay));
     end
 end
 
 % obtain the absolute value of channel impulse response
-channelAmplitude = abs(impulseResponse);
+channelAmplitude = abs(frequencyResponse);
 
 end
 
