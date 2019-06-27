@@ -24,22 +24,21 @@ bandwidth = 1e6;
 % number of transmit antenna
 nTxs = 1;
 % number of subbands
-% nSubbands = [2 4 8 16]; nSubbandsRef = nSubbands(4);
-nSubbands = [8];
+nSubbands = [2 4 8 16]; nSubbandsRef = 16;
 % number of different subband cases
 nCases = length(nSubbands);
 % SNR
-snrDb = 10: 10: 40; snrRef = snrDb(2);
+snrDb = [10 20 30 40]; snrRef = 20;
 % number of SNRs
 nSnrs = length(snrDb);
 % average noise power
 noisePowerDbm = rxPowerDbm - snrDb; noisePower = dbm2pow(noisePowerDbm); noisePowerRef = noisePower(2);
 % max number of iterations
 maxIter = 1e1;
-% rate constraint
-minRate = 10: 1: 15;
+% rate constraint per subband
+minSubbandRate = 0: 0.5: 10;
 % number of samples in each curve
-nSamples = length(minRate);
+nSamples = length(minSubbandRate);
 % minimum gain ratio of the harvested current in each iteration (successive approximation)
 minCurrentGainRatio = 1e-2;
 % minimum gain of the harvested current in each iteration

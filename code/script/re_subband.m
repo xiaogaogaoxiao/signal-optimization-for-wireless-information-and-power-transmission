@@ -3,10 +3,11 @@ initialize; config;
 currentDecoupling = zeros(nCases, nSamples); rateDecoupling = zeros(nCases, nSamples);
 currentNoPowerWaveform = zeros(nCases, nSamples); rateNoPowerWaveform = zeros(nCases, nSamples);
 for iCase = 1: nCases
-    [channelAmplitude] = channel_realization(nSubbands(iCase), nTxs, centerFrequency, bandwidth, nRealizations, channelMode);
+%     [channelAmplitude] = channel_realization(nSubbands(iCase), nTxs, centerFrequency, bandwidth, nRealizations, channelMode);
+    [channelAmplitude] = channel_sample(nSubbands(iCase));
     for iSample = 1: nSamples
-        [currentDecoupling(iCase, iSample), rateDecoupling(iCase, iSample)] = wipt_decoupling(nSubbands(iCase), channelAmplitude, k2, k4, txPower, noisePowerRef, resistance, maxIter, minRate(iSample), minCurrentGainRatio, minCurrentGain);
-        [currentNoPowerWaveform(iCase, iSample), rateNoPowerWaveform(iCase, iSample)] = wipt_no_power_waveform(nSubbands(iCase), channelAmplitude, k2, k4, txPower, noisePowerRef, resistance, maxIter, minRate(iSample), minCurrentGainRatio, minCurrentGain);
+%         [currentDecoupling(iCase, iSample), rateDecoupling(iCase, iSample)] = wipt_decoupling(nSubbands(iCase), channelAmplitude, k2, k4, txPower, noisePowerRef, resistance, maxIter, minSubbandRate(iSample), minCurrentGainRatio, minCurrentGain);
+        [currentNoPowerWaveform(iCase, iSample), rateNoPowerWaveform(iCase, iSample)] = wipt_no_power_waveform(nSubbands(iCase), channelAmplitude, k2, k4, txPower, noisePowerRef, resistance, maxIter, minSubbandRate(iSample), minCurrentGainRatio, minCurrentGain);
     end
 end
 %% R-E region plots

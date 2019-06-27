@@ -5,12 +5,13 @@ currentLowerBound = zeros(nSnrs, nSamples); rateLowerBound = zeros(nSnrs, nSampl
 currentNoPowerWaveform = zeros(nSnrs, nSamples); rateNoPowerWaveform = zeros(nSnrs, nSamples);
 % simulate multipath flat channel based on tapped-delay line model
 % [channelAmplitude] = frequency_flat_channel(nSubbands(iCase), nTxs, centerFrequency);
-[channelAmplitude] = frequency_selective_channel(nSubbandsRef, nTxs, centerFrequency, bandwidth);
+% [channelAmplitude] = frequency_selective_channel(nSubbandsRef, nTxs, centerFrequency, bandwidth);
+[channelAmplitude] = channel_sample(nSubbandsRef);
 for iSnr = 1: nSnrs
     for iSample = 1: nSamples
-        [currentDecoupling(iSnr, iSample), rateDecoupling(iSnr, iSample)] = wipt_decoupling(nSubbandsRef, channelAmplitude, k2, k4, txPower, noisePower(iSnr), resistance, maxIter, minRate(iSample), minCurrentGainRatio, minCurrentGain);
-        [currentLowerBound(iSnr, iSample), rateLowerBound(iSnr, iSample)] = wipt_lower_bound(nSubbandsRef, nTxs, channelAmplitude, k2, k4, txPower, noisePower(iSnr), resistance, maxIter, minRate(iSample), minCurrentGainRatio, minCurrentGain);
-        [currentNoPowerWaveform(iSnr, iSample), rateNoPowerWaveform(iSnr, iSample)] = wipt_no_power_waveform(nSubbandsRef, channelAmplitude, k2, k4, txPower, noisePower(iSnr), resistance, maxIter, minRate(iSample), minCurrentGainRatio, minCurrentGain);
+        [currentDecoupling(iSnr, iSample), rateDecoupling(iSnr, iSample)] = wipt_decoupling(nSubbandsRef, channelAmplitude, k2, k4, txPower, noisePower(iSnr), resistance, maxIter, minSubbandRate(iSample), minCurrentGainRatio, minCurrentGain);
+        [currentLowerBound(iSnr, iSample), rateLowerBound(iSnr, iSample)] = wipt_lower_bound(nSubbandsRef, nTxs, channelAmplitude, k2, k4, txPower, noisePower(iSnr), resistance, maxIter, minSubbandRate(iSample), minCurrentGainRatio, minCurrentGain);
+        [currentNoPowerWaveform(iSnr, iSample), rateNoPowerWaveform(iSnr, iSample)] = wipt_no_power_waveform(nSubbandsRef, channelAmplitude, k2, k4, txPower, noisePower(iSnr), resistance, maxIter, minSubbandRate(iSample), minCurrentGainRatio, minCurrentGain);
     end
 end
 %% R-E region plots
