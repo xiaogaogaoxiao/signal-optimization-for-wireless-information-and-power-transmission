@@ -19,6 +19,7 @@ function [mutualInfo, monomialOfMutualInfo, posynomialOfPowerTerms, exponentOfMu
 %   - exponentOfMutualInfo: exponent of the mutual information in the geometric mean
 %
 % Comments:
+%   - returns per-subband rate that decreases as the number of subbands increases
 %   - assume the power waveform is CSCG that creates an interference and rate loss
 %   - there is a constant term (i.e. 1) in each posynomial
 %
@@ -77,5 +78,7 @@ else
     % the expression is neither supported by CVX nor to be used by the algorithm
     mutualInfo = NaN;
 end
+% per-subband rate
+mutualInfo = mutualInfo / nSubbands;
 
 end

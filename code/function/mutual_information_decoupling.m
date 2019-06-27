@@ -16,6 +16,7 @@ function [mutualInfo, monomialOfMutualInfo, exponentOfMutualInfo] = mutual_infor
 %   - exponentOfMutualInfo: exponent of the mutual information in the geometric mean
 %
 % Comments:
+%   - returns per-subband rate that decreases as the number of subbands increases
 %   - decouple the design of the spatial and frequency domain weights
 %   - there is a constant term (i.e. 1) in each posynomial
 %
@@ -49,6 +50,8 @@ else
     exponentOfMutualInfo = NaN;
     mutualInfo = NaN;
 end
+% per-subband rate
+mutualInfo = mutualInfo / nSubbands;
 
 end
 
