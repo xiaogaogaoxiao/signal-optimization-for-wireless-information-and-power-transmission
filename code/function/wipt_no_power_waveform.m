@@ -1,4 +1,4 @@
-function [current, rate] = wipt_no_power_waveform(nSubbands, channelAmplitude, k2, k4, txPower, noisePower, resistance, maxIter, minRate, minCurrentGainRatio, minCurrentGain)
+function [current, rate] = wipt_no_power_waveform(nSubbands, channelAmplitude, k2, k4, txPower, noisePower, resistance, maxIter, minSubbandRate, minCurrentGainRatio, minCurrentGain)
 % Function:
 %   - characterizing the rate-energy region of MISO transmission based on the proposed WIPT architecture
 %
@@ -10,7 +10,7 @@ function [current, rate] = wipt_no_power_waveform(nSubbands, channelAmplitude, k
 %   - noisePower: average noise power
 %   - resistance: antenna resistance
 %   - maxIter: max number of iterations for sequential convex optimization
-%   - minRate: rate constraint
+%   - minSubbandRate: rate constraint per subband
 %   - minCurrentGainRatio: minimum gain ratio of the harvested current in each iteration
 %
 % OutputArg(s):
@@ -29,6 +29,7 @@ infoAmplitude = 2 * channelAmplitude / norm(channelAmplitude, 'fro') * sqrt(txPo
 powerSplitRatio = 0.5;
 infoSplitRatio = 1 - powerSplitRatio;
 current = 0;
+minSumRate = nSubbands * minSubbandRate;
 [~, ~, exponentOfTarget] = target_function_decoupling(nSubbands, powerAmplitude, infoAmplitude, channelAmplitude, k2, k4, powerSplitRatio, resistance);
 [~, ~, exponentOfMutualInfo] = mutual_information_decoupling(nSubbands, infoAmplitude, channelAmplitude, noisePower, infoSplitRatio);
 
@@ -52,7 +53,7 @@ for iIter = 1: maxIter
         subject to
             0.5 * (norm(powerAmplitude, 'fro') ^ 2 + norm(infoAmplitude, 'fro') ^ 2) <= txPower;
             t0 * prod((monomialOfTarget ./ exponentOfTarget) .^ (-exponentOfTarget)) <= 1;
-            2 ^ minRate * prod(prod((monomialOfMutualInfo ./ exponentOfMutualInfo) .^ (-exponentOfMutualInfo))) <= 1;
+            2 ^ minSumRate * prod(prod((monomialOfMutualInfo ./ exponentOfMutualInfo) .^ (-exponentOfMutualInfo))) <= 1;
             powerSplitRatio + infoSplitRatio <= 1;
     cvx_end
     
