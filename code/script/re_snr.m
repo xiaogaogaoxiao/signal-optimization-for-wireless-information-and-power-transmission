@@ -1,17 +1,15 @@
 initialize; config;
-%% Rate-energy region as a function of SNR
-currentDecoupling = zeros(nSnrs, nSamples); rateDecoupling = zeros(nSnrs, nSamples);
-currentLowerBound = zeros(nSnrs, nSamples); rateLowerBound = zeros(nSnrs, nSamples);
-currentNoPowerWaveform = zeros(nSnrs, nSamples); rateNoPowerWaveform = zeros(nSnrs, nSamples);
-% simulate multipath flat channel based on tapped-delay line model
-% [channelAmplitude] = frequency_flat_channel(nSubbands(iCase), nTxs, centerFrequency);
-% [channelAmplitude] = frequency_selective_channel(nSubbandsRef, nTxs, centerFrequency, bandwidth);
-[channelAmplitude] = channel_sample(nSubbandsRef);
-for iSnr = 1: nSnrs
-    for iSample = 1: nSamples
-        [currentDecoupling(iSnr, iSample), rateDecoupling(iSnr, iSample)] = wipt_decoupling(nSubbandsRef, channelAmplitude, k2, k4, txPower, noisePower(iSnr), resistance, maxIter, minSubbandRate(iSample), minCurrentGainRatio, minCurrentGain);
-        [currentLowerBound(iSnr, iSample), rateLowerBound(iSnr, iSample)] = wipt_lower_bound(nSubbandsRef, nTxs, channelAmplitude, k2, k4, txPower, noisePower(iSnr), resistance, maxIter, minSubbandRate(iSample), minCurrentGainRatio, minCurrentGain);
-        [currentNoPowerWaveform(iSnr, iSample), rateNoPowerWaveform(iSnr, iSample)] = wipt_no_power_waveform(nSubbandsRef, channelAmplitude, k2, k4, txPower, noisePower(iSnr), resistance, maxIter, minSubbandRate(iSample), minCurrentGainRatio, minCurrentGain);
+%% Channel
+[channelAmplitude] = channel_amplitude(nSubbands, nTxs, centerFrequency, bandwidth, channelMode);
+%% R-E region samples
+currentDecoupling = zeros(nSnrCases, nRateSamples); rateDecoupling = zeros(nSnrCases, nRateSamples);
+currentLowerBound = zeros(nSnrCases, nRateSamples); rateLowerBound = zeros(nSnrCases, nRateSamples);
+currentNoPowerWaveform = zeros(nSnrCases, nRateSamples); rateNoPowerWaveform = zeros(nSnrCases, nRateSamples);
+for iSnrCase = 1: nSnrCases
+    for iRateSample = 1: nRateSamples
+        [currentDecoupling(iSnrCase, iRateSample), rateDecoupling(iSnrCase, iRateSample)] = wipt_decoupling(nSubbandsRef, channelAmplitude{iSubbandCase}, k2, k4, txPower, noisePower(iSnrCase), resistance, maxIter, minSubbandRate(iRateSample), minCurrentGainRatio, minCurrentGain);
+        [currentLowerBound(iSnrCase, iRateSample), rateLowerBound(iSnrCase, iRateSample)] = wipt_lower_bound(nSubbandsRef, nTxs, channelAmplitude{iSubbandCase}, k2, k4, txPower, noisePower(iSnrCase), resistance, maxIter, minSubbandRate(iRateSample), minCurrentGainRatio, minCurrentGain);
+        [currentNoPowerWaveform(iSnrCase, iRateSample), rateNoPowerWaveform(iSnrCase, iRateSample)] = wipt_no_power_waveform(nSubbandsRef, channelAmplitude{iSubbandCase}, k2, k4, txPower, noisePower(iSnrCase), resistance, maxIter, minSubbandRate(iRateSample), minCurrentGainRatio, minCurrentGain);
     end
 end
 %% R-E region plots

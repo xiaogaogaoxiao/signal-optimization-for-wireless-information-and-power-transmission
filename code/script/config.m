@@ -2,8 +2,6 @@ clc; clear; close all;
 
 % diode k-parameter
 k2 = 0.0034; k4 = 0.3829;
-% truncation order
-order = 4;
 % antenna resistance
 resistance = 50;
 % center frequency
@@ -17,35 +15,37 @@ pathLossDb = 58;
 % average transmit power
 txPowerDbm = -20; txPower = dbm2pow(txPowerDbm);
 % average receive power
-% rxPowerDbm = txPowerDbm + eirpDbm + rxGainDbi - pathLossDb; rxPower = dbm2pow(rxPowerDbm);
-rxPowerDbm = txPowerDbm; rxPower = dbm2pow(rxPowerDbm);
+rxPowerDbm = eirpDbm + rxGainDbi - pathLossDb; rxPower = dbm2pow(rxPowerDbm);
 % bandwidth
 bandwidth = 1e6;
 % number of transmit antenna
 nTxs = 1;
 % number of subbands
-nSubbands = [2 4 8 16]; nSubbandsRef = 16;
+nSubbands = [2 4 8 16];
+% nSubbands = 8;
+nSubbandsRef = 16;
 % number of different subband cases
-nCases = length(nSubbands);
+nSubbandCases = length(nSubbands);
 % SNR
-snrDb = [10 20 30 40]; snrRef = 20;
+snrDb = [10 20 30 40];
+snrRefDb = 20;
 % number of SNRs
-nSnrs = length(snrDb);
+nSnrCases = length(snrDb);
 % average noise power
-noisePowerDbm = rxPowerDbm - snrDb; noisePower = dbm2pow(noisePowerDbm); noisePowerRef = noisePower(2);
-% max number of iterations
+noisePowerDbm = rxPowerDbm - snrDb; noisePower = dbm2pow(noisePowerDbm);
+noisePowerRefDbm = rxPowerDbm - snrRefDb; noisePowerRef = dbm2pow(noisePowerRefDbm);
+% max number of iterations for convergence
 maxIter = 1e1;
 % rate constraint per subband
 minSubbandRate = 0: 0.5: 10;
 % number of samples in each curve
-nSamples = length(minSubbandRate);
+nRateSamples = length(minSubbandRate);
 % minimum gain ratio of the harvested current in each iteration (successive approximation)
 minCurrentGainRatio = 1e-2;
 % minimum gain of the harvested current in each iteration
 minCurrentGain = 1e-9;
-% number of channel realizations for average
-nRealizations = 1e3;
 % channel mode ("flat" or "selective")
 channelMode = "flat";
+% channelMode = "selective";
 
-clearvars eirpDbm rxGainDbi pathLossDb txPowerDbm noisePowerDbm snrDb
+clearvars eirpDbm rxGainDbi pathLossDb txPowerDbm rxPowerDbm noisePowerDbm noisePowerRefDbm snrDb snrRefDb

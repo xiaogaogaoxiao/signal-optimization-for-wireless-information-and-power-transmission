@@ -9,33 +9,48 @@ function [channelAmplitude] = frequency_selective_channel(nSubbands, nTxs, cente
 %   - bandwidth: available bandwidth
 %
 % OutputArg(s):
-%   - channelAmplitude: absolute value of channel frequency response
+%   - channelAmplitude: absolute channel frequency response sampled on subbands
 %
 % Comments:
 %   - frequency-selective fading
 %   - assume transmit antennas are close enough and no phase shift
 %   - the optimum phases of information and power waveforms for single-user systems are fixed as the negative phase of channel impulse response
-%   - therefore, the optimization is all about the amplitudes and this function only returns the channel amplitude
+%   - the optimization is all about the amplitudes
 %
 % Author & Date: Yang (i@snowztail.com) - 02 Jun 19
 
 
-frequencyResponse = zeros(nSubbands, nTxs);
-% gap frequency
-gapFrequency = bandwidth / nSubbands;
-% carrier frequency
-carrierFrequency = centerFrequency - (nSubbands - 1) / 2 * gapFrequency: gapFrequency: centerFrequency + (nSubbands - 1) / 2 * gapFrequency;
+% channelAmplitude = zeros(nSubbands, nTxs);
+% % gap frequency
+% gapFrequency = bandwidth / nSubbands;
+% % carrier frequency
+% carrierFrequency = centerFrequency - (nSubbands - 1) / 2 * gapFrequency: gapFrequency: centerFrequency + (nSubbands - 1) / 2 * gapFrequency;
+% for iTx = 1: nTxs
+%     % tapped-delay line by HIPERLAN/2 model B
+%     [tapDelay, tapGain] = hiperlan2_B();
+%     for iSubband = 1: nSubbands
+%         % sum paths to get complex channel gain
+%         channelAmplitude(iSubband, iTx) = sum(tapGain .* exp(-1i * 2 * pi * carrierFrequency(iSubband) * tapDelay));
+%     end
+% end
+
+nSubbandCases = length(nSubbands);
+channelAmplitude = cell(nSubbandCases, 1);
+
 for iTx = 1: nTxs
     % tapped-delay line by HIPERLAN/2 model B
     [tapDelay, tapGain] = hiperlan2_B();
-    for iSubband = 1: nSubbands
-        % sum paths to get complex channel gain
-        frequencyResponse(iSubband, iTx) = sum(tapGain .* exp(-1i * 2 * pi * carrierFrequency(iSubband) * tapDelay));
+    for iSubbandCase = 1: nSubbandCases
+        % gap frequency
+        gapFrequency = bandwidth / nSubbands(iSubbandCase);
+        % carrier frequency
+        carrierFrequency = centerFrequency - (nSubbands(iSubbandCase) - 1) / 2 * gapFrequency: gapFrequency: centerFrequency + (nSubbands(iSubbandCase) - 1) / 2 * gapFrequency;
+        for iSubband = 1: nSubbands(iSubbandCase)
+            % sum paths to get complex channel gain
+            channelAmplitude{iSubbandCase}(iSubband, iTx) = abs(sum(tapGain .* exp(-1i * 2 * pi * carrierFrequency(iSubband) * tapDelay)));
+        end
     end
 end
-
-% obtain the absolute value of channel impulse response
-channelAmplitude = abs(frequencyResponse);
 
 end
 
