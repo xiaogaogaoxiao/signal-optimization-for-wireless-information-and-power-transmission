@@ -1,15 +1,32 @@
 initialize; config;
 %% Channel
-[channelAmplitude] = channel_amplitude(nSubbands, nTxs, centerFrequency, bandwidth, channelMode);
+[frequencyResponse, basebandFrequency, tapDelay, tapGain] = frequency_response(nTxs, centerFrequency, bandwidth, channelMode);
+index = find(basebandFrequency >= -bandwidth / 2 & basebandFrequency <= bandwidth / 2);
+
+figure('Name', sprintf('Frequency response of the frequency-%s channel', channelMode));
+plot(basebandFrequency / 1e6, frequencyResponse);
+hold on;
+plot(basebandFrequency(index) / 1e6, frequencyResponse(index));
+grid on; grid minor;
+legend([num2str(2.5 * bandwidth / 1e6) ' MHz'], [num2str(bandwidth / 1e6) ' MHz']);
+xlabel("Frequency [MHz]");
+ylabel("Frequency response");
+xlim([-1.25, 1.25]);
+xticks(-1.25: 0.25: 1.25);
+yticks(0: 0.2: 10);
 %% R-E region samples
 currentDecoupling = zeros(nSnrCases, nRateSamples); rateDecoupling = zeros(nSnrCases, nRateSamples);
 currentLowerBound = zeros(nSnrCases, nRateSamples); rateLowerBound = zeros(nSnrCases, nRateSamples);
 currentNoPowerWaveform = zeros(nSnrCases, nRateSamples); rateNoPowerWaveform = zeros(nSnrCases, nRateSamples);
+
+gapFrequency = bandwidth / nSubbandsRef;
+sampleFrequency = centerFrequency - (nSubbandsRef - 1) / 2 * gapFrequency: gapFrequency: centerFrequency + (nSubbandsRef - 1) / 2 * gapFrequency;
+[channelAmplitude] = channel_amplitude(sampleFrequency, tapDelay, tapGain, channelMode);
 for iSnrCase = 1: nSnrCases
     for iRateSample = 1: nRateSamples
-        [currentDecoupling(iSnrCase, iRateSample), rateDecoupling(iSnrCase, iRateSample)] = wipt_decoupling(nSubbandsRef, channelAmplitude{iSubbandCase}, k2, k4, txPower, noisePower(iSnrCase), resistance, maxIter, minSubbandRate(iRateSample), minCurrentGainRatio, minCurrentGain);
-        [currentLowerBound(iSnrCase, iRateSample), rateLowerBound(iSnrCase, iRateSample)] = wipt_lower_bound(nSubbandsRef, nTxs, channelAmplitude{iSubbandCase}, k2, k4, txPower, noisePower(iSnrCase), resistance, maxIter, minSubbandRate(iRateSample), minCurrentGainRatio, minCurrentGain);
-        [currentNoPowerWaveform(iSnrCase, iRateSample), rateNoPowerWaveform(iSnrCase, iRateSample)] = wipt_no_power_waveform(nSubbandsRef, channelAmplitude{iSubbandCase}, k2, k4, txPower, noisePower(iSnrCase), resistance, maxIter, minSubbandRate(iRateSample), minCurrentGainRatio, minCurrentGain);
+        [currentDecoupling(iSnrCase, iRateSample), rateDecoupling(iSnrCase, iRateSample)] = wipt_decoupling(nSubbandsRef, channelAmplitude, k2, k4, txPower, noisePower(iSnrCase), resistance, maxIter, minSubbandRate(iRateSample), minCurrentGainRatio, minCurrentGain);
+        [currentLowerBound(iSnrCase, iRateSample), rateLowerBound(iSnrCase, iRateSample)] = wipt_lower_bound(nSubbandsRef, nTxs, channelAmplitude, k2, k4, txPower, noisePower(iSnrCase), resistance, maxIter, minSubbandRate(iRateSample), minCurrentGainRatio, minCurrentGain);
+        [currentNoPowerWaveform(iSnrCase, iRateSample), rateNoPowerWaveform(iSnrCase, iRateSample)] = wipt_no_power_waveform(nSubbandsRef, channelAmplitude, k2, k4, txPower, noisePower(iSnrCase), resistance, maxIter, minSubbandRate(iRateSample), minCurrentGainRatio, minCurrentGain);
     end
 end
 %% R-E region plots

@@ -22,8 +22,9 @@ bandwidth = 1e6;
 nTxs = 1;
 % number of subbands
 nSubbands = [2 4 8 16];
-% nSubbands = 8;
 nSubbandsRef = 16;
+% number of frequency samples over unit bandwidth
+nFrequencySamples = 1e2;
 % number of different subband cases
 nSubbandCases = length(nSubbands);
 % SNR
@@ -45,7 +46,7 @@ minCurrentGainRatio = 1e-2;
 % minimum gain of the harvested current in each iteration
 minCurrentGain = 1e-9;
 % channel mode ("flat" or "selective")
-channelMode = "flat";
-% channelMode = "selective";
+% channelMode = "flat";
+channelMode = "selective";
 
 clearvars eirpDbm rxGainDbi pathLossDb txPowerDbm rxPowerDbm noisePowerDbm noisePowerRefDbm snrDb snrRefDb

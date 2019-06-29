@@ -1,34 +1,51 @@
 initialize; config;
-%% Rate-energy region as a function of subband count
-currentDecoupling = zeros(nCases, nSamples); rateDecoupling = zeros(nCases, nSamples);
-currentNoPowerWaveform = zeros(nCases, nSamples); rateNoPowerWaveform = zeros(nCases, nSamples);
-for iCase = 1: nCases
-%     [channelAmplitude] = channel_realization(nSubbands(iCase), nTxs, centerFrequency, bandwidth, nRealizations, channelMode);
-    [channelAmplitude] = channel_sample(nSubbands(iCase));
-    for iSample = 1: nSamples
-%         [currentDecoupling(iCase, iSample), rateDecoupling(iCase, iSample)] = wipt_decoupling(nSubbands(iCase), channelAmplitude, k2, k4, txPower, noisePowerRef, resistance, maxIter, minSubbandRate(iSample), minCurrentGainRatio, minCurrentGain);
-        [currentNoPowerWaveform(iCase, iSample), rateNoPowerWaveform(iCase, iSample)] = wipt_no_power_waveform(nSubbands(iCase), channelAmplitude, k2, k4, txPower, noisePowerRef, resistance, maxIter, minSubbandRate(iSample), minCurrentGainRatio, minCurrentGain);
+%% Channel
+[frequencyResponse, basebandFrequency, tapDelay, tapGain] = frequency_response(nTxs, centerFrequency, bandwidth, channelMode);
+index = find(basebandFrequency >= -bandwidth / 2 & basebandFrequency <= bandwidth / 2);
+
+figure('Name', sprintf('Frequency response of the frequency-%s channel', channelMode));
+plot(basebandFrequency / 1e6, frequencyResponse);
+hold on;
+plot(basebandFrequency(index) / 1e6, frequencyResponse(index));
+grid on; grid minor;
+legend([num2str(2.5 * bandwidth / 1e6) ' MHz'], [num2str(bandwidth / 1e6) ' MHz']);
+xlabel("Frequency [MHz]");
+ylabel("Frequency response");
+xlim([-1.25, 1.25]);
+xticks(-1.25: 0.25: 1.25);
+yticks(0: 0.2: 10);
+%% R-E region
+currentDecoupling = zeros(nSubbandCases, nRateSamples); rateDecoupling = zeros(nSubbandCases, nRateSamples);
+currentNoPowerWaveform = zeros(nSubbandCases, nRateSamples); rateNoPowerWaveform = zeros(nSubbandCases, nRateSamples);
+
+for iSubbandCase = 1: nSubbandCases
+    gapFrequency = bandwidth / nSubbands(iSubbandCase);
+    sampleFrequency = centerFrequency - (nSubbands(iSubbandCase) - 1) / 2 * gapFrequency: gapFrequency: centerFrequency + (nSubbands(iSubbandCase) - 1) / 2 * gapFrequency;
+    [channelAmplitude] = channel_amplitude(sampleFrequency, tapDelay, tapGain, channelMode);
+    for iRateSample = 1: nRateSamples
+        [currentDecoupling(iSubbandCase, iRateSample), rateDecoupling(iSubbandCase, iRateSample)] = wipt_decoupling(nSubbands(iSubbandCase), channelAmplitude, k2, k4, txPower, noisePowerRef, resistance, maxIter, minSubbandRate(iRateSample), minCurrentGainRatio, minCurrentGain);
+        [currentNoPowerWaveform(iSubbandCase, iRateSample), rateNoPowerWaveform(iSubbandCase, iRateSample)] = wipt_no_power_waveform(nSubbands(iSubbandCase), channelAmplitude, k2, k4, txPower, noisePowerRef, resistance, maxIter, minSubbandRate(iRateSample), minCurrentGainRatio, minCurrentGain);
     end
 end
-%% R-E region plots
+
 figure('Name', 'Superposed waveforms');
-for iCase = 1: nCases
-    plot(rateDecoupling(iCase, :), currentDecoupling(iCase, :) * 1e6);
+for iSubbandCase = 1: nSubbandCases
+    plot(rateDecoupling(iSubbandCase, :), currentDecoupling(iSubbandCase, :) * 1e6);
     hold on;
 end
 hold off;
 grid on; grid minor;
 legend(cellstr(num2str(nSubbands', 'N = %d')));
 xlabel("Rate [bps/Hz]");
-ylabel("I_{DC} [\muA]")
+ylabel("I_{DC} [\muA]");
 
 figure('Name', 'No power waveform');
-for iCase = 1: nCases
-    plot(rateNoPowerWaveform(iCase, :), currentNoPowerWaveform(iCase, :) * 1e6);
+for iSubbandCase = 1: nSubbandCases
+    plot(rateNoPowerWaveform(iSubbandCase, :), currentNoPowerWaveform(iSubbandCase, :) * 1e6);
     hold on;
 end
 hold off;
 grid on; grid minor;
 legend(cellstr(num2str(nSubbands', 'N = %d')));
 xlabel("Rate [bps/Hz]");
-ylabel("I_{DC} [\muA]")
+ylabel("I_{DC} [\muA]");
