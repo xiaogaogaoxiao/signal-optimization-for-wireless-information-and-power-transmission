@@ -6,8 +6,8 @@ function [tapDelay, tapGain] = hiperlan2_B()
 %   - none
 %
 % OutputArg(s):
-%   - tapDelay: tap (path) delay
-%   - tapGain: complex tap (path) gain
+%   - tapDelay: tap delay
+%   - tapGain: complex tap gain
 %
 % Comments:
 %   - corresponds to typical large open space and office environments for NLOS conditions and 100 ns average rms delay spread
