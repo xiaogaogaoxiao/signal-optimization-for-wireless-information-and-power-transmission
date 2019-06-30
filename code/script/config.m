@@ -44,7 +44,7 @@ nRateSamples = length(minSubbandRate);
 % minimum gain ratio of the harvested current in each iteration (successive approximation)
 minCurrentGainRatio = 1e-2;
 % minimum gain of the harvested current in each iteration
-minCurrentGain = 1e-9;
+minCurrentGain = 1e-8;
 % channel mode ("flat" or "selective")
 % channelMode = "flat";
 channelMode = "selective";
