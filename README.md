@@ -27,7 +27,7 @@ Topics include:
 
 ### Block Diagram
 
-![Block Diagram](https://raw.githubusercontent.com/SnowzTail/signal-optimization-for-wireless-information-and-power-transmission/master/src/images/Block Diagram.png)
+![Block Diagram](https://raw.githubusercontent.com/SnowzTail/signal-optimization-for-wireless-information-and-power-transmission/master/src/images/Block%20Diagram.png)
 
 
 
@@ -40,7 +40,7 @@ Topics include:
 
 ### Diode Nonlinearity and Harvester Models
 
-| ![Diode Characteristics](https://raw.githubusercontent.com/SnowzTail/signal-optimization-for-wireless-information-and-power-transmission/master/src/images/Diode Characteristics.png) | <a href="https://www.codecogs.com/eqnedit.php?latex=z_{dc}=\sum_{i\geq&space;2,&space;even}^{n_{0}}k_{i}\varepsilon[y_{rf}^{r}(t)^{i}]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?z_{dc}=\sum_{i\geq&space;2,&space;even}^{n_{0}}k_{i}\varepsilon[y_{rf}^{r}(t)^{i}]" title="z_{dc}=\sum_{i\geq 2, even}^{n_{0}}k_{i}\varepsilon[y_{rf}^{r}(t)^{i}]" /></a> |
+| ![Diode Characteristics](https://raw.githubusercontent.com/SnowzTail/signal-optimization-for-wireless-information-and-power-transmission/master/src/images/Diode%20Characteristics.png) | <a href="https://www.codecogs.com/eqnedit.php?latex=z_{dc}=\sum_{i\geq&space;2,&space;even}^{n_{0}}k_{i}\varepsilon[y_{rf}^{r}(t)^{i}]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?z_{dc}=\sum_{i\geq&space;2,&space;even}^{n_{0}}k_{i}\varepsilon[y_{rf}^{r}(t)^{i}]" title="z_{dc}=\sum_{i\geq 2, even}^{n_{0}}k_{i}\varepsilon[y_{rf}^{r}(t)^{i}]" /></a> |
 | :----------------------------------------------------------: | :----------------------------------------------------------: |
 |                   _Diode Characteristics_                    |                    _Harvested DC Current_                    |
 
@@ -59,7 +59,7 @@ Topics include:
 
 |              | Time Switching (TS)                                          | Power Splitting (PS)                                         |
 | ------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| Diagram      | ![TS Receiver](https://raw.githubusercontent.com/SnowzTail/signal-optimization-for-wireless-information-and-power-transmission/master/src/images/TS Receiver.png) | ![PS Receiver](https://raw.githubusercontent.com/SnowzTail/signal-optimization-for-wireless-information-and-power-transmission/master/src/images/PS Receiver.png) |
+| Diagram      | ![TS Receiver](https://raw.githubusercontent.com/SnowzTail/signal-optimization-for-wireless-information-and-power-transmission/master/src/images/TS%20Receiver.png) | ![PS Receiver](https://raw.githubusercontent.com/SnowzTail/signal-optimization-for-wireless-information-and-power-transmission/master/src/images/PS%20Receiver.png) |
 | Function     | Switch the signal to either ID or EH                         | Split a portion to ID and the rest to EH                     |
 | Optimization | Individual blocks                                            | Jointly                                                      |
 | Control      | Slot length                                                  | PS ratio (&rho;)                                             |
@@ -72,10 +72,10 @@ Topics include:
 
 ---
 
-| ![Algorithm 1](https://raw.githubusercontent.com/SnowzTail/signal-optimization-for-wireless-information-and-power-transmission/master/src/images/Algorithm 1.png) | ![Formula 1](https://raw.githubusercontent.com/SnowzTail/signal-optimization-for-wireless-information-and-power-transmission/master/src/images/Formula 1.png) |
+| ![Algorithm 1](https://raw.githubusercontent.com/SnowzTail/signal-optimization-for-wireless-information-and-power-transmission/master/src/images/Algorithm%201.png) | ![Formula 1](https://raw.githubusercontent.com/SnowzTail/signal-optimization-for-wireless-information-and-power-transmission/master/src/images/Formula%201.png) |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| ![Algorithm 2](https://raw.githubusercontent.com/SnowzTail/signal-optimization-for-wireless-information-and-power-transmission/master/src/images/Algorithm 2.png) | ![Formula 2](https://raw.githubusercontent.com/SnowzTail/signal-optimization-for-wireless-information-and-power-transmission/master/src/images/Formula 2.png) |
-| ![Algorithm 3](https://raw.githubusercontent.com/SnowzTail/signal-optimization-for-wireless-information-and-power-transmission/master/src/images/Algorithm 3.png) | ![Formula 3](https://raw.githubusercontent.com/SnowzTail/signal-optimization-for-wireless-information-and-power-transmission/master/src/images/Formula 3.png) |
+| ![Algorithm 2](https://raw.githubusercontent.com/SnowzTail/signal-optimization-for-wireless-information-and-power-transmission/master/src/images/Algorithm%202.png) | ![Formula 2](https://raw.githubusercontent.com/SnowzTail/signal-optimization-for-wireless-information-and-power-transmission/master/src/images/Formula%202.png) |
+| ![Algorithm 3](https://raw.githubusercontent.com/SnowzTail/signal-optimization-for-wireless-information-and-power-transmission/master/src/images/Algorithm%203.png) | ![Formula 3](https://raw.githubusercontent.com/SnowzTail/signal-optimization-for-wireless-information-and-power-transmission/master/src/images/Formula%203.png) |
 
 ** Please check [the reference](https://ieeexplore.ieee.org/document/8115220) for more details.
 
