@@ -1,4 +1,4 @@
-function [current, rate] = wipt_no_power_waveform(nSubbands, channelAmplitude, k2, k4, txPower, noisePower, resistance, maxIter, minSubbandRate, minCurrentGainRatio, minCurrentGain)
+function [current, rate] = wipt_no_power_waveform(nSubbands, channelAmplitude, k2, k4, txPower, noisePower, resistance, maxIter, minSubbandRate, minCurrentGain)
 % Function:
 %   - characterizing the rate-energy region of MISO transmission based on the proposed WIPT architecture
 %
@@ -11,7 +11,6 @@ function [current, rate] = wipt_no_power_waveform(nSubbands, channelAmplitude, k
 %   - resistance: antenna resistance
 %   - maxIter: max number of iterations for sequential convex optimization
 %   - minSubbandRate: rate constraint per subband
-%   - minCurrentGainRatio: minimum gain ratio of the harvested current in each iteration
 %
 % OutputArg(s):
 %   - current: maximum achievable DC current at the output of the harvester
@@ -63,7 +62,7 @@ for iIter = 1: maxIter
         [targetFun, ~, exponentOfTarget] = target_function_decoupling(nSubbands, powerAmplitude, infoAmplitude, channelAmplitude, k2, k4, powerSplitRatio, resistance);
         [rate, ~, exponentOfMutualInfo] = mutual_information_decoupling(nSubbands, infoAmplitude, channelAmplitude, noisePower, infoSplitRatio);
         % stopping criteria for convergence
-        doExit = (targetFun - current) / current < minCurrentGainRatio || (targetFun - current) < minCurrentGain;
+        doExit = (targetFun - current) < minCurrentGain;
         % update optimum DC current
         current = targetFun;
         if doExit

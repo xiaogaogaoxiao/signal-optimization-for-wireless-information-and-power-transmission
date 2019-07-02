@@ -22,7 +22,7 @@ bandwidth = 1e6;
 nTxs = 1;
 % number of subbands
 nSubbands = [2 4 8 16];
-nSubbandsRef = 16;
+nSubbandsRef = 2;
 % number of frequency samples over unit bandwidth
 nFrequencySamples = 1e2;
 % number of different subband cases
@@ -41,10 +41,8 @@ maxIter = 1e1;
 minSubbandRate = 0: 0.5: 10;
 % number of samples in each curve
 nRateSamples = length(minSubbandRate);
-% minimum gain ratio of the harvested current in each iteration (successive approximation)
-minCurrentGainRatio = 1e-2;
 % minimum gain of the harvested current in each iteration
-minCurrentGain = 1e-8;
+minCurrentGain = 5e-8;
 % channel mode ("flat" or "selective")
 % channelMode = "flat";
 channelMode = "selective";
