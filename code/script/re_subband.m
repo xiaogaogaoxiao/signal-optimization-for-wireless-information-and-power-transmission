@@ -9,8 +9,8 @@ hold on;
 plot(basebandFrequency(index) / 1e6, frequencyResponse(index));
 grid on; grid minor;
 legend([num2str(2.5 * bandwidth / 1e6) ' MHz'], [num2str(bandwidth / 1e6) ' MHz']);
-xlabel("Frequency [MHz]");
-ylabel("Frequency response");
+xlabel('Frequency [MHz]');
+ylabel('Frequency response');
 xlim([-1.25, 1.25]);
 xticks(-1.25: 0.25: 1.25);
 yticks(0: 0.2: 10);
@@ -23,8 +23,8 @@ for iSubbandCase = 1: nSubbandCases
     sampleFrequency = centerFrequency - (nSubbands(iSubbandCase) - 1) / 2 * gapFrequency: gapFrequency: centerFrequency + (nSubbands(iSubbandCase) - 1) / 2 * gapFrequency;
     [channelAmplitude] = channel_amplitude(sampleFrequency, tapDelay, tapGain, channelMode);
     for iRateSample = 1: nRateSamples
-        [currentDecoupling(iSubbandCase, iRateSample), rateDecoupling(iSubbandCase, iRateSample)] = wipt_decoupling(nSubbands(iSubbandCase), channelAmplitude, k2, k4, txPower, noisePowerRef, resistance, maxIter, minSubbandRate(iRateSample), minCurrentGainRatio, minCurrentGain);
-        [currentNoPowerWaveform(iSubbandCase, iRateSample), rateNoPowerWaveform(iSubbandCase, iRateSample)] = wipt_no_power_waveform(nSubbands(iSubbandCase), channelAmplitude, k2, k4, txPower, noisePowerRef, resistance, maxIter, minSubbandRate(iRateSample), minCurrentGainRatio, minCurrentGain);
+        [currentDecoupling(iSubbandCase, iRateSample), rateDecoupling(iSubbandCase, iRateSample)] = wipt_decoupling(nSubbands(iSubbandCase), channelAmplitude, k2, k4, txPower, noisePowerRef, resistance, maxIter, minSubbandRate(iRateSample), minCurrentGain);
+        [currentNoPowerWaveform(iSubbandCase, iRateSample), rateNoPowerWaveform(iSubbandCase, iRateSample)] = wipt_no_power_waveform(nSubbands(iSubbandCase), channelAmplitude, k2, k4, txPower, noisePowerRef, resistance, maxIter, minSubbandRate(iRateSample), minCurrentGain);
     end
 end
 
@@ -36,8 +36,8 @@ end
 hold off;
 grid on; grid minor;
 legend(cellstr(num2str(nSubbands', 'N = %d')));
-xlabel("Rate [bps/Hz]");
-ylabel("I_{DC} [\muA]");
+xlabel('Rate [bps/Hz]');
+ylabel('I_{DC} [\muA]');
 
 figure('Name', 'No power waveform');
 for iSubbandCase = 1: nSubbandCases
@@ -47,5 +47,5 @@ end
 hold off;
 grid on; grid minor;
 legend(cellstr(num2str(nSubbands', 'N = %d')));
-xlabel("Rate [bps/Hz]");
-ylabel("I_{DC} [\muA]");
+xlabel('Rate [bps/Hz]');
+ylabel('I_{DC} [\muA]');

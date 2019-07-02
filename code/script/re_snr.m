@@ -9,8 +9,8 @@ hold on;
 plot(basebandFrequency(index) / 1e6, frequencyResponse(index));
 grid on; grid minor;
 legend([num2str(2.5 * bandwidth / 1e6) ' MHz'], [num2str(bandwidth / 1e6) ' MHz']);
-xlabel("Frequency [MHz]");
-ylabel("Frequency response");
+xlabel('Frequency [MHz]');
+ylabel('Frequency response');
 xlim([-1.25, 1.25]);
 xticks(-1.25: 0.25: 1.25);
 yticks(0: 0.2: 10);
@@ -24,60 +24,60 @@ sampleFrequency = centerFrequency - (nSubbandsRef - 1) / 2 * gapFrequency: gapFr
 [channelAmplitude] = channel_amplitude(sampleFrequency, tapDelay, tapGain, channelMode);
 for iSnrCase = 1: nSnrCases
     for iRateSample = 1: nRateSamples
-        [currentDecoupling(iSnrCase, iRateSample), rateDecoupling(iSnrCase, iRateSample)] = wipt_decoupling(nSubbandsRef, channelAmplitude, k2, k4, txPower, noisePower(iSnrCase), resistance, maxIter, minSubbandRate(iRateSample), minCurrentGainRatio, minCurrentGain);
-        [currentLowerBound(iSnrCase, iRateSample), rateLowerBound(iSnrCase, iRateSample)] = wipt_lower_bound(nSubbandsRef, nTxs, channelAmplitude, k2, k4, txPower, noisePower(iSnrCase), resistance, maxIter, minSubbandRate(iRateSample), minCurrentGainRatio, minCurrentGain);
-        [currentNoPowerWaveform(iSnrCase, iRateSample), rateNoPowerWaveform(iSnrCase, iRateSample)] = wipt_no_power_waveform(nSubbandsRef, channelAmplitude, k2, k4, txPower, noisePower(iSnrCase), resistance, maxIter, minSubbandRate(iRateSample), minCurrentGainRatio, minCurrentGain);
+        [currentDecoupling(iSnrCase, iRateSample), rateDecoupling(iSnrCase, iRateSample)] = wipt_decoupling(nSubbandsRef, channelAmplitude, k2, k4, txPower, noisePower(iSnrCase), resistance, maxIter, minSubbandRate(iRateSample), minCurrentGain);
+        [currentLowerBound(iSnrCase, iRateSample), rateLowerBound(iSnrCase, iRateSample)] = wipt_lower_bound(nSubbandsRef, nTxs, channelAmplitude, k2, k4, txPower, noisePower(iSnrCase), resistance, maxIter, minSubbandRate(iRateSample), minCurrentGain);
+        [currentNoPowerWaveform(iSnrCase, iRateSample), rateNoPowerWaveform(iSnrCase, iRateSample)] = wipt_no_power_waveform(nSubbandsRef, channelAmplitude, k2, k4, txPower, noisePower(iSnrCase), resistance, maxIter, minSubbandRate(iRateSample), minCurrentGain);
     end
 end
 %% R-E region plots
-figure("SNR = 10 dB");
-plot(rateDecoupling(1, :), currentDecoupling(1, :));
+figure('Name', 'SNR = 10 dB');
+plot(rateDecoupling(1, :), currentDecoupling(1, :) * 1e6);
 hold on;
-plot(rateLowerBound(1, :), currentLowerBound(1, :));
+plot(rateLowerBound(1, :), currentLowerBound(1, :) * 1e6);
 hold on;
-plot(rateNoPowerWaveform(1, :), currentNoPowerWaveform(1, :));
+plot(rateNoPowerWaveform(1, :), currentNoPowerWaveform(1, :) * 1e6);
 hold on;
 hold off;
 grid on; grid minor;
-legend("Superposed waveform", "No power waveform", "Lower bound");
-xlabel("Rate [bps/Hz]");
-ylabel("I_{DC} [\muA]")
+legend('Superposed waveform', 'No power waveform', 'Lower bound');
+xlabel('Rate [bps/Hz]');
+ylabel('I_{DC} [\muA]')
 
-figure("SNR = 20 dB");
-plot(rateDecoupling(2, :), currentDecoupling(2, :));
+figure('Name', 'SNR = 20 dB');
+plot(rateDecoupling(2, :), currentDecoupling(2, :) * 1e6);
 hold on;
-plot(rateLowerBound(2, :), currentLowerBound(2, :));
+plot(rateLowerBound(2, :), currentLowerBound(2, :) * 1e6);
 hold on;
-plot(rateNoPowerWaveform(2, :), currentNoPowerWaveform(2, :));
+plot(rateNoPowerWaveform(2, :), currentNoPowerWaveform(2, :) * 1e6);
 hold on;
 hold off;
 grid on; grid minor;
-legend("Superposed waveform", "No power waveform", "Lower bound");
-xlabel("Rate [bps/Hz]");
-ylabel("I_{DC} [\muA]")
+legend('Superposed waveform', 'No power waveform', 'Lower bound');
+xlabel('Rate [bps/Hz]');
+ylabel('I_{DC} [\muA]')
 
-figure("SNR = 30 dB");
-plot(rateDecoupling(3, :), currentDecoupling(3, :));
+figure('Name', 'SNR = 30 dB');
+plot(rateDecoupling(3, :), currentDecoupling(3, :) * 1e6);
 hold on;
-plot(rateLowerBound(3, :), currentLowerBound(3, :));
+plot(rateLowerBound(3, :), currentLowerBound(3, :) * 1e6);
 hold on;
-plot(rateNoPowerWaveform(3, :), currentNoPowerWaveform(3, :));
+plot(rateNoPowerWaveform(3, :), currentNoPowerWaveform(3, :) * 1e6);
 hold on;
 hold off;
 grid on; grid minor;
-legend("Superposed waveform", "No power waveform", "Lower bound");
-xlabel("Rate [bps/Hz]");
-ylabel("I_{DC} [\muA]")
+legend('Superposed waveform', 'No power waveform', 'Lower bound');
+xlabel('Rate [bps/Hz]');
+ylabel('I_{DC} [\muA]')
 
-figure("SNR = 40 dB");
-plot(rateDecoupling(4, :), currentDecoupling(4, :));
+figure('Name', 'SNR = 40 dB');
+plot(rateDecoupling(4, :), currentDecoupling(4, :) * 1e6);
 hold on;
-plot(rateLowerBound(4, :), currentLowerBound(4, :));
+plot(rateLowerBound(4, :), currentLowerBound(4, :) * 1e6);
 hold on;
-plot(rateNoPowerWaveform(4, :), currentNoPowerWaveform(4, :));
+plot(rateNoPowerWaveform(4, :), currentNoPowerWaveform(4, :) * 1e6);
 hold on;
 hold off;
 grid on; grid minor;
-legend("Superposed waveform", "No power waveform", "Lower bound");
-xlabel("Rate [bps/Hz]");
-ylabel("I_{DC} [\muA]")
+legend('Superposed waveform', 'No power waveform', 'Lower bound');
+xlabel('Rate [bps/Hz]');
+ylabel('I_{DC} [\muA]')
