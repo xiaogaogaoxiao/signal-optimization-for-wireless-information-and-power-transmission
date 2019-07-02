@@ -1,1 +1,1 @@
-addpath(genpath(fileparts(pwd)));
+addpath(genpath(pwd));
