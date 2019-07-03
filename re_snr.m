@@ -14,6 +14,7 @@ ylabel('Frequency response');
 xlim([-1.25, 1.25]);
 xticks(-1.25: 0.25: 1.25);
 yticks(0: 0.2: 10);
+save([pwd '/data/channel.mat'], 'tapDelay', 'tapGain');
 %% R-E region samples
 currentDecoupling = zeros(nSnrCases, nRateSamples); rateDecoupling = zeros(nSnrCases, nRateSamples);
 currentLowerBound = zeros(nSnrCases, nRateSamples); rateLowerBound = zeros(nSnrCases, nRateSamples);

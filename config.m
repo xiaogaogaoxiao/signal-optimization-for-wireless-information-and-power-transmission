@@ -38,7 +38,7 @@ noisePowerRefDbm = rxPowerDbm - snrRefDb; noisePowerRef = dbm2pow(noisePowerRefD
 % max number of iterations for convergence
 maxIter = 1e1;
 % rate constraint per subband
-minSubbandRate = 0: 0.5: 10;
+minSubbandRate = 0: 0.25: 10;
 % number of samples in each curve
 nRateSamples = length(minSubbandRate);
 % minimum gain of the harvested current in each iteration
