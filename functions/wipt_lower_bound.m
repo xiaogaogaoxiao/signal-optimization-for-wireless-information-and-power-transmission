@@ -1,4 +1,4 @@
-function [current, rate] = wipt_lower_bound(nSubbands, nTxs, channelAmplitude, k2, k4, txPower, noisePower, resistance, maxIter, minSubbandRate, minCurrentGain)
+function [current, rate] = wipt_lower_bound(nSubbands, nTxs, channelAmplitude, k2, k4, txPower, noisePower, resistance, minSubbandRate, minCurrentGain)
 % Function:
 %   - characterizing the rate-energy region of MISO transmission based on the proposed WIPT architecture
 %
@@ -10,33 +10,37 @@ function [current, rate] = wipt_lower_bound(nSubbands, nTxs, channelAmplitude, k
 %   - txPower: average transmit power
 %   - noisePower: average noise power
 %   - resistance: antenna resistance
-%   - maxIter: max number of iterations for sequential convex optimization
 %   - minSubbandRate: rate constraint per subband
 %
 % OutputArg(s):
-%   - dcCurrent: maximum achievable DC current
+%   - current: maximum achievable DC current
 %   - rate: mutual information based on the designed waveform
 %
 % Comments:
 %   - assume the power waveform is CSCG that creates an interference and rate loss
-%   - the power is maximized but the rate can be higher than the constraint
-%   - assume same phase as in general case: optimal for single transmit antenna but no guarantee optimal for MISO
+%   - optimal for SISO but no guarantee for MISO
 %
 % Author & Date: Yang (i@snowztail.com) - 11 Jun 19
 
 
-% initialize with matched filters
-powerAmplitude = channelAmplitude / norm(channelAmplitude, 'fro') * sqrt(txPower);
-infoAmplitude = channelAmplitude / norm(channelAmplitude, 'fro') * sqrt(txPower);
+% initialize
+current = 0;
+isConverged = false;
+isSolvable = true;
+
 powerSplitRatio = 0.5;
 infoSplitRatio = 1 - powerSplitRatio;
-current = 0;
+
 minSumRate = nSubbands * minSubbandRate;
+
+% matched filters
+powerAmplitude = channelAmplitude / norm(channelAmplitude, 'fro') * sqrt(txPower);
+infoAmplitude = channelAmplitude / norm(channelAmplitude, 'fro') * sqrt(txPower);
+
 [~, ~, exponentOfTarget] = target_function_decoupling(nSubbands, powerAmplitude, infoAmplitude, channelAmplitude, k2, k4, powerSplitRatio, resistance);
 [~, ~, ~, exponentOfMutualInfo] = mutual_information_lower_bound(nSubbands, nTxs, powerAmplitude, infoAmplitude, channelAmplitude, noisePower, infoSplitRatio);
 
-% iterate until optimum
-for iIter = 1: maxIter
+while (~isConverged) && (isSolvable)
     clearvars t0 powerAmplitude infoAmplitude powerSplitRatio infoSplitRatio
     
     cvx_begin gp
@@ -60,23 +64,16 @@ for iIter = 1: maxIter
             powerSplitRatio + infoSplitRatio <= 1;
     cvx_end
 
-    % valid solution
+    % update achievable rate and power successively
     if cvx_status == "Solved"
-        % update achievable rate and power successively
         [targetFun, ~, exponentOfTarget] = target_function_decoupling(nSubbands, powerAmplitude, infoAmplitude, channelAmplitude, k2, k4, powerSplitRatio, resistance);
         [rate, ~, ~, exponentOfMutualInfo] = mutual_information_lower_bound(nSubbands, nTxs, powerAmplitude, infoAmplitude, channelAmplitude, noisePower, infoSplitRatio);
-        % stopping criteria
-        doExit = (targetFun - current) < minCurrentGain;
-        % update optimum DC current
+        isConverged = (targetFun - current) < minCurrentGain;
         current = targetFun;
-        if doExit
-            break;
-        end
-    % cannot meet the minimum rate requirement
     else
         current = NaN;
         rate = NaN;
-        break;
+        isSolvable = false;
     end
 end
 

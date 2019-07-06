@@ -15,6 +15,8 @@ xlim([-1.25, 1.25]);
 xticks(-1.25: 0.25: 1.25);
 yticks(0: 0.2: 10);
 save([pwd '/data/channel.mat'], 'tapDelay', 'tapGain');
+
+% load([pwd '/data/channel.mat']);
 %% R-E region samples
 currentDecoupling = zeros(nSnrCases, nRateSamples); rateDecoupling = zeros(nSnrCases, nRateSamples);
 currentLowerBound = zeros(nSnrCases, nRateSamples); rateLowerBound = zeros(nSnrCases, nRateSamples);
@@ -25,9 +27,9 @@ sampleFrequency = centerFrequency - (nSubbandsRef - 1) / 2 * gapFrequency: gapFr
 [channelAmplitude] = channel_amplitude(sampleFrequency, tapDelay, tapGain, channelMode);
 for iSnrCase = 1: nSnrCases
     for iRateSample = 1: nRateSamples
-        [currentDecoupling(iSnrCase, iRateSample), rateDecoupling(iSnrCase, iRateSample)] = wipt_decoupling(nSubbandsRef, channelAmplitude, k2, k4, txPower, noisePower(iSnrCase), resistance, maxIter, minSubbandRate(iRateSample), minCurrentGain);
-        [currentLowerBound(iSnrCase, iRateSample), rateLowerBound(iSnrCase, iRateSample)] = wipt_lower_bound(nSubbandsRef, nTxs, channelAmplitude, k2, k4, txPower, noisePower(iSnrCase), resistance, maxIter, minSubbandRate(iRateSample), minCurrentGain);
-        [currentNoPowerWaveform(iSnrCase, iRateSample), rateNoPowerWaveform(iSnrCase, iRateSample)] = wipt_no_power_waveform(nSubbandsRef, channelAmplitude, k2, k4, txPower, noisePower(iSnrCase), resistance, maxIter, minSubbandRate(iRateSample), minCurrentGain);
+        [currentDecoupling(iSnrCase, iRateSample), rateDecoupling(iSnrCase, iRateSample)] = wipt_decoupling(nSubbandsRef, channelAmplitude, k2, k4, txPower, noisePower(iSnrCase), resistance, minSubbandRate(iRateSample), minCurrentGain);
+        [currentLowerBound(iSnrCase, iRateSample), rateLowerBound(iSnrCase, iRateSample)] = wipt_lower_bound(nSubbandsRef, nTxs, channelAmplitude, k2, k4, txPower, noisePower(iSnrCase), resistance, minSubbandRate(iRateSample), minCurrentGain);
+        [currentNoPowerWaveform(iSnrCase, iRateSample), rateNoPowerWaveform(iSnrCase, iRateSample)] = wipt_no_power_waveform(nSubbandsRef, channelAmplitude, k2, k4, txPower, noisePower(iSnrCase), resistance, minSubbandRate(iRateSample), minCurrentGain);
     end
 end
 %% R-E region plots
