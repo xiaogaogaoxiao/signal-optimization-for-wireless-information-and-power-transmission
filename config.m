@@ -22,7 +22,7 @@ bandwidth = 1e6;
 nTxs = 1;
 % number of subbands
 nSubbands = [2 4 8 16];
-nSubbandsRef = 2;
+nSubbandsRef = 16;
 % number of frequency samples over unit bandwidth
 nFrequencySamples = 1e2;
 % number of different subband cases
@@ -35,8 +35,6 @@ nSnrCases = length(snrDb);
 % average noise power
 noisePowerDbm = rxPowerDbm - snrDb; noisePower = dbm2pow(noisePowerDbm);
 noisePowerRefDbm = rxPowerDbm - snrRefDb; noisePowerRef = dbm2pow(noisePowerRefDbm);
-% max number of iterations for convergence
-maxIter = 1e1;
 % rate constraint per subband
 minSubbandRate = 0: 0.25: 10;
 % number of samples in each curve
