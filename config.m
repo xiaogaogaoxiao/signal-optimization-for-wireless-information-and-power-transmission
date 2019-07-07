@@ -40,7 +40,7 @@ minSubbandRate = 0: 0.25: 10;
 % number of samples in each curve
 nRateSamples = length(minSubbandRate);
 % minimum gain of the harvested current in each iteration
-minCurrentGain = 5e-8;
+minCurrentGain = 1e-8;
 % channel mode ("flat" or "selective")
 % channelMode = "flat";
 channelMode = "selective";

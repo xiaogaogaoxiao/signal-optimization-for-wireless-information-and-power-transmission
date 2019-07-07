@@ -52,3 +52,5 @@ grid on; grid minor;
 legend(cellstr(num2str(nSubbands', 'N = %d')));
 xlabel('Rate [bps/Hz]');
 ylabel('I_{DC} [\muA]');
+
+save('data_subband.mat');

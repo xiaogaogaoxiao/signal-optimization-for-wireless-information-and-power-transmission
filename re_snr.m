@@ -84,3 +84,5 @@ grid on; grid minor;
 legend('Superposed waveform', 'No power waveform', 'Lower bound');
 xlabel('Rate [bps/Hz]');
 ylabel('I_{DC} [\muA]')
+
+save('data_snr.mat');
