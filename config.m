@@ -21,7 +21,7 @@ bandwidth = 1e6;
 % number of transmit antenna
 nTxs = 1;
 % number of subbands
-nSubbands = [2 4 8 16];
+nSubbands = [1 2 4 8 16];
 nSubbandsRef = 16;
 % number of frequency samples over unit bandwidth
 nFrequencySamples = 1e2;
