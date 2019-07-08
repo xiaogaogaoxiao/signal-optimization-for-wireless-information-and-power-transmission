@@ -1,6 +1,13 @@
 initialize; config;
 %% Channel
-[frequencyResponse, basebandFrequency, tapDelay, tapGain] = frequency_response(nTxs, centerFrequency, bandwidth, channelMode);
+% tapped-delay line by HIPERLAN/2 model B
+tapDelay = zeros(nTxs, 18);
+tapGain = zeros(nTxs, 18);
+for iTx = 1: nTxs
+    [tapDelay(iTx, :), tapGain(iTx, :)] = hiperlan2_B();
+end
+
+[frequencyResponse, basebandFrequency] = frequency_response(tapDelay, tapGain, centerFrequency, bandwidth, channelMode);
 index = find(basebandFrequency >= -bandwidth / 2 & basebandFrequency <= bandwidth / 2);
 
 figure('Name', sprintf('Frequency response of the frequency-%s channel', channelMode));
