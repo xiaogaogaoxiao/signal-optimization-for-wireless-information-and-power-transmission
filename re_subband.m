@@ -21,8 +21,8 @@ ylabel('Frequency response');
 xlim([-1.25, 1.25]);
 xticks(-1.25: 0.25: 1.25);
 yticks(0: 0.2: 10);
-save([pwd '/data/channel.mat'], 'tapDelay', 'tapGain');
 
+% save([pwd '/data/channel.mat'], 'tapDelay', 'tapGain');
 % load([pwd '/data/channel.mat']);
 %% R-E region
 currentDecoupling = zeros(nSubbandCases, nRateSamples); rateDecoupling = zeros(nSubbandCases, nRateSamples);
@@ -32,7 +32,7 @@ for iSubbandCase = 1: nSubbandCases
     gapFrequency = bandwidth / nSubbands(iSubbandCase);
     sampleFrequency = centerFrequency - (nSubbands(iSubbandCase) - 1) / 2 * gapFrequency: gapFrequency: centerFrequency + (nSubbands(iSubbandCase) - 1) / 2 * gapFrequency;
     [channelAmplitude] = channel_amplitude(sampleFrequency, tapDelay, tapGain, channelMode);
-    for iRateSample = 1: nRateSamples
+    parfor iRateSample = 1: nRateSamples
         [currentDecoupling(iSubbandCase, iRateSample), rateDecoupling(iSubbandCase, iRateSample)] = wipt_decoupling(nSubbands(iSubbandCase), channelAmplitude, k2, k4, txPower, noisePowerRef, resistance, minSubbandRate(iRateSample), minCurrentGain);
         [currentNoPowerWaveform(iSubbandCase, iRateSample), rateNoPowerWaveform(iSubbandCase, iRateSample)] = wipt_no_power_waveform(nSubbands(iSubbandCase), channelAmplitude, k2, k4, txPower, noisePowerRef, resistance, minSubbandRate(iRateSample), minCurrentGain);
     end
