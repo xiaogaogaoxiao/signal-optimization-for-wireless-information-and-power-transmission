@@ -33,7 +33,7 @@ gapFrequency = bandwidth / nSubbandsRef;
 sampleFrequency = centerFrequency - (nSubbandsRef - 1) / 2 * gapFrequency: gapFrequency: centerFrequency + (nSubbandsRef - 1) / 2 * gapFrequency;
 [channelAmplitude] = channel_amplitude(sampleFrequency, tapDelay, tapGain, channelMode);
 for iSnrCase = 1: nSnrCases
-    parfor iRateSample = 1: nRateSamples
+    for iRateSample = 1: nRateSamples
         [currentDecoupling(iSnrCase, iRateSample), rateDecoupling(iSnrCase, iRateSample)] = wipt_decoupling(nSubbandsRef, channelAmplitude, k2, k4, txPower, noisePower(iSnrCase), resistance, minSubbandRate(iRateSample), minCurrentGain);
         [currentLowerBound(iSnrCase, iRateSample), rateLowerBound(iSnrCase, iRateSample)] = wipt_lower_bound(nSubbandsRef, nTxs, channelAmplitude, k2, k4, txPower, noisePower(iSnrCase), resistance, minSubbandRate(iRateSample), minCurrentGain);
         [currentNoPowerWaveform(iSnrCase, iRateSample), rateNoPowerWaveform(iSnrCase, iRateSample)] = wipt_no_power_waveform(nSubbandsRef, channelAmplitude, k2, k4, txPower, noisePower(iSnrCase), resistance, minSubbandRate(iRateSample), minCurrentGain);
@@ -49,7 +49,7 @@ plot(rateNoPowerWaveform(1, :), currentNoPowerWaveform(1, :) * 1e6);
 hold on;
 hold off;
 grid on; grid minor;
-legend('Superposed waveform', 'No power waveform', 'Lower bound');
+legend('Superposed waveform', 'Lower bound', 'No power waveform');
 xlabel('Rate [bps/Hz]');
 ylabel('I_{DC} [\muA]')
 
@@ -62,7 +62,7 @@ plot(rateNoPowerWaveform(2, :), currentNoPowerWaveform(2, :) * 1e6);
 hold on;
 hold off;
 grid on; grid minor;
-legend('Superposed waveform', 'No power waveform', 'Lower bound');
+legend('Superposed waveform', 'Lower bound', 'No power waveform');
 xlabel('Rate [bps/Hz]');
 ylabel('I_{DC} [\muA]')
 
@@ -75,7 +75,7 @@ plot(rateNoPowerWaveform(3, :), currentNoPowerWaveform(3, :) * 1e6);
 hold on;
 hold off;
 grid on; grid minor;
-legend('Superposed waveform', 'No power waveform', 'Lower bound');
+legend('Superposed waveform', 'Lower bound', 'No power waveform');
 xlabel('Rate [bps/Hz]');
 ylabel('I_{DC} [\muA]')
 
@@ -88,7 +88,7 @@ plot(rateNoPowerWaveform(4, :), currentNoPowerWaveform(4, :) * 1e6);
 hold on;
 hold off;
 grid on; grid minor;
-legend('Superposed waveform', 'No power waveform', 'Lower bound');
+legend('Superposed waveform', 'Lower bound', 'No power waveform');
 xlabel('Rate [bps/Hz]');
 ylabel('I_{DC} [\muA]')
 
