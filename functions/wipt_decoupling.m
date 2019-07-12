@@ -24,7 +24,8 @@ function [current, rate] = wipt_decoupling(nSubbands, channelAmplitude, k2, k4, 
 
 
 % initialize
-current = 0;
+current = NaN;
+rate = NaN;
 isConverged = false;
 isSolvable = true;
 
@@ -44,7 +45,7 @@ while (~isConverged) && (isSolvable)
     clearvars t0 powerAmplitude infoAmplitude powerSplitRatio infoSplitRatio
     
     cvx_begin gp
-        cvx_solver mosek
+        cvx_solver sedumi
         
         variable t0
         variable powerAmplitude(nSubbands, 1) nonnegative
@@ -71,8 +72,6 @@ while (~isConverged) && (isSolvable)
         isConverged = (targetFun - current) < minCurrentGain;
         current = targetFun;
     else
-        current = NaN;
-        rate = NaN;
         isSolvable = false;
     end
 end

@@ -24,8 +24,9 @@ function [current, rate] = wipt(nSubbands, nTxs, channelAmplitude, k2, k4, txPow
 
 
 % initialize
-current = 0;
-isConverged = 0;
+current = NaN;
+rate = NaN;
+isConverged = false;
 isSolvable = true;
 
 powerSplitRatio = 0.5;
@@ -71,8 +72,6 @@ while (~isConverged) && (isSolvable)
         isConverged = (targetFun - current) < minCurrentGain;
         current = targetFun;
     else
-        current = NaN;
-        rate = NaN;
         isSolvable = false;
     end
 end
