@@ -1,4 +1,5 @@
 initialize; config;
+pushbullet.pushNote(deviceId, 'MATLAB Assist', sprintf('''%s'' is running', mfilename));
 %% Channel
 % tapped-delay line by HIPERLAN/2 model B
 tapDelay = zeros(nTxs, 18);
@@ -28,14 +29,18 @@ yticks(0: 0.2: 10);
 currentDecoupling = zeros(nSubbandCases, nRateSamples); rateDecoupling = zeros(nSubbandCases, nRateSamples);
 currentNoPowerWaveform = zeros(nSubbandCases, nRateSamples); rateNoPowerWaveform = zeros(nSubbandCases, nRateSamples);
 
-for iSubbandCase = 1: nSubbandCases
-    gapFrequency = bandwidth / nSubbands(iSubbandCase);
-    sampleFrequency = centerFrequency - (nSubbands(iSubbandCase) - 1) / 2 * gapFrequency: gapFrequency: centerFrequency + (nSubbands(iSubbandCase) - 1) / 2 * gapFrequency;
-    [channelAmplitude] = channel_amplitude(sampleFrequency, tapDelay, tapGain, channelMode);
-    for iRateSample = 1: nRateSamples
-        [currentDecoupling(iSubbandCase, iRateSample), rateDecoupling(iSubbandCase, iRateSample)] = wipt_decoupling(nSubbands(iSubbandCase), channelAmplitude, k2, k4, txPower, noisePowerRef, resistance, minSubbandRate(iRateSample), minCurrentGain);
-        [currentNoPowerWaveform(iSubbandCase, iRateSample), rateNoPowerWaveform(iSubbandCase, iRateSample)] = wipt_no_power_waveform(nSubbands(iSubbandCase), channelAmplitude, k2, k4, txPower, noisePowerRef, resistance, minSubbandRate(iRateSample), minCurrentGain);
+try
+    for iSubbandCase = 1: nSubbandCases
+        gapFrequency = bandwidth / nSubbands(iSubbandCase);
+        sampleFrequency = centerFrequency - (nSubbands(iSubbandCase) - 1) / 2 * gapFrequency: gapFrequency: centerFrequency + (nSubbands(iSubbandCase) - 1) / 2 * gapFrequency;
+        [channelAmplitude] = channel_amplitude(sampleFrequency, tapDelay, tapGain, channelMode);
+        for iRateSample = 1: nRateSamples
+            [currentDecoupling(iSubbandCase, iRateSample), rateDecoupling(iSubbandCase, iRateSample)] = wipt_decoupling(nSubbands(iSubbandCase), channelAmplitude, k2, k4, txPower, noisePowerRef, resistance, minSubbandRate(iRateSample), minCurrentGain);
+            [currentNoPowerWaveform(iSubbandCase, iRateSample), rateNoPowerWaveform(iSubbandCase, iRateSample)] = wipt_no_power_waveform(nSubbands(iSubbandCase), channelAmplitude, k2, k4, txPower, noisePowerRef, resistance, minSubbandRate(iRateSample), minCurrentGain);
+        end
     end
+catch
+    pushbullet.pushNote(deviceId, 'MATLAB Assist', 'Houston, we have a problem');
 end
 
 figure('Name', 'Superposed waveforms');
@@ -61,3 +66,4 @@ xlabel('Rate [bps/Hz]');
 ylabel('I_{DC} [\muA]');
 
 save('data_subband.mat');
+pushbullet.pushNote(deviceId, 'MATLAB Assist', 'Job''s done!');

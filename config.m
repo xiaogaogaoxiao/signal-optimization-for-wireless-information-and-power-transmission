@@ -45,4 +45,9 @@ minCurrentGain = 1e-8;
 % channelMode = "flat";
 channelMode = "selective";
 
+% pushbullet APIs
+apikey = "o.yUNcIobGlYRt2DE15oosbhYHmiDXYpdP";
+deviceId = [];
+pushbullet = Pushbullet(apikey);
+
 clearvars eirpDbm rxGainDbi pathLossDb txPowerDbm rxPowerDbm noisePowerDbm noisePowerRefDbm snrDb snrRefDb
