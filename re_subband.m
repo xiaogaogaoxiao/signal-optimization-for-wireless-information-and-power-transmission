@@ -35,8 +35,8 @@ try
         sampleFrequency = centerFrequency - (nSubbands(iSubbandCase) - 1) / 2 * gapFrequency: gapFrequency: centerFrequency + (nSubbands(iSubbandCase) - 1) / 2 * gapFrequency;
         [channelAmplitude] = channel_amplitude(sampleFrequency, tapDelay, tapGain, channelMode);
         for iRateSample = 1: nRateSamples
-            [currentDecoupling(iSubbandCase, iRateSample), rateDecoupling(iSubbandCase, iRateSample)] = wipt_decoupling(nSubbands(iSubbandCase), channelAmplitude, k2, k4, txPower, noisePowerRef, resistance, minSubbandRate(iRateSample), minCurrentGain);
-            [currentNoPowerWaveform(iSubbandCase, iRateSample), rateNoPowerWaveform(iSubbandCase, iRateSample)] = wipt_no_power_waveform(nSubbands(iSubbandCase), channelAmplitude, k2, k4, txPower, noisePowerRef, resistance, minSubbandRate(iRateSample), minCurrentGain);
+            [currentDecoupling(iSubbandCase, iRateSample), rateDecoupling(iSubbandCase, iRateSample)] = wipt_decoupling(nSubbands(iSubbandCase), channelAmplitude, k2, k4, txPower, noisePowerRef, resistance, minSubbandRate(iRateSample), minCurrentGain, maxIter);
+            [currentNoPowerWaveform(iSubbandCase, iRateSample), rateNoPowerWaveform(iSubbandCase, iRateSample)] = wipt_no_power_waveform(nSubbands(iSubbandCase), channelAmplitude, k2, k4, txPower, noisePowerRef, resistance, minSubbandRate(iRateSample), minCurrentGain, maxIter);
         end
     end
 catch

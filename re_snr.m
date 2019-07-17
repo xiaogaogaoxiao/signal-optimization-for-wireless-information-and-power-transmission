@@ -36,9 +36,9 @@ try
     [channelAmplitude] = channel_amplitude(sampleFrequency, tapDelay, tapGain, channelMode);
     for iSnrCase = 1: nSnrCases
         for iRateSample = 1: nRateSamples
-            [currentDecoupling(iSnrCase, iRateSample), rateDecoupling(iSnrCase, iRateSample)] = wipt_decoupling(nSubbandsRef, channelAmplitude, k2, k4, txPower, noisePower(iSnrCase), resistance, minSubbandRate(iRateSample), minCurrentGain);
-            [currentLowerBound(iSnrCase, iRateSample), rateLowerBound(iSnrCase, iRateSample)] = wipt_lower_bound(nSubbandsRef, nTxs, channelAmplitude, k2, k4, txPower, noisePower(iSnrCase), resistance, minSubbandRate(iRateSample), minCurrentGain);
-            [currentNoPowerWaveform(iSnrCase, iRateSample), rateNoPowerWaveform(iSnrCase, iRateSample)] = wipt_no_power_waveform(nSubbandsRef, channelAmplitude, k2, k4, txPower, noisePower(iSnrCase), resistance, minSubbandRate(iRateSample), minCurrentGain);
+            [currentDecoupling(iSnrCase, iRateSample), rateDecoupling(iSnrCase, iRateSample)] = wipt_decoupling(nSubbandsRef, channelAmplitude, k2, k4, txPower, noisePower(iSnrCase), resistance, minSubbandRate(iRateSample), minCurrentGain, maxIter);
+            [currentLowerBound(iSnrCase, iRateSample), rateLowerBound(iSnrCase, iRateSample)] = wipt_lower_bound(nSubbandsRef, nTxs, channelAmplitude, k2, k4, txPower, noisePower(iSnrCase), resistance, minSubbandRate(iRateSample), minCurrentGain, maxIter);
+            [currentNoPowerWaveform(iSnrCase, iRateSample), rateNoPowerWaveform(iSnrCase, iRateSample)] = wipt_no_power_waveform(nSubbandsRef, channelAmplitude, k2, k4, txPower, noisePower(iSnrCase), resistance, minSubbandRate(iRateSample), minCurrentGain, maxIter);
         end
     end
 catch

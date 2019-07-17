@@ -1,4 +1,4 @@
-function [current, rate] = wipt_no_power_waveform(nSubbands, channelAmplitude, k2, k4, txPower, noisePower, resistance, minSubbandRate, minCurrentGain)
+function [current, rate] = wipt_no_power_waveform(nSubbands, channelAmplitude, k2, k4, txPower, noisePower, resistance, minSubbandRate, minCurrentGain, maxIter)
 % Function:
 %   - characterizing the rate-energy region of MISO transmission based on the proposed WIPT architecture
 %
@@ -10,6 +10,7 @@ function [current, rate] = wipt_no_power_waveform(nSubbands, channelAmplitude, k
 %   - noisePower: average noise power
 %   - resistance: antenna resistance
 %   - minSubbandRate: rate constraint per subband
+%   - maxIter: max number of iterations for sequential convex optimization
 %
 % OutputArg(s):
 %   - current: maximum achievable DC current at the output of the harvester
@@ -27,6 +28,7 @@ current = NaN;
 rate = NaN;
 isConverged = false;
 isSolvable = true;
+iIter = 0;
 
 powerSplitRatio = 0.5;
 infoSplitRatio = 1 - powerSplitRatio;
@@ -42,6 +44,7 @@ infoAmplitude = channelAmplitude / norm(channelAmplitude, 'fro') * sqrt(txPower)
 
 while (~isConverged) && (isSolvable)
     clearvars t0 infoAmplitude powerSplitRatio infoSplitRatio
+    iIter = iIter + 1;
     
     cvx_begin gp
         cvx_solver sedumi
@@ -67,7 +70,7 @@ while (~isConverged) && (isSolvable)
     if cvx_status == "Solved"
         [targetFun, ~, exponentOfTarget] = target_function_decoupling(nSubbands, powerAmplitude, infoAmplitude, channelAmplitude, k2, k4, powerSplitRatio, resistance);
         [rate, ~, exponentOfMutualInfo] = mutual_information_decoupling(nSubbands, infoAmplitude, channelAmplitude, noisePower, infoSplitRatio);
-        isConverged = (targetFun - current) < minCurrentGain;
+        isConverged = (targetFun - current) < minCurrentGain || iIter >= maxIter;
         current = targetFun;
     else
         isSolvable = false;
