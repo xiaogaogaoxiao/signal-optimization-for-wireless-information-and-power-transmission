@@ -40,9 +40,7 @@ minSubbandRate = 0: 0.25: 10;
 % number of samples in each curve
 nRateSamples = length(minSubbandRate);
 % minimum gain of the harvested current in each iteration
-minCurrentGain = 1e-7;
-% max number of iterations for sequential convex optimization
-maxIter = 10;
+minCurrentGain = 5e-8;
 % channel mode ("flat" or "selective")
 % channelMode = "flat";
 channelMode = "selective";
