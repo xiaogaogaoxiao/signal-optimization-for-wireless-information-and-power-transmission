@@ -5,7 +5,7 @@ k2 = 0.0034; k4 = 0.3829;
 % antenna resistance
 resistance = 50;
 % number of transmit antenna
-tx = [1];
+tx = 1;
 % rate constraint per subband
 rateConstraint = 0: 0.25: 10;
 % number of cases for different rate constraint
