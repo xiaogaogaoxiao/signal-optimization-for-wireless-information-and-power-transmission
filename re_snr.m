@@ -1,14 +1,12 @@
 initialize; config;
-pushbullet.pushNote(deviceId, 'MATLAB Assist', sprintf('''%s'' is running', mfilename));
+% Push.pushNote(Push.Devices, 'MATLAB Assist', sprintf('''%s'' is running', mfilename));
 %% Channel
 % tapped-delay line by HIPERLAN/2 model B
-tapDelay = zeros(nTxs, 18);
-tapGain = zeros(nTxs, 18);
-for iTx = 1: nTxs
-    [tapDelay(iTx, :), tapGain(iTx, :)] = hiperlan2_B();
-end
+[Channel] = hiperlan2_B(Transceiver, Channel);
 
-[frequencyResponse, basebandFrequency] = frequency_response(tapDelay, tapGain, centerFrequency, bandwidth, channelMode);
+[frequencyResponse] = channel_amplitude(Channel);
+basebandFrequency = sampleFrequency - centerFrequency;
+
 index = find(basebandFrequency >= -bandwidth / 2 & basebandFrequency <= bandwidth / 2);
 
 figure('Name', sprintf('Frequency response of the frequency-%s channel', channelMode));
@@ -37,12 +35,12 @@ try
     for iSnrCase = 1: nSnrCases
         for iRateSample = 1: nRateSamples
             [currentDecoupling(iSnrCase, iRateSample), rateDecoupling(iSnrCase, iRateSample)] = wipt_decoupling(nSubbandsRef, channelAmplitude, k2, k4, txPower, noisePower(iSnrCase), resistance, minSubbandRate(iRateSample), minCurrentGain);
-            [currentLowerBound(iSnrCase, iRateSample), rateLowerBound(iSnrCase, iRateSample)] = wipt_lower_bound(nSubbandsRef, nTxs, channelAmplitude, k2, k4, txPower, noisePower(iSnrCase), resistance, minSubbandRate(iRateSample), minCurrentGain);
+            [currentLowerBound(iSnrCase, iRateSample), rateLowerBound(iSnrCase, iRateSample)] = wipt_lower_bound(nSubbandsRef, tx, channelAmplitude, k2, k4, txPower, noisePower(iSnrCase), resistance, minSubbandRate(iRateSample), minCurrentGain);
             [currentNoPowerWaveform(iSnrCase, iRateSample), rateNoPowerWaveform(iSnrCase, iRateSample)] = wipt_no_power_waveform(nSubbandsRef, channelAmplitude, k2, k4, txPower, noisePower(iSnrCase), resistance, minSubbandRate(iRateSample), minCurrentGain);
         end
     end
 catch
-    pushbullet.pushNote(deviceId, 'MATLAB Assist', 'Houston, we have a problem');
+    Push.pushNote(Push.Devices, 'MATLAB Assist', 'Houston, we have a problem');
 end
 %% R-E region plots
 figure('Name', 'SNR = 10 dB');
@@ -98,4 +96,4 @@ xlabel('Rate [bps/Hz]');
 ylabel('I_{DC} [\muA]')
 
 save('data_snr.mat');
-pushbullet.pushNote(deviceId, 'MATLAB Assist', 'Job''s done!');
+Push.pushNote(Push.Devices, 'MATLAB Assist', 'Job''s done!');

@@ -2,9 +2,9 @@ initialize; config;
 pushbullet.pushNote(deviceId, 'MATLAB Assist', sprintf('''%s'' is running', mfilename));
 %% Channel
 % tapped-delay line by HIPERLAN/2 model B
-tapDelay = zeros(nTxs, 18);
-tapGain = zeros(nTxs, 18);
-for iTx = 1: nTxs
+tapDelay = zeros(tx, 18);
+tapGain = zeros(tx, 18);
+for iTx = 1: tx
     [tapDelay(iTx, :), tapGain(iTx, :)] = hiperlan2_B();
 end
 

@@ -1,13 +1,13 @@
-function [frequencyResponse, basebandFrequency] = frequency_response(tapDelay, tapGain, centerFrequency, bandwidth, channelMode)
+function [frequencyResponse, basebandFrequency] = sampli(Channel)
 % Function:
 %   - obtain the channel frequency response based on HIPERLAN/2 model B
 %
 % InputArg(s):
-%   - centerFrequency: center frequency of carriers
-%   - bandwidth: available bandwidth
-%   - channelMode: choose from "flat" and "selective"
 %   - tapDelay: tap delay
 %   - tapGain: complex tap gain
+%   - centerFrequency: center frequency of carriers
+%   - bandwidth: available bandwidth
+%   - mode: choose from "flat" and "selective"
 %
 % OutputArg(s):
 %   - frequencyResponse: absolute frequency response of a particular flat or frequency-selective channel
@@ -21,14 +21,13 @@ function [frequencyResponse, basebandFrequency] = frequency_response(tapDelay, t
 % Author & Date: Yang (i@snowztail.com) - 26 Jun 19
 
 
+v2struct(Channel, {'fieldNames', 'tapDelay', 'tapGain', 'centerFrequency', 'bandwidth', 'mode'});
+
+% parameters for channel plot
 redundancy = 2.5;
 gapFrequency = 1e4;
 
-% sampling frequency
-sampleFrequency = centerFrequency - redundancy * bandwidth / 2: gapFrequency: centerFrequency + redundancy * bandwidth / 2;
-
-[frequencyResponse] = channel_amplitude(sampleFrequency, tapDelay, tapGain, channelMode);
-basebandFrequency = sampleFrequency - centerFrequency;
+Channel.sampleFrequency = centerFrequency - redundancy * bandwidth / 2: gapFrequency: centerFrequency + redundancy * bandwidth / 2;
 
 end
 
