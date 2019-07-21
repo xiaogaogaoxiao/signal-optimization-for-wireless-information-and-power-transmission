@@ -14,21 +14,25 @@ Channel.sampleFrequency = Channel.centerFrequency - 0.5 * (Channel.bandwidth - C
 % obtain the channel amplitude corresponding to the carrier frequency
 [Channel] = channel_amplitude(Transceiver, Channel);
 % initialize
-Solution.currentDecoupling = zeros(Transceiver.nSnrs, Transceiver.nSamples);
-Solution.currentLowerBound = zeros(Transceiver.nSnrs, Transceiver.nSamples);
-Solution.currentNoPowerWaveform = zeros(Transceiver.nSnrs, Transceiver.nSamples);
-Solution.rateDecoupling = zeros(Transceiver.nSnrs, Transceiver.nSamples);
-Solution.rateLowerBound = zeros(Transceiver.nSnrs, Transceiver.nSamples);
-Solution.rateNoPowerWaveform = zeros(Transceiver.nSnrs, Transceiver.nSamples);
+% Solution.currentDecoupling = zeros(Transceiver.nSnrs, Transceiver.nSamples);
+% Solution.currentLowerBound = zeros(Transceiver.nSnrs, Transceiver.nSamples);
+% Solution.currentNoPowerWaveform = zeros(Transceiver.nSnrs, Transceiver.nSamples);
+% Solution.rateDecoupling = zeros(Transceiver.nSnrs, Transceiver.nSamples);
+% Solution.rateLowerBound = zeros(Transceiver.nSnrs, Transceiver.nSamples);
+% Solution.rateNoPowerWaveform = zeros(Transceiver.nSnrs, Transceiver.nSamples);
+% initialize with matched filers
+Solution.powerAmplitude = Channel.subbandAmplitude / norm(Channel.subbandAmplitude, 'fro') * sqrt(Transceiver.txPower);
+Solution.infoAmplitude = Channel.subbandAmplitude / norm(Channel.subbandAmplitude, 'fro') * sqrt(Transceiver.txPower);
+SolutionDecoupling = Solution;
+SolutionLowerBound = Solution;
+SolutionNoPowerWaveform = Solution;
+SolutionNoPowerWaveform.powerAmplitude = zeros(size(SolutionNoPowerWaveform.powerAmplitude)) + eps;
 % try
     for iSnr = 1: Transceiver.nSnrs
-        % initialize with matched filers
-        Solution.powerAmplitude = Channel.subbandAmplitude / norm(Channel.subbandAmplitude, 'fro') * sqrt(Transceiver.txPower);
-        Solution.infoAmplitude = Channel.subbandAmplitude / norm(Channel.subbandAmplitude, 'fro') * sqrt(Transceiver.txPower);
         for iSample = 1: Transceiver.nSamples
-            [Solution] = wipt_decoupling(Transceiver, Channel, Solution);
-            [currentLowerBound(iSnr, iSample), rateLowerBound(iSnr, iSample)] = wipt_lower_bound(subbandRef, tx, channelAmplitude, k2, k4, txPower, noisePower(iSnr), resistance, minSubbandRate(iSample), minCurrentGain);
-            [currentNoPowerWaveform(iSnr, iSample), rateNoPowerWaveform(iSnr, iSample)] = wipt_no_power_waveform(subbandRef, channelAmplitude, k2, k4, txPower, noisePower(iSnr), resistance, minSubbandRate(iSample), minCurrentGain);
+            [SolutionDecoupling] = wipt_decoupling(Transceiver, Channel, SolutionDecoupling);
+            [SolutionLowerBound] = wipt_lower_bound(Transceiver, Channel, SolutionLowerBound);
+            [SolutionNoPowerWaveform] = wipt_no_power_waveform(Transceiver, Channel, SolutionNoPowerWaveform);
         end
     end
 % catch

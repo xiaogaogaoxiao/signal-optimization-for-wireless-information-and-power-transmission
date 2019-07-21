@@ -7,7 +7,8 @@ resistance = 50;
 % number of transmit antenna
 tx = 1;
 % rate constraint per subband
-rateThr = 0: 0.25: 10;
+% rateThr = 0: 0.25: 10;
+rateThr = 1.5;
 % number of cases for different rate constraint
 nSamples = length(rateThr);
 % iteration threshold for current gain

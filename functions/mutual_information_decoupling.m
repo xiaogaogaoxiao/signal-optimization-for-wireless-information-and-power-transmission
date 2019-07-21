@@ -1,14 +1,14 @@
-function [mutualInfo, monomialOfMutualInfo, exponentOfMutualInfo] = mutual_information_decoupling(Transceiver, Channel, Solution)
+function [mutualInfo, monomialOfMutualInfo, exponentOfMutualInfo] = mutual_information_decoupling(noisePower, subband, subbandAmplitude, infoAmplitude, infoSplitRatio)
 % Function:
 %   - formulate the maximum achievable mutual information with the provided parameters
 %   - decomposite the posynomials that contribute to mutual information as sum of monomials
 %
 % InputArg(s):
-%   - Transceiver.noisePower: noise power
-%   - Channel.subband: number of subbands (subcarriers)
-%   - Channel.subbandAmplitude: amplitude of channel impulse response
-%   - Solution.infoAmplitude: optimum amplitude assigned to information waveform
-%   - Solution.infoSplitRatio: information splitting ratio
+%   - noisePower: noise power
+%   - subband: number of subbands (subcarriers)
+%   - subbandAmplitude: amplitude of channel impulse response
+%   - infoAmplitude: optimum amplitude assigned to information waveform
+%   - infoSplitRatio: information splitting ratio
 %
 % OutputArg(s):
 %   - mutualInfo: maximum achievable mutual information
@@ -22,10 +22,6 @@ function [mutualInfo, monomialOfMutualInfo, exponentOfMutualInfo] = mutual_infor
 %
 % Author & Date: Yang (i@snowztail.com) - 04 Jun 19
 
-
-v2struct(Transceiver, {'fieldNames', 'noisePower'});
-v2struct(Channel, {'fieldNames', 'subband', 'subbandAmplitude'});
-v2struct(Solution, {'fieldNames', 'infoSplitRatio', 'infoAmplitude'});
 
 % number of terms (Kn) in the result posynomials (a constant and a monomial)
 nTerms = 2;

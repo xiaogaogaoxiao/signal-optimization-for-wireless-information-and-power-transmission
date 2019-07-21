@@ -1,6 +1,6 @@
 function [Solution] = wipt_decoupling(Transceiver, Channel, Solution)
 % Function:
-%   - characterizing the rate-energy region of MISO transmission based on the proposed WIPT architecture
+%   - characterize the rate-energy region of MISO transmission based on the proposed WIPT architecture
 %
 % InputArg(s):
 %   - Transceiver.k2: diode k-parameters
@@ -9,16 +9,19 @@ function [Solution] = wipt_decoupling(Transceiver, Channel, Solution)
 %   - Transceiver.noisePower: average noise power
 %   - Transceiver.resistance: antenna resistance
 %   - Transceiver.rateThr: rate constraint per subband
+%   - Transceiver.currentGainThr: iteration threshold for current gain
 %   - Channel.subband: number of subbands (subcarriers)
 %   - Channel.subbandAmplitude: amplitude of channel impulse response
-%   - Solution.powerSplitRatio: ratio for power transmission
-%   - Solution.infoSplitRatio: ratio for information transmission
 %   - Solution.powerAmplitude: amplitude of power waveform
 %   - Solution.infoAmplitude: amplitude of information waveform
+%   - Solution.powerSplitRatio: ratio for power transmission
+%   - Solution.infoSplitRatio: ratio for information transmission
 %
 % OutputArg(s):
 %   - Solution.powerAmplitude: amplitude of updated power waveform
 %   - Solution.infoAmplitude: amplitude of updated information waveform
+%   - Solution.powerSplitRatio: ratio for power transmission
+%   - Solution.infoSplitRatio: ratio for information transmission
 %   - Solution.current: maximum achievable DC current at the output of the harvester
 %   - Solution.rate: mutual information based on the designed waveform
 %
@@ -41,12 +44,10 @@ isConverged = false;
 isSolvable = true;
 sumRateThr = subband * rateThr;
 
-[~, ~, exponentOfTarget] = target_function_decoupling(Transceiver, Channel, Solution);
-[~, ~, exponentOfMutualInfo] = mutual_information_decoupling(Transceiver, Channel, Solution);
+[~, ~, exponentOfTarget] = target_function_decoupling(k2, k4, resistance, subbandAmplitude, subband, powerAmplitude, infoAmplitude, powerSplitRatio);
+[~, ~, exponentOfMutualInfo] = mutual_information_decoupling(noisePower, subband, subbandAmplitude, infoAmplitude, infoSplitRatio);
 
 while (~isConverged) && (isSolvable)
-    clearvars t0 powerAmplitude infoAmplitude powerSplitRatio infoSplitRatio
-    
     cvx_begin gp
         cvx_solver sedumi
         
@@ -57,8 +58,8 @@ while (~isConverged) && (isSolvable)
         variable infoSplitRatio nonnegative
 
         % formulate the expression of monomials
-        [~, monomialOfTarget, ~] = target_function_decoupling(Transceiver, Channel, Solution);
-        [~, monomialOfMutualInfo, ~] = mutual_information_decoupling(Transceiver, Channel, Solution);
+        [~, monomialOfTarget, ~] = target_function_decoupling(k2, k4, resistance, subbandAmplitude, subband, powerAmplitude, infoAmplitude, powerSplitRatio);
+        [~, monomialOfMutualInfo, ~] = mutual_information_decoupling(noisePower, subband, subbandAmplitude, infoAmplitude, infoSplitRatio);
 
         minimize (1 / t0)
         subject to
@@ -70,14 +71,21 @@ while (~isConverged) && (isSolvable)
     
     % update achievable rate and power successively
     if cvx_status == "Solved"
-        [targetFun, ~, exponentOfTarget] = target_function_decoupling(subband, powerAmplitude, infoAmplitude, subbandAmplitude, k2, k4, powerSplitRatio, resistance);
-        [rate, ~, exponentOfMutualInfo] = mutual_information_decoupling(subband, infoAmplitude, subbandAmplitude, noisePower, infoSplitRatio);
+        [targetFun, ~, exponentOfTarget] = target_function_decoupling(k2, k4, resistance, subbandAmplitude, subband, powerAmplitude, infoAmplitude, powerSplitRatio);
+        [rate, ~, exponentOfMutualInfo] = mutual_information_decoupling(noisePower, subband, subbandAmplitude, infoAmplitude, infoSplitRatio);
         isConverged = (targetFun - current) < currentGainThr;
         current = targetFun;
     else
         isSolvable = false;
     end
 end
+
+Solution.powerAmplitude = powerAmplitude;
+Solution.infoAmplitude = infoAmplitude;
+Solution.powerSplitRatio = powerSplitRatio;
+Solution.infoSplitRatio = infoSplitRatio;
+Solution.current = current;
+Solution.rate = rate;
 
 end
 

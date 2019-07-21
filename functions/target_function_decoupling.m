@@ -1,17 +1,17 @@
-function [targetFun, monomialOfTarget, exponentOfTarget] = target_function_decoupling(Transceiver, Channel, Solution)
+function [targetFun, monomialOfTarget, exponentOfTarget] = target_function_decoupling(k2, k4, resistance, subbandAmplitude, subband, powerAmplitude, infoAmplitude, powerSplitRatio)
 % Function:
 %   - formulate the target proportional to the output current as a function of amplitudes of multicarrier unmodulated (multisine) power waveform and modulated information waveform
 %   - decomposite target posynomial as sum of monomials
 %
 % InputArg(s):
-%   - Transceiver.k2: diode k-parameters
-%   - Transceiver.k4: diode k-parameters
-%   - Transceiver.resistance: antenna resistance
-%   - Channel.subbandAmplitude: amplitude of channel impulse response
-%   - Channel.subband: number of subbands (subcarriers)
-%   - Solution.powerAmplitude: optimum amplitude assigned to power waveform
-%   - Solution.infoAmplitude: optimum amplitude assigned to information waveform
-%   - Solution.powerSplitRatio: power splitting ratio
+%   - k2: diode k-parameter
+%   - k4: diode k-parameter
+%   - resistance: antenna resistance
+%   - subbandAmplitude: amplitude of channel impulse response
+%   - subband: number of subbands (subcarriers)
+%   - powerAmplitude: optimum amplitude assigned to power waveform
+%   - infoAmplitude: optimum amplitude assigned to information waveform
+%   - powerSplitRatio: power splitting ratio
 %
 % OutputArg(s):
 %   - targetFun: target posynomial (zDc) that proportional to the output current
@@ -25,10 +25,6 @@ function [targetFun, monomialOfTarget, exponentOfTarget] = target_function_decou
 %
 % Author & Date: Yang (i@snowztail.com) - 04 Jun 19
 
-
-v2struct(Transceiver, {'fieldNames', 'k2', 'k4', 'resistance'});
-v2struct(Channel, {'fieldNames', 'subband', 'subbandAmplitude'});
-v2struct(Solution, {'fieldNames', 'powerSplitRatio', 'powerAmplitude', 'infoAmplitude'});
 
 % number of terms in each expression
 nTermsP2 = subband;

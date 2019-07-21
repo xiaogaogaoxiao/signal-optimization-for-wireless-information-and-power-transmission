@@ -1,15 +1,15 @@
-function [mutualInfo, monomialOfMutualInfo, posynomialOfPowerTerms, exponentOfMutualInfo] = mutual_information_lower_bound(nSubbands, nTxs, powerAmplitude, infoAmplitude, channelAmplitude, noisePower, infoSplitRatio)
+function [mutualInfo, monomialOfMutualInfo, posynomialOfPowerTerms, exponentOfMutualInfo] = mutual_information_lower_bound(tx, noisePower, subband, subbandAmplitude, powerAmplitude, infoAmplitude, infoSplitRatio)
 % Function:
 %   - formulate the maximum achievable mutual information with the provided parameters
 %   - decomposite the posynomials that contribute to mutual information as sum of monomials
 %
 % InputArg(s):
-%   - nSubbands: number of subbands (subcarriers)
-%   - nTxs: number of transmit antennas
-%   - powerAmplitude: optimum amplitude assigned to power waveform [CVX variable]
-%   - infoAmplitude: optimum amplitude assigned to information waveform [CVX variable]
-%   - channelAmplitude: amplitude of channel impulse response
+%   - tx: number of transmit antennas
 %   - noisePower: noise power
+%   - subband: number of subbands (subcarriers)
+%   - subbandAmplitude: amplitude of channel impulse response
+%   - powerAmplitude: optimum amplitude assigned to power waveform
+%   - infoAmplitude: optimum amplitude assigned to information waveform
 %   - infoSplitRatio: information splitting ratio
 %
 % OutputArg(s):
@@ -27,7 +27,7 @@ function [mutualInfo, monomialOfMutualInfo, posynomialOfPowerTerms, exponentOfMu
 
 
 % number of terms in the power and information posynomials
-nSubTerms = nTxs ^ 2;
+nSubTerms = tx ^ 2;
 
 % type of variables
 isKnown = isa(infoAmplitude, 'double');
@@ -35,30 +35,30 @@ isKnown = isa(infoAmplitude, 'double');
 % initialize
 if isKnown
     % placeholder for actual values (doubles)
-    monomialOfPowerTerms = zeros(nSubbands, nSubTerms);
-    monomialOfInfoTerms = zeros(nSubbands, nSubTerms);
+    monomialOfPowerTerms = zeros(subband, nSubTerms);
+    monomialOfInfoTerms = zeros(subband, nSubTerms);
 else
     % placeholder for CVX variables (expressions)
-    monomialOfPowerTerms = cvx(zeros(nSubbands, nSubTerms));
-    monomialOfInfoTerms = cvx(zeros(nSubbands, nSubTerms));
+    monomialOfPowerTerms = cvx(zeros(subband, nSubTerms));
+    monomialOfInfoTerms = cvx(zeros(subband, nSubTerms));
 end
 
-for iSubband = 1: nSubbands
+for iSubband = 1: subband
     iSubTerm = 0;
-    for iTx0 = 1: nTxs
-        for iTx1 = 1: nTxs
+    for iTx0 = 1: tx
+        for iTx1 = 1: tx
             iSubTerm = iSubTerm + 1;
             monomialOfPowerTerms(iSubband, iSubTerm) = ...
-                (powerAmplitude(iSubband, iTx0) * channelAmplitude(iSubband, iTx0)) * ...
-                (powerAmplitude(iSubband, iTx1) * channelAmplitude(iSubband, iTx1));
+                (powerAmplitude(iSubband, iTx0) * subbandAmplitude(iSubband, iTx0)) * ...
+                (powerAmplitude(iSubband, iTx1) * subbandAmplitude(iSubband, iTx1));
             monomialOfInfoTerms(iSubband, iSubTerm) = ...
-                (infoAmplitude(iSubband, iTx0) * channelAmplitude(iSubband, iTx0)) * ...
-                (infoAmplitude(iSubband, iTx1) * channelAmplitude(iSubband, iTx1));
+                (infoAmplitude(iSubband, iTx0) * subbandAmplitude(iSubband, iTx0)) * ...
+                (infoAmplitude(iSubband, iTx1) * subbandAmplitude(iSubband, iTx1));
         end
     end
 end
 
-monomialOfMutualInfo = [ones(nSubbands, 1), infoSplitRatio / noisePower * monomialOfPowerTerms, infoSplitRatio / noisePower * monomialOfInfoTerms];
+monomialOfMutualInfo = [ones(subband, 1), infoSplitRatio / noisePower * monomialOfPowerTerms, infoSplitRatio / noisePower * monomialOfInfoTerms];
 
 % number of terms (Jn) in the result posynomials
 nTerms = size(monomialOfMutualInfo, 2);
@@ -79,6 +79,6 @@ else
     mutualInfo = NaN;
 end
 % per-subband rate
-mutualInfo = mutualInfo / nSubbands;
+mutualInfo = mutualInfo / subband;
 
 end
