@@ -1,12 +1,14 @@
-function [Channel] = channel_amplitude(Channel)
+function [Channel] = channel_amplitude(Transceiver, Channel)
 % Function:
 %   - obtain the channel amplitude corresponding to the subband frequency
 %
 % InputArg(s):
+%   - Transceiver.tx: number of transmit antenna
+%   - Channel.centerFrequency: center frequency
 %   - Channel.sampleFrequency: discrete frequency sample points
 %   - Channel.tapDelay: tap delay
 %   - Channel.tapGain: complex tap gain
-%   - Channel.mode: choose from "flat" and "selective"
+%   - Channel.fadingType: choose from "flat" and "selective"
 %
 % OutputArg(s):
 %   - Channel.amplitude: absolute multipath channel amplitude on the subbands
@@ -17,23 +19,21 @@ function [Channel] = channel_amplitude(Channel)
 % Author & Date: Yang (i@snowztail.com) - 29 Jun 19
 
 
-v2struct(Channel, {'fieldNames', 'sampleFrequency', 'tapDelay', 'tapGain', 'mode'});
+v2struct(Transceiver, {'fieldNames', 'tx'});
+v2struct(Channel, {'fieldNames', 'centerFrequency', 'sampleFrequency', 'tapDelay', 'tapGain', 'fadingType'});
 
-tx = size(tapDelay, 1);
 subband = length(sampleFrequency);
-centerFrequency = mean(sampleFrequency);
 amplitude = zeros(subband, tx);
 
 % sum taps to get absolute channel gain
-if channelMode == "flat"
+if fadingType == "flat"
     for iTx = 1: tx
-        amplitude(:, iTx) = repmat(abs(sum(tapGain(iTx, :) .* exp(-1i * 2 * pi * centerFrequency * tapDelay(iTx, :)))), subband, 1);
+        amplitude(:, iTx) = repmat(abs(sum(tapGain(iTx, :) .* exp(-1i * 2 * pi * centerFrequency * tapDelay))), subband, 1);
     end
-elseif channelMode == "selective"
+elseif fadingType == "selective"
     for iTx = 1: tx
         for iSubband = 1: subband
-            % sum paths to get complex channel gain
-            amplitude(iSubband, iTx) = abs(sum(tapGain(iTx, :) .* exp(-1i * 2 * pi * sampleFrequency(iSubband) * tapDelay(iTx, :))));
+            amplitude(iSubband, iTx) = abs(sum(tapGain(iTx, :) .* exp(-1i * 2 * pi * sampleFrequency(iSubband) * tapDelay)));
         end
     end
 end

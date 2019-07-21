@@ -1,28 +1,12 @@
 initialize; config;
 pushbullet.pushNote(deviceId, 'MATLAB Assist', sprintf('''%s'' is running', mfilename));
 %% Channel
-% tapped-delay line by HIPERLAN/2 model B
-tapDelay = zeros(tx, 18);
-tapGain = zeros(tx, 18);
-for iTx = 1: tx
-    [tapDelay(iTx, :), tapGain(iTx, :)] = hiperlan2_B();
-end
-
-[frequencyResponse, basebandFrequency] = frequency_response(tapDelay, tapGain, centerFrequency, bandwidth, channelMode);
-index = find(basebandFrequency >= -bandwidth / 2 & basebandFrequency <= bandwidth / 2);
-
-figure('Name', sprintf('Frequency response of the frequency-%s channel', channelMode));
-plot(basebandFrequency / 1e6, frequencyResponse);
-hold on;
-plot(basebandFrequency(index) / 1e6, frequencyResponse(index));
-grid on; grid minor;
-legend([num2str(2.5 * bandwidth / 1e6) ' MHz'], [num2str(bandwidth / 1e6) ' MHz']);
-xlabel('Frequency [MHz]');
-ylabel('Frequency response');
-xlim([-1.25, 1.25]);
-xticks(-1.25: 0.25: 1.25);
-yticks(0: 0.2: 10);
-
+% generate the tap delay and gains based on HIPERLAN/2 model B
+[Channel] = hiperlan2_B(Transceiver, Channel);
+% obtain the channel amplitude corresponding to the subband frequency
+[Channel] = channel_amplitude(Transceiver, Channel);
+% plot channel frequency response
+plot_channel;
 % save([pwd '/data/channel.mat'], 'tapDelay', 'tapGain');
 % load([pwd '/data/channel.mat']);
 %% R-E region
