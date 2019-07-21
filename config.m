@@ -7,13 +7,11 @@ resistance = 50;
 % number of transmit antenna
 tx = 1;
 % rate constraint per subband
-rateConstraint = 0: 0.25: 10;
+rateThr = 0: 0.25: 10;
 % number of cases for different rate constraint
-nSamples = length(rateConstraint);
+nSamples = length(rateThr);
 % iteration threshold for current gain
 currentGainThr = 5e-8;
-
-Transceiver = v2struct(k2, k4, resistance, tx, rateConstraint, nSamples, currentGainThr);
 %% Channel
 % equivalent isotropically radiated power
 eirpDbm = 36;
@@ -58,11 +56,14 @@ sampleFrequency = centerFrequency - 2.5 * bandwidth / 2: 1e4: centerFrequency + 
 basebandFrequency = sampleFrequency - centerFrequency;
 % valid frequency point index
 validIndex = find(basebandFrequency >= -bandwidth / 2 & basebandFrequency <= bandwidth / 2);
-
-Channel = v2struct(txPower, rxPower, noisePower, noisePowerRef, centerFrequency, bandwidth, subband, subbandRef, nSubbands, snrDb, snrDbRef, nSnrs, tap, fadingType, sampleFrequency, basebandFrequency, validIndex);
+%% R-E region
+powerSplitRatio = 0.5;
+infoSplitRatio = 1 - powerSplitRatio;
 %% Pushbullet APIs for notification
 apiKey = "o.yUNcIobGlYRt2DE15oosbhYHmiDXYpdP";
-
-Push = Pushbullet(apiKey);
 %% Clean up
-clearvars -except Transceiver Channel Push;
+Transceiver = v2struct(k2, k4, resistance, tx, txPower, rxPower, noisePower, noisePowerRef, snrDb, snrDbRef, nSnrs, rateThr, nSamples, currentGainThr);
+Channel = v2struct(centerFrequency, bandwidth, subband, subbandRef, nSubbands, tap, fadingType, sampleFrequency, basebandFrequency, validIndex);
+Solution = v2struct(powerSplitRatio, infoSplitRatio);
+Push = Pushbullet(apiKey);
+clearvars -except Transceiver Channel Solution Push;

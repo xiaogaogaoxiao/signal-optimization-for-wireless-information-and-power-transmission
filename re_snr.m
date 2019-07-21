@@ -3,31 +3,37 @@ initialize; config;
 %% Channel
 % generate the tap delay and gains based on HIPERLAN/2 model B
 [Channel] = hiperlan2_B(Transceiver, Channel);
-% obtain the channel amplitude corresponding to the subband frequency
-[Channel] = channel_amplitude(Transceiver, Channel);
 % plot channel frequency response
 plot_response;
 % save([pwd '/data/channel.mat'], 'Channel');
 % load([pwd '/data/channel.mat']);
 %% R-E region samples
-currentDecoupling = zeros(nSnrs, nSamples); rateDecoupling = zeros(nSnrs, nSamples);
-currentLowerBound = zeros(nSnrs, nSamples); rateLowerBound = zeros(nSnrs, nSamples);
-currentNoPowerWaveform = zeros(nSnrs, nSamples); rateNoPowerWaveform = zeros(nSnrs, nSamples);
-
-try
-    gapFrequency = bandwidth / nSubbandsRef;
-    sampleFrequency = centerFrequency - (nSubbandsRef - 1) / 2 * gapFrequency: gapFrequency: centerFrequency + (nSubbandsRef - 1) / 2 * gapFrequency;
-    [channelAmplitude] = channel_amplitude(sampleFrequency, tapDelay, tapGain, channelMode);
-    for iSnr = 1: nSnrs
-        for iSample = 1: nSamples
-            [currentDecoupling(iSnr, iSample), rateDecoupling(iSnr, iSample)] = wipt_decoupling(nSubbandsRef, channelAmplitude, k2, k4, txPower, noisePower(iSnr), resistance, minSubbandRate(iSample), minCurrentGain);
-            [currentLowerBound(iSnr, iSample), rateLowerBound(iSnr, iSample)] = wipt_lower_bound(nSubbandsRef, tx, channelAmplitude, k2, k4, txPower, noisePower(iSnr), resistance, minSubbandRate(iSample), minCurrentGain);
-            [currentNoPowerWaveform(iSnr, iSample), rateNoPowerWaveform(iSnr, iSample)] = wipt_no_power_waveform(nSubbandsRef, channelAmplitude, k2, k4, txPower, noisePower(iSnr), resistance, minSubbandRate(iSample), minCurrentGain);
+% calculate carrier frequency
+Channel.gapFrequency = Channel.bandwidth / Channel.subbandRef;
+Channel.sampleFrequency = Channel.centerFrequency - 0.5 * (Channel.bandwidth - Channel.gapFrequency): Channel.gapFrequency: Channel.centerFrequency + 0.5 * (Channel.bandwidth - Channel.gapFrequency);
+% obtain the channel amplitude corresponding to the carrier frequency
+[Channel] = channel_amplitude(Transceiver, Channel);
+% initialize
+Solution.currentDecoupling = zeros(Transceiver.nSnrs, Transceiver.nSamples);
+Solution.currentLowerBound = zeros(Transceiver.nSnrs, Transceiver.nSamples);
+Solution.currentNoPowerWaveform = zeros(Transceiver.nSnrs, Transceiver.nSamples);
+Solution.rateDecoupling = zeros(Transceiver.nSnrs, Transceiver.nSamples);
+Solution.rateLowerBound = zeros(Transceiver.nSnrs, Transceiver.nSamples);
+Solution.rateNoPowerWaveform = zeros(Transceiver.nSnrs, Transceiver.nSamples);
+% try
+    for iSnr = 1: Transceiver.nSnrs
+        % initialize with matched filers
+        Solution.powerAmplitude = Channel.subbandAmplitude / norm(Channel.subbandAmplitude, 'fro') * sqrt(Transceiver.txPower);
+        Solution.infoAmplitude = Channel.subbandAmplitude / norm(Channel.subbandAmplitude, 'fro') * sqrt(Transceiver.txPower);
+        for iSample = 1: Transceiver.nSamples
+            [Solution] = wipt_decoupling(Transceiver, Channel, Solution);
+            [currentLowerBound(iSnr, iSample), rateLowerBound(iSnr, iSample)] = wipt_lower_bound(subbandRef, tx, channelAmplitude, k2, k4, txPower, noisePower(iSnr), resistance, minSubbandRate(iSample), minCurrentGain);
+            [currentNoPowerWaveform(iSnr, iSample), rateNoPowerWaveform(iSnr, iSample)] = wipt_no_power_waveform(subbandRef, channelAmplitude, k2, k4, txPower, noisePower(iSnr), resistance, minSubbandRate(iSample), minCurrentGain);
         end
     end
-catch
-    Push.pushNote(Push.Devices, 'MATLAB Assist', 'Houston, we have a problem');
-end
+% catch
+%     Push.pushNote(Push.Devices, 'MATLAB Assist', 'Houston, we have a problem');
+% end
 %% R-E region plots
 figure('Name', 'SNR = 10 dB');
 plot(rateDecoupling(1, :), currentDecoupling(1, :) * 1e6);

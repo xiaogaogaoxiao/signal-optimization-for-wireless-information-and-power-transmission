@@ -1,16 +1,17 @@
-function [targetFun, monomialOfTarget, exponentOfTarget] = target_function_decoupling(nSubbands, powerAmplitude, infoAmplitude, channelAmplitude, k2, k4, powerSplitRatio, resistance)
+function [targetFun, monomialOfTarget, exponentOfTarget] = target_function_decoupling(Transceiver, Channel, Solution)
 % Function:
 %   - formulate the target proportional to the output current as a function of amplitudes of multicarrier unmodulated (multisine) power waveform and modulated information waveform
 %   - decomposite target posynomial as sum of monomials
 %
 % InputArg(s):
-%   - nSubbands: number of subbands (subcarriers)
-%   - powerAmplitude: optimum amplitude assigned to power waveform [CVX variable]
-%   - infoAmplitude: optimum amplitude assigned to information waveform [CVX variable]
-%   - channelAmplitude: amplitude of channel impulse response
-%   - k2, k4: diode k-parameters
-%   - powerSplitRatio: power splitting ratio
-%   - resistance: antenna resistance
+%   - Transceiver.k2: diode k-parameters
+%   - Transceiver.k4: diode k-parameters
+%   - Transceiver.resistance: antenna resistance
+%   - Channel.subbandAmplitude: amplitude of channel impulse response
+%   - Channel.subband: number of subbands (subcarriers)
+%   - Solution.powerAmplitude: optimum amplitude assigned to power waveform
+%   - Solution.infoAmplitude: optimum amplitude assigned to information waveform
+%   - Solution.powerSplitRatio: power splitting ratio
 %
 % OutputArg(s):
 %   - targetFun: target posynomial (zDc) that proportional to the output current
@@ -25,12 +26,16 @@ function [targetFun, monomialOfTarget, exponentOfTarget] = target_function_decou
 % Author & Date: Yang (i@snowztail.com) - 04 Jun 19
 
 
+v2struct(Transceiver, {'fieldNames', 'k2', 'k4', 'resistance'});
+v2struct(Channel, {'fieldNames', 'subband', 'subbandAmplitude'});
+v2struct(Solution, {'fieldNames', 'powerSplitRatio', 'powerAmplitude', 'infoAmplitude'});
+
 % number of terms in each expression
-nTermsP2 = nSubbands;
-nTermsP4 = nSubbands * (2 * nSubbands ^ 2 + 1) / 3;
-nTermsI2 = nSubbands;
-nTermsI4 = nSubbands ^ 2;
-nTermsP2I2 = nSubbands ^ 2;
+nTermsP2 = subband;
+nTermsP4 = subband * (2 * subband ^ 2 + 1) / 3;
+nTermsI2 = subband;
+nTermsI4 = subband ^ 2;
+nTermsP2I2 = subband ^ 2;
 
 % type of variables
 isKnown = isa(infoAmplitude, 'double');
@@ -54,26 +59,26 @@ end
 
 % monomials related to the time-average of power (multisine) signal to the second order
 iTermP2 = 0;
-for iSubband = 1: nSubbands
+for iSubband = 1: subband
     iTermP2 = iTermP2 + 1;
-    monomialOfTargetP2(iTermP2) = norm(channelAmplitude(iSubband, :)) ^ 2 * powerAmplitude(iSubband) ^ 2;
+    monomialOfTargetP2(iTermP2) = norm(subbandAmplitude(iSubband, :)) ^ 2 * powerAmplitude(iSubband) ^ 2;
 end
 clearvars iSubband;
 
 % monomials related to the time-average of power (multisine) signal to the fourth order
 iTermP4 = 0;
-for iSubband0 = 1: nSubbands
-    for iSubband1 = 1: nSubbands
-        for iSubband2 = 1: nSubbands
+for iSubband0 = 1: subband
+    for iSubband1 = 1: subband
+        for iSubband2 = 1: subband
             iSubband3 = iSubband0 + iSubband1 - iSubband2;
-            isValid = iSubband3 >= 1 && iSubband3 <= nSubbands;
+            isValid = iSubband3 >= 1 && iSubband3 <= subband;
             if isValid
                 iTermP4 = iTermP4 + 1;
                 monomialOfTargetP4(iTermP4) = ...
-                    (powerAmplitude(iSubband0) * norm(channelAmplitude(iSubband0, :))) * ...
-                    (powerAmplitude(iSubband1) * norm(channelAmplitude(iSubband1, :))) * ...
-                    (powerAmplitude(iSubband2) * norm(channelAmplitude(iSubband2, :))) * ...
-                    (powerAmplitude(iSubband3) * norm(channelAmplitude(iSubband3, :)));
+                    (powerAmplitude(iSubband0) * norm(subbandAmplitude(iSubband0, :))) * ...
+                    (powerAmplitude(iSubband1) * norm(subbandAmplitude(iSubband1, :))) * ...
+                    (powerAmplitude(iSubband2) * norm(subbandAmplitude(iSubband2, :))) * ...
+                    (powerAmplitude(iSubband3) * norm(subbandAmplitude(iSubband3, :)));
             else
                 continue;
             end
@@ -84,32 +89,32 @@ clearvars iSubband0 iSubband1 iSubband2 iSubband3;
 
 % monomials related to the expectation of time-average of information (modulated) signal to the second order
 iTermI2 = 0;
-for iSubband = 1: nSubbands
+for iSubband = 1: subband
     iTermI2 = iTermI2 + 1;
-    monomialOfTargetI2(iTermI2) = norm(channelAmplitude(iSubband, :)) ^ 2 * infoAmplitude(iSubband) ^ 2;
+    monomialOfTargetI2(iTermI2) = norm(subbandAmplitude(iSubband, :)) ^ 2 * infoAmplitude(iSubband) ^ 2;
 end
 clearvars iSubband;
 
 % monomials related to the expectation of time-average of information (modulated) signal to the fourth order
 iTermI4 = 0;
-for iSubband0 = 1: nSubbands
-    for iSubband1 = 1: nSubbands
+for iSubband0 = 1: subband
+    for iSubband1 = 1: subband
         iTermI4 = iTermI4 + 1;
         monomialOfTargetI4(iTermI4) = ...
-            (infoAmplitude(iSubband0) ^ 2 * norm(channelAmplitude(iSubband0, :)) ^ 2) * ...
-            (infoAmplitude(iSubband1) ^ 2 * norm(channelAmplitude(iSubband1, :)) ^ 2);
+            (infoAmplitude(iSubband0) ^ 2 * norm(subbandAmplitude(iSubband0, :)) ^ 2) * ...
+            (infoAmplitude(iSubband1) ^ 2 * norm(subbandAmplitude(iSubband1, :)) ^ 2);
     end
 end
 clearvars iSubband0 iSubband1;
 
 % monomials related to the combined power-info terms
 iTermP2I2 = 0;
-for iSubband0 = 1: nSubbands
-    for iSubband1 = 1: nSubbands
+for iSubband0 = 1: subband
+    for iSubband1 = 1: subband
         iTermP2I2 = iTermP2I2 + 1;
         monomialOfTargetP2I2(iTermP2I2) = ...
-            (norm(channelAmplitude(iSubband0, :)) ^ 2 * powerAmplitude(iSubband0) ^ 2) * ...
-            (norm(channelAmplitude(iSubband1, :)) ^ 2 * infoAmplitude(iSubband1) ^ 2);
+            (norm(subbandAmplitude(iSubband0, :)) ^ 2 * powerAmplitude(iSubband0) ^ 2) * ...
+            (norm(subbandAmplitude(iSubband1, :)) ^ 2 * infoAmplitude(iSubband1) ^ 2);
     end
 end
 clearvars iSubband0 iSubband1;

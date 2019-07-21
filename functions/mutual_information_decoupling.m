@@ -1,14 +1,14 @@
-function [mutualInfo, monomialOfMutualInfo, exponentOfMutualInfo] = mutual_information_decoupling(nSubbands, infoAmplitude, channelAmplitude, noisePower, infoSplitRatio)
+function [mutualInfo, monomialOfMutualInfo, exponentOfMutualInfo] = mutual_information_decoupling(Transceiver, Channel, Solution)
 % Function:
 %   - formulate the maximum achievable mutual information with the provided parameters
 %   - decomposite the posynomials that contribute to mutual information as sum of monomials
 %
 % InputArg(s):
-%   - nSubbands: number of subbands (subcarriers)
-%   - infoAmplitude: optimum amplitude assigned to information waveform [CVX variable]
-%   - channelAmplitude: amplitude of channel impulse response
-%   - noisePower: noise power
-%   - infoSplitRatio: information splitting ratio
+%   - Transceiver.noisePower: noise power
+%   - Channel.subband: number of subbands (subcarriers)
+%   - Channel.subbandAmplitude: amplitude of channel impulse response
+%   - Solution.infoAmplitude: optimum amplitude assigned to information waveform
+%   - Solution.infoSplitRatio: information splitting ratio
 %
 % OutputArg(s):
 %   - mutualInfo: maximum achievable mutual information
@@ -23,6 +23,10 @@ function [mutualInfo, monomialOfMutualInfo, exponentOfMutualInfo] = mutual_infor
 % Author & Date: Yang (i@snowztail.com) - 04 Jun 19
 
 
+v2struct(Transceiver, {'fieldNames', 'noisePower'});
+v2struct(Channel, {'fieldNames', 'subband', 'subbandAmplitude'});
+v2struct(Solution, {'fieldNames', 'infoSplitRatio', 'infoAmplitude'});
+
 % number of terms (Kn) in the result posynomials (a constant and a monomial)
 nTerms = 2;
 
@@ -32,14 +36,14 @@ isKnown = isa(infoAmplitude, 'double');
 % initialize (a constant term 1 exists in each posynomial)
 if isKnown
     % placeholder for actual values (doubles)
-    monomialOfMutualInfo = ones(nSubbands, nTerms);
+    monomialOfMutualInfo = ones(subband, nTerms);
 else
     % placeholder for CVX variables (expressions)
-    monomialOfMutualInfo = cvx(ones(nSubbands, nTerms));
+    monomialOfMutualInfo = cvx(ones(subband, nTerms));
 end
 
-for iSubband = 1: nSubbands
-    monomialOfMutualInfo(iSubband, 2) = infoSplitRatio / noisePower * (infoAmplitude(iSubband) ^ 2 * norm(channelAmplitude(iSubband, :)) ^ 2);
+for iSubband = 1: subband
+    monomialOfMutualInfo(iSubband, 2) = infoSplitRatio / noisePower * (infoAmplitude(iSubband) ^ 2 * norm(subbandAmplitude(iSubband, :)) ^ 2);
 end
 
 if isKnown
@@ -51,7 +55,7 @@ else
     mutualInfo = NaN;
 end
 % per-subband rate
-mutualInfo = mutualInfo / nSubbands;
+mutualInfo = mutualInfo / subband;
 
 end
 
