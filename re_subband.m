@@ -1,20 +1,20 @@
 initialize; config;
-pushbullet.pushNote(deviceId, 'MATLAB Assist', sprintf('''%s'' is running', mfilename));
+Push.pushNote(Push.Devices, 'MATLAB Assist', sprintf('''%s'' is running', mfilename));
 %% Channel
 % generate the tap delay and gains based on HIPERLAN/2 model B
 [Channel] = hiperlan2_B(Transceiver, Channel);
-% obtain the channel amplitude corresponding to the subband frequency
+plot_response;
+% obtain the channel amplitude corresponding to the carrier frequency
 [Channel] = channel_amplitude(Transceiver, Channel);
-% plot channel frequency response
-plot_channel;
-% save([pwd '/data/channel.mat'], 'tapDelay', 'tapGain');
+save([pwd '/data/channel.mat']);
 % load([pwd '/data/channel.mat']);
-%% R-E region
-currentDecoupling = zeros(nSubbandCases, nRateSamples); rateDecoupling = zeros(nSubbandCases, nRateSamples);
-currentNoPowerWaveform = zeros(nSubbandCases, nRateSamples); rateNoPowerWaveform = zeros(nSubbandCases, nRateSamples);
-
+%% R-E region samples
+re_initialize;
+rateDecoupling = zeros(Variable.nSubbandCases, Variable.nSamples); currentDecoupling = zeros(Variable.nSubbandCases, Variable.nSamples);
+rateLowerBound = zeros(Variable.nSubbandCases, Variable.nSamples); currentLowerBound = zeros(Variable.nSubbandCases, Variable.nSamples);
+rateNoPowerWaveform = zeros(Variable.nSubbandCases, Variable.nSamples); currentNoPowerWaveform = zeros(Variable.nSubbandCases, Variable.nSamples);
 try
-    for iSubbandCase = 1: nSubbandCases
+    for iCase = 1: Variable.nSubbandCases
         gapFrequency = bandwidth / nSubbands(iSubbandCase);
         sampleFrequency = centerFrequency - (nSubbands(iSubbandCase) - 1) / 2 * gapFrequency: gapFrequency: centerFrequency + (nSubbands(iSubbandCase) - 1) / 2 * gapFrequency;
         [channelAmplitude] = channel_amplitude(sampleFrequency, tapDelay, tapGain, channelMode);

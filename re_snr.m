@@ -1,95 +1,53 @@
 initialize; config;
-% Push.pushNote(Push.Devices, 'MATLAB Assist', sprintf('''%s'' is running', mfilename));
+Push.pushNote(Push.Devices, 'MATLAB Assist', sprintf('''%s'' is running', mfilename));
 %% Channel
 % generate the tap delay and gains based on HIPERLAN/2 model B
 [Channel] = hiperlan2_B(Transceiver, Channel);
-% plot channel frequency response
 plot_response;
-% save([pwd '/data/channel.mat'], 'Channel');
-% load([pwd '/data/channel.mat']);
-%% R-E region samples
-% calculate carrier frequency
-Channel.gapFrequency = Channel.bandwidth / Channel.subbandRef;
-Channel.sampleFrequency = Channel.centerFrequency - 0.5 * (Channel.bandwidth - Channel.gapFrequency): Channel.gapFrequency: Channel.centerFrequency + 0.5 * (Channel.bandwidth - Channel.gapFrequency);
 % obtain the channel amplitude corresponding to the carrier frequency
 [Channel] = channel_amplitude(Transceiver, Channel);
-% initialize
-% Solution.currentDecoupling = zeros(Transceiver.nSnrs, Transceiver.nSamples);
-% Solution.currentLowerBound = zeros(Transceiver.nSnrs, Transceiver.nSamples);
-% Solution.currentNoPowerWaveform = zeros(Transceiver.nSnrs, Transceiver.nSamples);
-% Solution.rateDecoupling = zeros(Transceiver.nSnrs, Transceiver.nSamples);
-% Solution.rateLowerBound = zeros(Transceiver.nSnrs, Transceiver.nSamples);
-% Solution.rateNoPowerWaveform = zeros(Transceiver.nSnrs, Transceiver.nSamples);
-% initialize with matched filers
-Solution.powerAmplitude = Channel.subbandAmplitude / norm(Channel.subbandAmplitude, 'fro') * sqrt(Transceiver.txPower);
-Solution.infoAmplitude = Channel.subbandAmplitude / norm(Channel.subbandAmplitude, 'fro') * sqrt(Transceiver.txPower);
-SolutionDecoupling = Solution;
-SolutionLowerBound = Solution;
-SolutionNoPowerWaveform = Solution;
-SolutionNoPowerWaveform.powerAmplitude = zeros(size(SolutionNoPowerWaveform.powerAmplitude)) + eps;
-% try
-    for iSnr = 1: Transceiver.nSnrs
-        for iSample = 1: Transceiver.nSamples
+save([pwd '/data/channel.mat']);
+% load([pwd '/data/channel.mat']);
+%% R-E region samples
+re_initialize;
+rateDecoupling = zeros(Variable.nSnrCases, Variable.nSamples); currentDecoupling = zeros(Variable.nSnrCases, Variable.nSamples);
+rateLowerBound = zeros(Variable.nSnrCases, Variable.nSamples); currentLowerBound = zeros(Variable.nSnrCases, Variable.nSamples);
+rateNoPowerWaveform = zeros(Variable.nSnrCases, Variable.nSamples); currentNoPowerWaveform = zeros(Variable.nSnrCases, Variable.nSamples);
+try
+    for iCase = 1: Variable.nSnrCases
+        Transceiver.snrDb = Variable.snrDb(iCase);
+        Transceiver.noisePower = Variable.noisePower(iCase);
+        for iSample = 1: Variable.nSamples
+            Transceiver.rateThr = Variable.rateThr(iSample);
             [SolutionDecoupling] = wipt_decoupling(Transceiver, Channel, SolutionDecoupling);
             [SolutionLowerBound] = wipt_lower_bound(Transceiver, Channel, SolutionLowerBound);
             [SolutionNoPowerWaveform] = wipt_no_power_waveform(Transceiver, Channel, SolutionNoPowerWaveform);
+            rateDecoupling(iCase, iSample) = SolutionDecoupling.rate; currentDecoupling(iCase, iSample) = SolutionDecoupling.current;
+            rateLowerBound(iCase, iSample) = SolutionLowerBound.rate; currentLowerBound(iCase, iSample) = SolutionDecoupling.current;
+            rateNoPowerWaveform(iCase, iSample) = SolutionNoPowerWaveform.rate; currentNoPowerWaveform(iCase, iSample) = SolutionDecoupling.current;
+            % invalid solution cannot be used for iterations
+            if isnan(rateDecoupling(iCase, iSample)) || isnan(rateLowerBound(iCase, iSample)) || isnan(rateNoPowerWaveform(iCase, iSample))
+                re_initialize;
+            end
         end
     end
-% catch
-%     Push.pushNote(Push.Devices, 'MATLAB Assist', 'Houston, we have a problem');
-% end
+catch
+    Push.pushNote(Push.Devices, 'MATLAB Assist', 'Houston, we have a problem');
+end
 %% R-E region plots
-figure('Name', 'SNR = 10 dB');
-plot(rateDecoupling(1, :), currentDecoupling(1, :) * 1e6);
-hold on;
-plot(rateLowerBound(1, :), currentLowerBound(1, :) * 1e6);
-hold on;
-plot(rateNoPowerWaveform(1, :), currentNoPowerWaveform(1, :) * 1e6);
-hold on;
-hold off;
-grid on; grid minor;
-legend('Superposed waveform', 'Lower bound', 'No power waveform');
-xlabel('Rate [bps/Hz]');
-ylabel('I_{DC} [\muA]')
-
-figure('Name', 'SNR = 20 dB');
-plot(rateDecoupling(2, :), currentDecoupling(2, :) * 1e6);
-hold on;
-plot(rateLowerBound(2, :), currentLowerBound(2, :) * 1e6);
-hold on;
-plot(rateNoPowerWaveform(2, :), currentNoPowerWaveform(2, :) * 1e6);
-hold on;
-hold off;
-grid on; grid minor;
-legend('Superposed waveform', 'Lower bound', 'No power waveform');
-xlabel('Rate [bps/Hz]');
-ylabel('I_{DC} [\muA]')
-
-figure('Name', 'SNR = 30 dB');
-plot(rateDecoupling(3, :), currentDecoupling(3, :) * 1e6);
-hold on;
-plot(rateLowerBound(3, :), currentLowerBound(3, :) * 1e6);
-hold on;
-plot(rateNoPowerWaveform(3, :), currentNoPowerWaveform(3, :) * 1e6);
-hold on;
-hold off;
-grid on; grid minor;
-legend('Superposed waveform', 'Lower bound', 'No power waveform');
-xlabel('Rate [bps/Hz]');
-ylabel('I_{DC} [\muA]')
-
-figure('Name', 'SNR = 40 dB');
-plot(rateDecoupling(4, :), currentDecoupling(4, :) * 1e6);
-hold on;
-plot(rateLowerBound(4, :), currentLowerBound(4, :) * 1e6);
-hold on;
-plot(rateNoPowerWaveform(4, :), currentNoPowerWaveform(4, :) * 1e6);
-hold on;
-hold off;
-grid on; grid minor;
-legend('Superposed waveform', 'Lower bound', 'No power waveform');
-xlabel('Rate [bps/Hz]');
-ylabel('I_{DC} [\muA]')
-
+for iCase = 1: Variable.nSnrCases
+    figure('Name', sprintf('SNR = %d dB', Variable.snrDb(iCase)));
+    plot(rateDecoupling(iCase, :), currentDecoupling(iCase, :) * 1e6);
+    hold on;
+    plot(rateLowerBound(iCase, :), currentLowerBound(iCase, :) * 1e6);
+    hold on;
+    plot(rateNoPowerWaveform(iCase, :), currentNoPowerWaveform(iCase, :) * 1e6);
+    hold on;
+    hold off;
+    grid on; grid minor;
+    legend('Superposed waveform', 'Lower bound', 'No power waveform');
+    xlabel('Rate [bps/Hz]');
+    ylabel('I_{DC} [\muA]')
+end
 save('data_snr.mat');
 Push.pushNote(Push.Devices, 'MATLAB Assist', 'Job''s done!');
