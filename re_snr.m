@@ -9,7 +9,11 @@ plot_response;
 save([pwd '/data/channel.mat']);
 % load([pwd '/data/channel.mat']);
 %% R-E region samples
-re_initialize;
+% initialize algorithms
+[SolutionDecouplingInit, SolutionLowerBoundInit, SolutionNoPowerWaveformInit] = initialize_algorithm(Transceiver, Channel);
+SolutionDecoupling = SolutionDecouplingInit;
+SolutionLowerBound = SolutionLowerBoundInit;
+SolutionNoPowerWaveform = SolutionNoPowerWaveformInit;
 rateDecoupling = zeros(Variable.nSnrCases, Variable.nSamples); currentDecoupling = zeros(Variable.nSnrCases, Variable.nSamples);
 rateLowerBound = zeros(Variable.nSnrCases, Variable.nSamples); currentLowerBound = zeros(Variable.nSnrCases, Variable.nSamples);
 rateNoPowerWaveform = zeros(Variable.nSnrCases, Variable.nSamples); currentNoPowerWaveform = zeros(Variable.nSnrCases, Variable.nSamples);
@@ -26,8 +30,14 @@ try
             rateLowerBound(iCase, iSample) = SolutionLowerBound.rate; currentLowerBound(iCase, iSample) = SolutionDecoupling.current;
             rateNoPowerWaveform(iCase, iSample) = SolutionNoPowerWaveform.rate; currentNoPowerWaveform(iCase, iSample) = SolutionDecoupling.current;
             % invalid solution cannot be used for iterations
-            if isnan(rateDecoupling(iCase, iSample)) || isnan(rateLowerBound(iCase, iSample)) || isnan(rateNoPowerWaveform(iCase, iSample))
-                re_initialize;
+            if isnan(rateDecoupling(iCase, iSample))
+                SolutionDecoupling = SolutionDecouplingInit;
+            end
+            if isnan(rateLowerBound(iCase, iSample))
+                SolutionLowerBound = SolutionLowerBoundInit;
+            end
+            if isnan(rateNoPowerWaveform(iCase, iSample))
+                SolutionNoPowerWaveform = SolutionNoPowerWaveformInit;
             end
         end
     end
