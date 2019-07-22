@@ -54,6 +54,13 @@ nSamples = length(rateThr);
 subband = [1 2 4 8 16];
 % number of subband cases
 nSubbandCases = length(subband);
+% gap frequency
+gapFrequency = bandwidth ./ subband;
+% sample frequency
+sampleFrequency = cell(nSubbandCases, 1);
+for iCase = 1: nSubbandCases
+    sampleFrequency{iCase} = centerFrequency - 0.5 * (bandwidth - gapFrequency(iCase)): gapFrequency(iCase): centerFrequency + 0.5 * (bandwidth - gapFrequency(iCase));
+end
 % different SNR cases
 snrDb = [10 20 30 40];
 % number of SNR cases
@@ -61,7 +68,7 @@ nSnrCases = length(snrDb);
 % average noise power
 noisePowerDbm = rxPowerDbm - snrDb; noisePower = dbm2pow(noisePowerDbm);
 
-Variable = v2struct(rateThr, nSamples, subband, nSubbandCases, snrDb, nSnrCases, noisePower);
+Variable = v2struct(rateThr, nSamples, subband, nSubbandCases, gapFrequency, sampleFrequency, snrDb, nSnrCases, noisePower);
 %% Pushbullet APIs
 apiKey = "o.yUNcIobGlYRt2DE15oosbhYHmiDXYpdP";
 
