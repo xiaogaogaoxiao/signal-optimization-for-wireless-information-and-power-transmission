@@ -24,8 +24,8 @@ try
             [SolutionLowerBound] = wipt_lower_bound(Transceiver, Channel, SolutionLowerBound);
             [SolutionNoPowerWaveform] = wipt_no_power_waveform(Transceiver, Channel, SolutionNoPowerWaveform);
             rateDecoupling(iCase, iSample) = SolutionDecoupling.rate; currentDecoupling(iCase, iSample) = SolutionDecoupling.current;
-            rateLowerBound(iCase, iSample) = SolutionLowerBound.rate; currentLowerBound(iCase, iSample) = SolutionDecoupling.current;
-            rateNoPowerWaveform(iCase, iSample) = SolutionNoPowerWaveform.rate; currentNoPowerWaveform(iCase, iSample) = SolutionDecoupling.current;
+            rateLowerBound(iCase, iSample) = SolutionLowerBound.rate; currentLowerBound(iCase, iSample) = SolutionLowerBound.current;
+            rateNoPowerWaveform(iCase, iSample) = SolutionNoPowerWaveform.rate; currentNoPowerWaveform(iCase, iSample) = SolutionNoPowerWaveform.current;
             % invalid solution cannot be used for iterations
             if isnan(rateDecoupling(iCase, iSample))
                 [SolutionDecoupling, ~, ~] = initialize_algorithm(Transceiver, Channel);

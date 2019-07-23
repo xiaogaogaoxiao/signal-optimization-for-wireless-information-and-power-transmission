@@ -47,7 +47,7 @@ validIndex = find(basebandFrequency >= -bandwidth / 2 & basebandFrequency <= ban
 Response = v2struct(centerFrequency, bandwidth, subband, tap, fadingType, sampleFrequency, basebandFrequency, validIndex);
 %% Variables
 % rate constraint per subband
-rateThr = 10: -0.5: 0;
+rateThr = 20: -0.5: 0;
 % number of samples
 nSamples = length(rateThr);
 % different subband cases
