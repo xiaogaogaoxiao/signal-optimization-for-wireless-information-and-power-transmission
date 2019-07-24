@@ -20,6 +20,9 @@ function [SolutionDecouplingInit, SolutionLowerBoundInit, SolutionNoPowerWavefor
 v2struct(Transceiver, {'fieldNames', 'txPower'});
 v2struct(Channel, {'fieldNames', 'subbandAmplitude'});
 
+% initialize results
+rate = NaN;
+current = NaN;
 % ratio for power transmission
 powerSplitRatio = 0.5;
 % ratio for information transmission
@@ -29,13 +32,13 @@ infoSplitRatio = 1 - powerSplitRatio;
 powerAmplitude = subbandAmplitude / norm(subbandAmplitude, 'fro') * sqrt(txPower);
 infoAmplitude = subbandAmplitude / norm(subbandAmplitude, 'fro') * sqrt(txPower);
 % superposed waveforms
-SolutionDecouplingInit = v2struct(powerSplitRatio, infoSplitRatio, powerAmplitude, infoAmplitude);
-SolutionLowerBoundInit = v2struct(powerSplitRatio, infoSplitRatio, powerAmplitude, infoAmplitude);
+SolutionDecouplingInit = v2struct(rate, current, powerSplitRatio, infoSplitRatio, powerAmplitude, infoAmplitude);
+SolutionLowerBoundInit = v2struct(rate, current, powerSplitRatio, infoSplitRatio, powerAmplitude, infoAmplitude);
 
 % no power waveform
 powerAmplitude = zeros(size(powerAmplitude)) + eps;
 infoAmplitude = infoAmplitude * sqrt(2);
-SolutionNoPowerWaveformInit = v2struct(powerSplitRatio, infoSplitRatio, powerAmplitude, infoAmplitude);
+SolutionNoPowerWaveformInit = v2struct(rate, current, powerSplitRatio, infoSplitRatio, powerAmplitude, infoAmplitude);
 
 end
 
