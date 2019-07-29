@@ -1,7 +1,7 @@
 function [targetFun, monomialOfTarget, exponentOfTarget] = target_function_decoupling(k2, k4, resistance, subbandAmplitude, subband, powerAmplitude, infoAmplitude, powerSplitRatio)
 % Function:
 %   - formulate the target proportional to the output current as a function of amplitudes of multicarrier unmodulated (multisine) power waveform and modulated information waveform
-%   - decomposite target posynomial as sum of monomials
+%   - decompose target posynomial as sum of monomials
 %
 % InputArg(s):
 %   - k2: diode k-parameter
