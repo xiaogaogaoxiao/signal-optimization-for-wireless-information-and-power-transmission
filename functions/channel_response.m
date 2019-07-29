@@ -1,6 +1,6 @@
-function [Channel] = channel_amplitude(Transceiver, Channel)
+function [Channel] = channel_response(Transceiver, Channel)
 % Function:
-%   - obtain the channel amplitude corresponding to the subband frequency
+%   - obtain the channel amplitude and phase corresponding to the subband frequency
 %
 % InputArg(s):
 %   - Transceiver.tx: number of transmit antenna
@@ -12,6 +12,7 @@ function [Channel] = channel_amplitude(Transceiver, Channel)
 %
 % OutputArg(s):
 %   - Channel.subbandAmplitude: absolute multipath channel amplitude on the subbands
+%   - Channel.subbandPhase: multipath channel phase on the subbands
 %
 % Comments:
 %   - for multipath flat and frequency-selective channels
@@ -23,22 +24,23 @@ v2struct(Transceiver, {'fieldNames', 'tx'});
 v2struct(Channel, {'fieldNames', 'centerFrequency', 'sampleFrequency', 'tapDelay', 'tapGain', 'fadingType'});
 
 subband = length(sampleFrequency);
-subbandAmplitude = zeros(subband, tx);
+subbandGain = zeros(subband, tx);
 
 % sum taps to get absolute channel gain
 if fadingType == "flat"
     for iTx = 1: tx
-        subbandAmplitude(:, iTx) = repmat(abs(sum(tapGain(iTx, :) .* exp(-1i * 2 * pi * centerFrequency * tapDelay))), subband, 1);
+        subbandGain(:, iTx) = repmat(sum(tapGain(iTx, :) .* exp(-1i * 2 * pi * centerFrequency * tapDelay)), subband, 1);
     end
 elseif fadingType == "selective"
     for iTx = 1: tx
         for iSubband = 1: subband
-            subbandAmplitude(iSubband, iTx) = abs(sum(tapGain(iTx, :) .* exp(-1i * 2 * pi * sampleFrequency(iSubband) * tapDelay)));
+            subbandGain(iSubband, iTx) = sum(tapGain(iTx, :) .* exp(-1i * 2 * pi * sampleFrequency(iSubband) * tapDelay));
         end
     end
 end
 
-Channel.subbandAmplitude = subbandAmplitude;
+Channel.subbandAmplitude = abs(subbandGain);
+Channel.subbandPhase = angle(subbandGain);
 
 end
 

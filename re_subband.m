@@ -15,7 +15,7 @@ try
         Channel.sampleFrequency = Variable.sampleFrequency{iCase};
         Channel.gapFrequency = Variable.gapFrequency(iCase);
         % obtain the channel amplitude corresponding to the carrier frequency
-        [Channel] = channel_amplitude(Transceiver, Channel);
+        [Channel] = channel_response(Transceiver, Channel);
         % initialize algorithms
         [SolutionDecoupling, ~, SolutionNoPowerWaveform] = initialize_algorithm(Transceiver, Channel);
         for iSample = 1: Variable.nSamples

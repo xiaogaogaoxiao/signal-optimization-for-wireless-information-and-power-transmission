@@ -2,7 +2,7 @@
 Response.tapDelay = Channel.tapDelay;
 Response.tapGain = Channel.tapGain; 
 % obtain the channel subbandAmplitude corresponding to the sampling frequency
-[Response] = channel_amplitude(Transceiver, Response);
+[Response] = channel_response(Transceiver, Response);
 
 figure('Name', sprintf('Frequency response of the frequency-%s channel', Response.fadingType));
 plot(Response.basebandFrequency / 1e6, Response.subbandAmplitude);

@@ -5,7 +5,7 @@ centerFrequency = 5.18e9;
 % bandwidth
 bandwidth = 1e6;
 % number of frequency bands
-subband = 2;
+subband = 4;
 % number of taps in the tapped-delay line model
 tap = 18;
 % channel fading type ("flat" or "selective")
@@ -16,7 +16,7 @@ gapFrequency = bandwidth / subband;
 % sample frequency
 sampleFrequency = centerFrequency - 0.5 * (bandwidth - gapFrequency): gapFrequency: centerFrequency + 0.5 * (bandwidth - gapFrequency);
 
-Channel = v2struct(centerFrequency, bandwidth, subband, tap, fadingType, sampleFrequency);
+Channel = v2struct(centerFrequency, bandwidth, subband, tap, fadingType, gapFrequency, sampleFrequency);
 %% Transceiver
 % diode k-parameter
 k2 = 0.0034; k4 = 0.3829;
@@ -34,8 +34,12 @@ snrDb = 20;
 noisePowerDbm = rxPowerDbm - snrDb; noisePower = dbm2pow(noisePowerDbm);
 % iteration threshold for current gain
 currentGainThr = 5e-8;
+% oversampling factor
+oversampleFactor = 1;
+% peak-to-average power ratio
+paprDb = 10; papr = db2mag(paprDb);
 
-Transceiver = v2struct(k2, k4, resistance, tx, txPower, rxPower, snrDb, noisePower, currentGainThr);
+Transceiver = v2struct(k2, k4, resistance, tx, txPower, rxPower, snrDb, noisePower, currentGainThr, oversampleFactor, papr);
 %% Response plot
 % frequency points for channel response plot
 sampleFrequency = centerFrequency - 2.5 * bandwidth / 2: 1e4: centerFrequency + 2.5 * bandwidth / 2;
