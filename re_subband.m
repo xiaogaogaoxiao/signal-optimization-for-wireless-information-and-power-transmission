@@ -17,7 +17,7 @@ try
         % obtain the channel amplitude corresponding to the carrier frequency
         [Channel] = channel_response(Transceiver, Channel);
         % initialize algorithms
-        [SolutionDecoupling, ~, SolutionNoPowerWaveform] = initialize_algorithm(Transceiver, Channel);
+        [SolutionDecoupling, SolutionNoPowerWaveform] = initialize_algorithm(Transceiver, Channel);
         for iSample = 1: Variable.nSamples
             Transceiver.rateThr = Variable.rateThr(iSample);
             [SolutionDecoupling] = wipt_decoupling(Transceiver, Channel, SolutionDecoupling);
@@ -26,10 +26,10 @@ try
             rateNoPowerWaveform(iCase, iSample) = SolutionNoPowerWaveform.rate; currentNoPowerWaveform(iCase, iSample) = SolutionNoPowerWaveform.current;
             % invalid solution cannot be used for iterations
             if isnan(rateDecoupling(iCase, iSample))
-                [SolutionDecoupling, ~, ~] = initialize_algorithm(Transceiver, Channel);
+                [SolutionDecoupling, ~] = initialize_algorithm(Transceiver, Channel);
             end
             if isnan(rateNoPowerWaveform(iCase, iSample))
-                [~, ~, SolutionNoPowerWaveform] = initialize_algorithm(Transceiver, Channel);
+                [~, SolutionNoPowerWaveform] = initialize_algorithm(Transceiver, Channel);
             end
         end
     end

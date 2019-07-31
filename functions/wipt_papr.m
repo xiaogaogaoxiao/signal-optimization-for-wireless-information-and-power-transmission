@@ -1,6 +1,6 @@
 function [Solution] = wipt_papr(Transceiver, Channel, Solution)
 % Function:
-%   - characterize the rate-energy region of MISO transmission based on the proposed WIPT architecture
+%   - characterize the rate-energy region based on the proposed WIPT architecture
 %
 % InputArg(s):
 %   - Transceiver.k2: diode k-parameters
@@ -29,15 +29,9 @@ function [Solution] = wipt_papr(Transceiver, Channel, Solution)
 %   - Solution.rate: mutual information based on the designed waveform
 %
 % Comments:
-%   - decouple the design of the spatial and frequency domain weights
-%   - significantly reduce the computational complexity as vectors rather than matrices are to be optimized numerically
-%   - optimal for SISO but no guarantee for MISO
+%   - consider the peak-to-average power constraint for superposed waveforms
 %
 % Author & Date: Yang (i@snowztail.com) - 29 Jul 19
-
-
-
-
 
 
 v2struct(Transceiver, {'fieldNames', 'k2', 'k4', 'txPower', 'noisePower', 'resistance', 'rateThr', 'currentGainThr', 'oversampleFactor', 'papr'});
@@ -54,16 +48,15 @@ sumRateThr = subband * rateThr;
 % oversampling
 nOversamples = subband * oversampleFactor;
 samplePeriod = 1 / gapFrequency;
+sampleTime = (0: nOversamples - 1) * samplePeriod / subband / oversampleFactor;
 positivePosynomial = cell(1, nOversamples);
 negativeMonomial = cell(1, nOversamples);
 negativeExponent = cell(1, nOversamples);
 
 [~, ~, exponentOfTarget] = target_function_decoupling(k2, k4, resistance, subbandAmplitude, subband, powerAmplitude, infoAmplitude, powerSplitRatio);
 [~, ~, exponentOfMutualInfo] = mutual_information_decoupling(noisePower, subband, subbandAmplitude, infoAmplitude, infoSplitRatio);
-
 for iOversample = 1: nOversamples
-    sampleTime = (iOversample) * samplePeriod / subband / oversampleFactor;
-    [~, ~, negativeExponent{iOversample}] = signomial(subband, powerAmplitude, subbandPhase, sampleFrequency, sampleTime, papr);
+    [~, ~, negativeExponent{iOversample}] = signomial(subband, powerAmplitude, subbandPhase, sampleFrequency, sampleTime(iOversample), txPower, papr);
 end
 
 while (~isConverged) && (isSolvable)
@@ -79,11 +72,8 @@ while (~isConverged) && (isSolvable)
         % formulate the expression of monomials
         [~, monomialOfTarget, ~] = target_function_decoupling(k2, k4, resistance, subbandAmplitude, subband, powerAmplitude, infoAmplitude, powerSplitRatio);
         [~, monomialOfMutualInfo, ~] = mutual_information_decoupling(noisePower, subband, subbandAmplitude, infoAmplitude, infoSplitRatio);
-        
-        % PAPR constraints
         for iOversample = 1: nOversamples
-            sampleTime = (iOversample - 1) * samplePeriod / subband / oversampleFactor;
-            [positivePosynomial{iOversample}, negativeMonomial{iOversample}, ~] = signomial(subband, powerAmplitude, subbandPhase, sampleFrequency, sampleTime, papr);
+            [positivePosynomial{iOversample}, negativeMonomial{iOversample}, ~] = signomial(subband, powerAmplitude, subbandPhase, sampleFrequency, sampleTime(iOversample), txPower, papr);
         end
         
         minimize (1 / t0)
@@ -92,7 +82,8 @@ while (~isConverged) && (isSolvable)
             t0 * prod((monomialOfTarget ./ exponentOfTarget) .^ (-exponentOfTarget)) <= 1;
             2 ^ sumRateThr * prod(prod((monomialOfMutualInfo ./ exponentOfMutualInfo) .^ (-exponentOfMutualInfo))) <= 1;
             powerSplitRatio + infoSplitRatio <= 1;
-            for iOversample = 1: nOversamples
+            % PAPR constraints
+            for iOversample = 2: nOversamples
                 positivePosynomial{iOversample} * prod((negativeMonomial{iOversample} ./ negativeExponent{iOversample}) .^ (-negativeExponent{iOversample})) <= 1;
             end
     cvx_end
@@ -101,6 +92,9 @@ while (~isConverged) && (isSolvable)
     if cvx_status == "Solved"
         [targetFun, ~, exponentOfTarget] = target_function_decoupling(k2, k4, resistance, subbandAmplitude, subband, powerAmplitude, infoAmplitude, powerSplitRatio);
         [rate, ~, exponentOfMutualInfo] = mutual_information_decoupling(noisePower, subband, subbandAmplitude, infoAmplitude, infoSplitRatio);
+        for iOversample = 1: nOversamples
+            [~, ~, negativeExponent{iOversample}] = signomial(subband, powerAmplitude, subbandPhase, sampleFrequency, sampleTime(iOversample), txPower, papr);
+        end
         isConverged = (targetFun - current) < currentGainThr;
         current = targetFun;
     else
@@ -108,43 +102,12 @@ while (~isConverged) && (isSolvable)
     end
 end
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Solution.powerAmplitude = powerAmplitude;
+Solution.infoAmplitude = infoAmplitude;
+Solution.powerSplitRatio = powerSplitRatio;
+Solution.infoSplitRatio = infoSplitRatio;
+Solution.current = current;
+Solution.rate = rate;
 
 end
 

@@ -1,4 +1,4 @@
-function [positivePosynomial, negativeMonomial, negativeExponent] = signomial(subband, powerAmplitude, subbandPhase, sampleFrequency, sampleTime, papr)
+function [positivePosynomial, negativeMonomial, negativeExponent] = signomial(subband, powerAmplitude, subbandPhase, sampleFrequency, sampleTime, txPower, papr)
 % Function:
 %   - decompose average power signomial as sum of positive and negative monomials
 %
@@ -8,6 +8,7 @@ function [positivePosynomial, negativeMonomial, negativeExponent] = signomial(su
 %   - subbandPhase: multipath channel phase on the subbands
 %   - sampleFrequency: sampling frequency
 %   - sampleTime: time point of oversampling
+%   - txPower: average transmit power
 %   - papr: peak-to-average power ratio
 %
 % OutputArg(s):
@@ -16,6 +17,7 @@ function [positivePosynomial, negativeMonomial, negativeExponent] = signomial(su
 %   - negativeExponent: exponent of the negative posynomial in the geometric mean
 %
 % Comments:
+%   - the peak power corresponds to multisine while the average power is for the superposed waveform
 %   - optimum for SISO
 %
 % Author & Date: Yang (i@snowztail.com) - 29 Jul 19
@@ -43,14 +45,15 @@ for iSubband0 = 1: subband
         iTerm = iTerm + 1;
         coef(iTerm) = cos(2 * pi * sampleFrequency(iSubband0) * sampleTime - subbandPhase(iSubband0)) .* ...
             cos(2 * pi * sampleFrequency(iSubband1) * sampleTime - subbandPhase(iSubband1));
-        monomialOfSignomial(:, iTerm) = powerAmplitude(iSubband0) * powerAmplitude(iSubband1) * coef(iTerm);
+        monomialOfSignomial(iTerm) = powerAmplitude(iSubband0) * powerAmplitude(iSubband1) * coef(iTerm);
     end
 end
 positiveMonomial = monomialOfSignomial(coef > 0);
 negativeMonomial = - monomialOfSignomial(coef < 0);
 
 % denominator as a sum of monomials
-negativeMonomial = [0.5 * papr * norm(powerAmplitude) ^ 2, negativeMonomial];
+% negativeMonomial = [0.5 * papr * norm(powerAmplitude) ^ 2, negativeMonomial];
+negativeMonomial = [papr * txPower, negativeMonomial];
 
 if isKnown
     positivePosynomial = NaN;

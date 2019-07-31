@@ -71,10 +71,14 @@ snrDb = [10 20 30 40];
 nSnrCases = length(snrDb);
 % average noise power
 noisePowerDbm = rxPowerDbm - snrDb; noisePower = dbm2pow(noisePowerDbm);
+% different PAPR cases
+paprDb = [4 6 8 10 12]; papr = db2mag(paprDb);
+% number of PAPR cases
+nPaprCases = length(paprDb);
 
-Variable = v2struct(rateThr, nSamples, subband, nSubbandCases, gapFrequency, sampleFrequency, snrDb, nSnrCases, noisePower);
+Variable = v2struct(rateThr, nSamples, subband, nSubbandCases, gapFrequency, sampleFrequency, snrDb, nSnrCases, noisePower, papr, nPaprCases);
 %% Pushbullet APIs
-apiKey = "o.yUNcIobGlYRt2DE15oosbhYHmiDXYpdP";
+apiKey = "o.vhgHHTD2ZC2umYIGF7sPcYz4lo6L3cNc";
 
 Push = Pushbullet(apiKey);
 %% Clean up

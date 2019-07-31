@@ -1,15 +1,14 @@
-function [SolutionDecouplingInit, SolutionLowerBoundInit, SolutionNoPowerWaveformInit] = initialize_algorithm(Transceiver, Channel)
+function [SolutionSuperposedWaveform, SolutionNoPowerWaveform] = initialize_algorithm(Transceiver, Channel)
 % Function:
-%   - initialize algorithms
+%   - initialize resource allocation with matched filers
 %
 % InputArg(s):
 %   - Transceiver.txPower: average transmit power
 %   - Channel.subbandAmplitude: amplitude of channel impulse response
 %
 % OutputArg(s):
-%   - SolutionDecouplingInit: initial resource allocation corresponding to the algorithm of superposed waveform
-%   - SolutionLowerBoundInit: initial resource allocation corresponding to the algorithm of superposed waveform with interference
-%   - SolutionNoPowerWaveformInit: initial resource allocation corresponding to the algorithm of no power waveform
+%   - SolutionSuperposedWaveform: initial amplitude corresponding to the algorithm of superposed waveform
+%   - SolutionNoPowerWaveform: initial amplitude corresponding to the algorithm of no power waveform
 %
 % Comments:
 %   - initialize power and information waveforms with matched filers
@@ -28,17 +27,16 @@ powerSplitRatio = 0.5;
 % ratio for information transmission
 infoSplitRatio = 1 - powerSplitRatio;
 
-% initialize resource allocation with matched filers
+
+% superposed waveforms
 powerAmplitude = subbandAmplitude / norm(subbandAmplitude, 'fro') * sqrt(txPower);
 infoAmplitude = subbandAmplitude / norm(subbandAmplitude, 'fro') * sqrt(txPower);
-% superposed waveforms
-SolutionDecouplingInit = v2struct(rate, current, powerSplitRatio, infoSplitRatio, powerAmplitude, infoAmplitude);
-SolutionLowerBoundInit = v2struct(rate, current, powerSplitRatio, infoSplitRatio, powerAmplitude, infoAmplitude);
+SolutionSuperposedWaveform = v2struct(rate, current, powerSplitRatio, infoSplitRatio, powerAmplitude, infoAmplitude);
 
 % no power waveform
 powerAmplitude = zeros(size(powerAmplitude)) + eps;
-infoAmplitude = infoAmplitude * sqrt(2);
-SolutionNoPowerWaveformInit = v2struct(rate, current, powerSplitRatio, infoSplitRatio, powerAmplitude, infoAmplitude);
+infoAmplitude = subbandAmplitude / norm(subbandAmplitude, 'fro') * sqrt(txPower) * sqrt(2);
+SolutionNoPowerWaveform = v2struct(rate, current, powerSplitRatio, infoSplitRatio, powerAmplitude, infoAmplitude);
 
 end
 
