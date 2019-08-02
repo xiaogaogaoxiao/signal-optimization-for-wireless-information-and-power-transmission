@@ -45,6 +45,9 @@ isConverged = false;
 isSolvable = true;
 sumRateThr = subband * rateThr;
 
+% optimum beamforming phase
+beamformPhase = -subbandPhase;
+
 % oversampling
 nOversamples = subband * oversampleFactor;
 samplePeriod = 1 / gapFrequency;
@@ -56,7 +59,7 @@ negativeExponent = cell(1, nOversamples);
 [~, ~, exponentOfTarget] = target_function_decoupling(k2, k4, resistance, subbandAmplitude, subband, powerAmplitude, infoAmplitude, powerSplitRatio);
 [~, ~, exponentOfMutualInfo] = mutual_information_decoupling(noisePower, subband, subbandAmplitude, infoAmplitude, infoSplitRatio);
 for iOversample = 1: nOversamples
-    [~, ~, negativeExponent{iOversample}] = signomial(subband, powerAmplitude, subbandPhase, sampleFrequency, sampleTime(iOversample), txPower, papr);
+    [~, ~, negativeExponent{iOversample}] = signomial(subband, powerAmplitude, beamformPhase, sampleFrequency, sampleTime(iOversample), txPower, papr);
 end
 
 while (~isConverged) && (isSolvable)
@@ -73,7 +76,7 @@ while (~isConverged) && (isSolvable)
         [~, monomialOfTarget, ~] = target_function_decoupling(k2, k4, resistance, subbandAmplitude, subband, powerAmplitude, infoAmplitude, powerSplitRatio);
         [~, monomialOfMutualInfo, ~] = mutual_information_decoupling(noisePower, subband, subbandAmplitude, infoAmplitude, infoSplitRatio);
         for iOversample = 1: nOversamples
-            [positivePosynomial{iOversample}, negativeMonomial{iOversample}, ~] = signomial(subband, powerAmplitude, subbandPhase, sampleFrequency, sampleTime(iOversample), txPower, papr);
+            [positivePosynomial{iOversample}, negativeMonomial{iOversample}, ~] = signomial(subband, powerAmplitude, beamformPhase, sampleFrequency, sampleTime(iOversample), txPower, papr);
         end
         
         minimize (1 / t0)
@@ -93,7 +96,7 @@ while (~isConverged) && (isSolvable)
         [targetFun, ~, exponentOfTarget] = target_function_decoupling(k2, k4, resistance, subbandAmplitude, subband, powerAmplitude, infoAmplitude, powerSplitRatio);
         [rate, ~, exponentOfMutualInfo] = mutual_information_decoupling(noisePower, subband, subbandAmplitude, infoAmplitude, infoSplitRatio);
         for iOversample = 1: nOversamples
-            [~, ~, negativeExponent{iOversample}] = signomial(subband, powerAmplitude, subbandPhase, sampleFrequency, sampleTime(iOversample), txPower, papr);
+            [~, ~, negativeExponent{iOversample}] = signomial(subband, powerAmplitude, beamformPhase, sampleFrequency, sampleTime(iOversample), txPower, papr);
         end
         isConverged = (targetFun - current) < currentGainThr;
         current = targetFun;

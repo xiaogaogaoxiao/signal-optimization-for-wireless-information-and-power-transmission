@@ -1,11 +1,11 @@
-function [positivePosynomial, negativeMonomial, negativeExponent] = signomial(subband, powerAmplitude, subbandPhase, sampleFrequency, sampleTime, txPower, papr)
+function [positivePosynomial, negativeMonomial, negativeExponent] = signomial(subband, powerAmplitude, beamformPhase, sampleFrequency, sampleTime, txPower, papr)
 % Function:
 %   - decompose average power signomial as sum of positive and negative monomials
 %
 % InputArg(s):
 %   - subband: number of subbands (subcarriers)
 %   - powerAmplitude: optimum amplitude assigned to power waveform
-%   - subbandPhase: multipath channel phase on the subbands
+%   - beamformPhase: the beamforming phase
 %   - sampleFrequency: sampling frequency
 %   - sampleTime: time point of oversampling
 %   - txPower: average transmit power
@@ -43,8 +43,8 @@ iTerm = 0;
 for iSubband0 = 1: subband
     for iSubband1 = 1: subband
         iTerm = iTerm + 1;
-        coef(iTerm) = cos(2 * pi * sampleFrequency(iSubband0) * sampleTime - subbandPhase(iSubband0)) .* ...
-            cos(2 * pi * sampleFrequency(iSubband1) * sampleTime - subbandPhase(iSubband1));
+        coef(iTerm) = cos(2 * pi * sampleFrequency(iSubband0) * sampleTime + beamformPhase(iSubband0)) .* ...
+            cos(2 * pi * sampleFrequency(iSubband1) * sampleTime + beamformPhase(iSubband1));
         monomialOfSignomial(iTerm) = powerAmplitude(iSubband0) * powerAmplitude(iSubband1) * coef(iTerm);
     end
 end
