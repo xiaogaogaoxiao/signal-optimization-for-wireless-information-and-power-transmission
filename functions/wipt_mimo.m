@@ -1,4 +1,4 @@
-function [Solution] = wipt_mo(Transceiver, Channel, Solution)
+function [Solution] = wipt_mimo(Transceiver, Channel, Solution)
 % Function:
 %   - characterize the rate-energy region based on the proposed WIPT architecture
 %
@@ -6,6 +6,7 @@ function [Solution] = wipt_mo(Transceiver, Channel, Solution)
 %   - Transceiver.k2: diode k-parameters
 %   - Transceiver.k4: diode k-parameters
 %   - Transceiver.tx: number of transmit antennas
+%   - Transceiver.rx: number of receive antennas
 %   - Transceiver.txPower: average transmit power
 %   - Transceiver.noisePower: average noise power
 %   - Transceiver.resistance: antenna resistance
@@ -36,7 +37,7 @@ function [Solution] = wipt_mo(Transceiver, Channel, Solution)
 % Author & Date: Yang (i@snowztail.com) - 01 Aug 19
 
 
-v2struct(Transceiver, {'fieldNames', 'k2', 'k4', 'tx' 'txPower', 'noisePower', 'resistance', 'rateThr', 'currentGainThr'});
+v2struct(Transceiver, {'fieldNames', 'k2', 'k4', 'tx', 'rx' 'txPower', 'noisePower', 'resistance', 'rateThr', 'currentGainThr'});
 v2struct(Channel, {'fieldNames', 'subband', 'subbandAmplitude'});
 v2struct(Solution, {'fieldNames', 'powerSplitRatio', 'infoSplitRatio', 'powerAmplitude', 'infoAmplitude'});
 
@@ -55,8 +56,8 @@ while (~isConverged) && (isSolvable)
         cvx_solver sedumi
         
         variable t0
-        variable powerAmplitude(subband, tx) nonnegative
-        variable infoAmplitude(subband, tx) nonnegative
+        variable powerAmplitude(subband, rx) nonnegative
+        variable infoAmplitude(subband, rx) nonnegative
         variable powerSplitRatio nonnegative
         variable infoSplitRatio nonnegative
 

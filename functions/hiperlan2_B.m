@@ -4,6 +4,7 @@ function [Channel] = hiperlan2_B(Transceiver, Channel)
 %
 % InputArg(s):
 %   - Transceiver.tx: number of transmit antenna
+%   - Transceiver.rx: number of receive antenna
 %
 % OutputArg(s):
 %   - Channel.tapDelay: tap delay
@@ -15,19 +16,15 @@ function [Channel] = hiperlan2_B(Transceiver, Channel)
 % Author & Date: Yang (i@snowztail.com) - 31 May 19
 
 
-v2struct(Transceiver, {'fieldNames', 'tx'});
+v2struct(Transceiver, {'fieldNames', 'tx', 'rx'});
 
 tap = 18;
-tapGain = zeros(tx, tap);
-
-tapDelay = [0 10 20 30 50 80 110 140 180 230 280 330 380 430 490 560 640 730] * 1e-9;
-tapPowerDb = [-2.6 -3.0 -3.5 -3.9 0.0 -1.3 -2.6 -3.9 -3.4 -5.6 -7.7 -9.9 -12.1 -14.3 -15.4 -18.4 -20.7 -24.6];
+tapDelay = [0 10 20 30 50 80 110 140 180 230 280 330 380 430 490 560 640 730]' * 1e-9;
+tapPowerDb = [-2.6 -3.0 -3.5 -3.9 0.0 -1.3 -2.6 -3.9 -3.4 -5.6 -7.7 -9.9 -12.1 -14.3 -15.4 -18.4 -20.7 -24.6]';
 tapPower = db2pow(tapPowerDb);
 
 % model taps as i.i.d. CSCG variables
-for iTx = 1: tx
-    tapGain(iTx, :) = sqrt(tapPower) .* (sqrt(1 / 2) * (randn(size(tapPower)) + 1i * randn(size(tapPower))));
-end
+tapGain = repmat(sqrt(tapPower / 2), [1, tx, rx]) .* (randn(tap, tx, rx) + 1i * randn(tap, tx, rx));
 
 Channel.tapGain = tapGain;
 Channel.tapDelay = tapDelay;

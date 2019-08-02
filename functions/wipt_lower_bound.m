@@ -52,8 +52,8 @@ while (~isConverged) && (isSolvable)
         cvx_solver sedumi
         
         variable t0
-        variable powerAmplitude(subband, tx) nonnegative
-        variable infoAmplitude(subband, tx) nonnegative
+        variable powerAmplitude(subband, 1) nonnegative
+        variable infoAmplitude(subband, 1) nonnegative
         variable powerSplitRatio nonnegative
         variable infoSplitRatio nonnegative
 

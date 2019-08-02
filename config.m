@@ -22,8 +22,12 @@ Channel = v2struct(centerFrequency, bandwidth, subband, tap, fadingType, gapFreq
 k2 = 0.0034; k4 = 0.3829;
 % antenna resistance
 resistance = 50;
-% number of transmit antenna
-tx = 1;
+% number of transmit antennas
+tx = 2;
+% number of receive antennas
+rx = 3;
+% weight on rectennas
+weight = ones(1, rx);
 % average transmit power
 txPowerDbm = -20; txPower = dbm2pow(txPowerDbm);
 % average receive power
@@ -39,7 +43,7 @@ oversampleFactor = 1;
 % peak-to-average power ratio
 paprDb = 10; papr = db2mag(paprDb);
 
-Transceiver = v2struct(k2, k4, resistance, tx, txPower, rxPower, snrDb, noisePower, currentGainThr, oversampleFactor, papr);
+Transceiver = v2struct(k2, k4, resistance, tx, rx, weight, txPower, rxPower, snrDb, noisePower, currentGainThr, oversampleFactor, papr);
 %% Response plot
 % frequency points for channel response plot
 sampleFrequency = centerFrequency - 2.5 * bandwidth / 2: 1e4: centerFrequency + 2.5 * bandwidth / 2;
@@ -75,8 +79,12 @@ noisePowerDbm = rxPowerDbm - snrDb; noisePower = dbm2pow(noisePowerDbm);
 paprDb = [4 6 8 10 12]; papr = db2mag(paprDb);
 % number of PAPR cases
 nPaprCases = length(paprDb);
+% different rectenna cases
+rx = [1 2];
+% number of rectenna cases
+nRxCases = length(rx);
 
-Variable = v2struct(rateThr, nSamples, subband, nSubbandCases, gapFrequency, sampleFrequency, snrDb, nSnrCases, noisePower, papr, nPaprCases);
+Variable = v2struct(rateThr, nSamples, subband, nSubbandCases, gapFrequency, sampleFrequency, snrDb, nSnrCases, noisePower, papr, nPaprCases, rx, nRxCases);
 %% Pushbullet APIs
 apiKey = "o.vhgHHTD2ZC2umYIGF7sPcYz4lo6L3cNc";
 
