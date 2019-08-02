@@ -9,7 +9,7 @@ function [Transceiver, Channel] = preprocessing(Transceiver, Channel)
 %   - Transceiver.rx: number of receive antennas
 %   - Transceiver.weight: weight on rectennas
 %   - Channel.subband: number of subbands (subcarriers)
-%   - Channel.subbandAmplitude: amplitude of channel impulse response
+%   - Channel.subbandAmplitude: subband amplitude of the MIMO channel
 %   - Channel.subbandPhase: multipath channel phase on the subbands
 %
 % OutputArg(s):
@@ -26,15 +26,19 @@ v2struct(Transceiver, {'fieldNames', 'k2', 'tx', 'rx', 'weight'});
 v2struct(Channel, {'fieldNames', 'subband', 'subbandAmplitude', 'subbandPhase'});
 
 beamformPhase = zeros(subband, tx);
+mimoAmplitude = zeros(subband, tx);
 
-subbandGain = repmat(reshape(sqrt(k2 * weight), [1 1 rx]), [subband tx]) .* subbandAmplitude .* exp(1i * subbandPhase);
+% subbandGain = repmat(reshape(sqrt(k2 * weight), [1 1 rx]), [subband tx]) .* subbandAmplitude .* exp(1i * subbandPhase);
+subbandGain = repmat(reshape(sqrt(weight), [1 1 rx]), [subband tx]) .* subbandAmplitude .* exp(1i * subbandPhase);
 
 for iSubband = 1: subband
-    [~, ~, v] = svd(squeeze(subbandGain(iSubband, :, :)).');
+    [~, lambda, v] = svd(squeeze(subbandGain(iSubband, :, :)).');
     beamformPhase(iSubband, :) = angle(v(:, 1)).';
+    mimoAmplitude(iSubband, :) = diag(lambda).';
 end
 
 Channel.subbandGain = subbandGain;
+Channel.subbandAmplitude = mimoAmplitude;
 Transceiver.beamformPhase = beamformPhase;
 
 end

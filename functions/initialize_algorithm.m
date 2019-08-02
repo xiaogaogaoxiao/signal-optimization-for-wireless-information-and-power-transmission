@@ -27,7 +27,6 @@ powerSplitRatio = 0.5;
 % ratio for information transmission
 infoSplitRatio = 1 - powerSplitRatio;
 
-
 % superposed waveforms
 powerAmplitude = subbandAmplitude / norm(subbandAmplitude, 'fro') * sqrt(txPower);
 infoAmplitude = subbandAmplitude / norm(subbandAmplitude, 'fro') * sqrt(txPower);

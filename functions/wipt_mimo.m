@@ -12,8 +12,7 @@ function [Solution] = wipt_mimo(Transceiver, Channel, Solution)
 %   - Transceiver.resistance: antenna resistance
 %   - Transceiver.rateThr: rate constraint per subband
 %   - Transceiver.currentGainThr: iteration threshold for current gain
-%   - Transceiver.oversampleFactor: oversampleing factor
-%   - Transceiver.papr: peak-to-average power ratio
+%   - Transceiver.beamformPhase: the beamforming phase
 %   - Channel.subband: number of subbands (subcarriers)
 %   - Channel.subbandAmplitude: amplitude of channel impulse response
 %   - Channel.subbandPhase: multipath channel phase on the subbands
@@ -37,8 +36,8 @@ function [Solution] = wipt_mimo(Transceiver, Channel, Solution)
 % Author & Date: Yang (i@snowztail.com) - 01 Aug 19
 
 
-v2struct(Transceiver, {'fieldNames', 'k2', 'k4', 'tx', 'rx' 'txPower', 'noisePower', 'resistance', 'rateThr', 'currentGainThr'});
-v2struct(Channel, {'fieldNames', 'subband', 'subbandAmplitude'});
+v2struct(Transceiver, {'fieldNames', 'k2', 'k4', 'tx', 'rx' 'txPower', 'noisePower', 'resistance', 'rateThr', 'currentGainThr', 'beamformPhase'});
+v2struct(Channel, {'fieldNames', 'subband', 'subbandAmplitude', 'subbandPhase'});
 v2struct(Solution, {'fieldNames', 'powerSplitRatio', 'infoSplitRatio', 'powerAmplitude', 'infoAmplitude'});
 
 % initialize
@@ -48,7 +47,11 @@ isConverged = false;
 isSolvable = true;
 sumRateThr = subband * rateThr;
 
-[~, ~, exponentOfTarget] = target_function(k2, k4, tx, resistance, subbandAmplitude, subband, powerAmplitude, infoAmplitude, powerSplitRatio);
+% suboptimal beamforming phase
+powerPhase = subbandPhase + beamformPhase;
+infoPhase = subbandPhase + beamformPhase;
+
+[~, ~, exponentOfTarget] = target_function(k2, k4, tx, resistance, subbandAmplitude, subband, powerAmplitude, infoAmplitude, powerPhase, infoPhase, powerSplitRatio);
 [~, ~, exponentOfMutualInfo] = mutual_information(tx, noisePower, subband, subbandAmplitude, infoAmplitude, infoPhase, infoSplitRatio);
 
 while (~isConverged) && (isSolvable)
