@@ -3,8 +3,10 @@ function [SolutionSuperposedWaveform, SolutionNoPowerWaveform] = initialize_algo
 %   - initialize resource allocation with matched filers
 %
 % InputArg(s):
+%   - Transceiver.rx: number of receive antennas
 %   - Transceiver.txPower: average transmit power
 %   - Channel.subbandAmplitude: amplitude of channel impulse response
+%   - Channel.mimoAmplitude: equalvalent amplitude of MIMO channel
 %
 % OutputArg(s):
 %   - SolutionSuperposedWaveform: initial amplitude corresponding to the algorithm of superposed waveform
@@ -16,8 +18,15 @@ function [SolutionSuperposedWaveform, SolutionNoPowerWaveform] = initialize_algo
 % Author & Date: Yang (i@snowztail.com) - 22 Jul 19
 
 
-v2struct(Transceiver, {'fieldNames', 'txPower'});
-v2struct(Channel, {'fieldNames', 'subbandAmplitude'});
+v2struct(Transceiver, {'fieldNames', 'rx', 'txPower'});
+
+if rx == 1
+    v2struct(Channel, {'fieldNames', 'subbandAmplitude'});
+    amplitude = subbandAmplitude;
+else
+    v2struct(Channel, {'fieldNames', 'mimoAmplitude'});
+    amplitude = mimoAmplitude;
+end
 
 % initialize results
 rate = NaN;
@@ -28,13 +37,13 @@ powerSplitRatio = 0.5;
 infoSplitRatio = 1 - powerSplitRatio;
 
 % superposed waveforms
-powerAmplitude = subbandAmplitude / norm(subbandAmplitude, 'fro') * sqrt(txPower);
-infoAmplitude = subbandAmplitude / norm(subbandAmplitude, 'fro') * sqrt(txPower);
+powerAmplitude = amplitude / norm(amplitude, 'fro') * sqrt(txPower);
+infoAmplitude = amplitude / norm(amplitude, 'fro') * sqrt(txPower);
 SolutionSuperposedWaveform = v2struct(rate, current, powerSplitRatio, infoSplitRatio, powerAmplitude, infoAmplitude);
 
 % no power waveform
 powerAmplitude = zeros(size(powerAmplitude)) + eps;
-infoAmplitude = subbandAmplitude / norm(subbandAmplitude, 'fro') * sqrt(txPower) * sqrt(2);
+infoAmplitude = amplitude / norm(amplitude, 'fro') * sqrt(txPower) * sqrt(2);
 SolutionNoPowerWaveform = v2struct(rate, current, powerSplitRatio, infoSplitRatio, powerAmplitude, infoAmplitude);
 
 end

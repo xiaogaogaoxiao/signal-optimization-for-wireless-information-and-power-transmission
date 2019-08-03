@@ -51,7 +51,8 @@ sumRateThr = subband * rateThr;
 powerPhase = subbandPhase + beamformPhase;
 infoPhase = subbandPhase + beamformPhase;
 
-[~, ~, exponentOfTarget] = target_function(k2, k4, tx, resistance, subbandAmplitude, subband, powerAmplitude, infoAmplitude, powerPhase, infoPhase, powerSplitRatio);
+[~, ~, positiveExponent] = target_function_mimo(k2, k4, tx, rx, resistance, subbandAmplitude, subband, powerAmplitude, infoAmplitude, powerPhase, infoPhase, powerSplitRatio);
+% [~, ~, exponentOfTarget] = target_function_mimo(k2, k4, tx, rx, resistance, subbandAmplitude, subband, powerAmplitude, infoAmplitude, powerPhase, infoPhase, powerSplitRatio);
 [~, ~, exponentOfMutualInfo] = mutual_information(tx, noisePower, subband, subbandAmplitude, infoAmplitude, infoPhase, infoSplitRatio);
 
 while (~isConverged) && (isSolvable)

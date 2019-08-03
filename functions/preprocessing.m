@@ -38,7 +38,7 @@ for iSubband = 1: subband
 end
 
 Channel.subbandGain = subbandGain;
-Channel.subbandAmplitude = mimoAmplitude;
+Channel.mimoAmplitude = mimoAmplitude;
 Transceiver.beamformPhase = beamformPhase;
 
 end
