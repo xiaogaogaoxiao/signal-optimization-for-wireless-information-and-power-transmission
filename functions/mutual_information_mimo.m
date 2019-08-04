@@ -1,4 +1,4 @@
-function [mutualInfo, monomialOfMutualInfo, exponentOfMutualInfo] = mutual_information_mimo(tx, rx, noisePower, subband, subbandAmplitude, infoAmplitude, infoPhase, infoSplitRatio)
+function [mutualInfo, negativePosynomial, positiveMonomial, positiveExponent] = mutual_information_mimo(tx, rx, noisePower, subband, subbandAmplitude, infoAmplitude, infoPhase, infoSplitRatio)
 % Function:
 %   - formulate the maximum achievable mutual information with the provided parameters
 %   - decomposite the posynomials that contribute to mutual information as sum of monomials
@@ -33,6 +33,7 @@ nTerms = 1 + tx ^ 2 * rx;
 isKnown = isa(infoAmplitude, 'double');
 
 % initialize (a constant term 1 exists in each posynomial)
+coefOfMonomial = ones(subband, nTerms);
 if isKnown
     % placeholder for actual values (doubles)
     monomialOfMutualInfo = ones(subband, nTerms);
@@ -47,30 +48,38 @@ for iSubband = 1: subband
         for iTx1 = 1: tx
             for iRx = 1: rx
                 iTerm = iTerm + 1;
-                monomialOfMutualInfo(iSubband, iTerm) = infoSplitRatio / noisePower * ...
+                coefOfMonomial(iSubband, iTerm) = cos(infoPhase(iSubband, iTx0) - infoPhase(iSubband, iTx1));
+                monomialOfMutualInfo(iSubband, iTerm) = coefOfMonomial(iSubband, iTerm) * infoSplitRatio / noisePower * ...
                     (infoAmplitude(iSubband, iTx0) * subbandAmplitude(iSubband, iTx0, iRx)) * ...
-                    (infoAmplitude(iSubband, iTx1) * subbandAmplitude(iSubband, iTx1, iRx)) * ...
-                    cos(infoPhase(iSubband, iTx0) - infoPhase(iSubband, iTx1));
+                    (infoAmplitude(iSubband, iTx1) * subbandAmplitude(iSubband, iTx1, iRx));
             end
         end
     end
 end
 clearvars iSubband iTx0 iTx1 iRx iTerm;
 
-signomial = monomialOfMutualInfo(1, :);
 % unwrap product of signomials
+unwrappedMonomial = monomialOfMutualInfo(1, :);
+coef = coefOfMonomial(1, :);
 for iSubband = 1: subband - 1
-    [signomial] = unwrap_signomial(signomial, monomialOfMutualInfo(iSubband + 1, :));
+    [unwrappedMonomial] = unwrap_signomial(unwrappedMonomial, monomialOfMutualInfo(iSubband + 1, :));
+    [coef] = unwrap_signomial(coef, coefOfMonomial(iSubband + 1, :));
 end
 
+positiveMonomial = unwrappedMonomial(coef > 0);
+negativeMonomial = - unwrappedMonomial(coef < 0);
+
+negativePosynomial = sum(negativeMonomial);
+
 if isKnown
-    posynomialOfMutualInfo = sum(monomialOfMutualInfo, 2);
-    exponentOfMutualInfo = monomialOfMutualInfo ./ repmat(posynomialOfMutualInfo, [1 nTerms]);
-    mutualInfo = log(prod(posynomialOfMutualInfo)) / log(2);
+    positivePosynomial = sum(positiveMonomial);
+    positiveExponent = positiveMonomial / positivePosynomial;
+    mutualInfo = log(positivePosynomial - negativePosynomial) / log(2);
 else
-    exponentOfMutualInfo = NaN;
+    positiveExponent = NaN;
     mutualInfo = NaN;
 end
+
 % per-subband rate
 mutualInfo = mutualInfo / subband;
 

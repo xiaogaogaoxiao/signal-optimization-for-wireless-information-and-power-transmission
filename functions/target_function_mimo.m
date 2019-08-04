@@ -19,8 +19,9 @@ function [targetFun, negativePosynomial, positiveMonomial, positiveExponent] = t
 %
 % OutputArg(s):
 %   - targetFun: target posynomial (zDc) that proportional to the output current
-%   - monomialOfTarget: monomials (g) as components of the target posynomial
-%   - exponentOfTarget: exponent of the target function in the geometric mean
+%   - negativePosynomial: negative posynomial (f2) of the target signomial
+%   - positiveMonomial: positive monomial (terms of f1) of the target signomial
+%   - positiveExponent: exponent of the positive posynomial in the geometric mean
 %
 % Comments:
 %   - for MIMO

@@ -51,36 +51,35 @@ sumRateThr = subband * rateThr;
 powerPhase = subbandPhase + beamformPhase;
 infoPhase = subbandPhase + beamformPhase;
 
-[~, ~, positiveExponent] = target_function_mimo(k2, k4, tx, rx, resistance, subbandAmplitude, subband, powerAmplitude, infoAmplitude, powerPhase, infoPhase, powerSplitRatio);
-% [~, ~, exponentOfTarget] = target_function_mimo(k2, k4, tx, rx, resistance, subbandAmplitude, subband, powerAmplitude, infoAmplitude, powerPhase, infoPhase, powerSplitRatio);
-[~, ~, exponentOfMutualInfo] = mutual_information_mimo(tx, rx, noisePower, subband, subbandAmplitude, infoAmplitude, infoPhase, infoSplitRatio);
+[~, ~, positiveExponentOfTarget] = target_function_mimo(k2, k4, tx, rx, resistance, subbandAmplitude, subband, powerAmplitude, infoAmplitude, powerPhase, infoPhase, powerSplitRatio);
+[~, ~, ~, positiveExponentOfMi] = mutual_information_mimo(tx, rx, noisePower, subband, subbandAmplitude, infoAmplitude, infoPhase, infoSplitRatio);
 
 while (~isConverged) && (isSolvable)
     cvx_begin gp
         cvx_solver sedumi
         
         variable t0
-        variable powerAmplitude(subband, rx) nonnegative
-        variable infoAmplitude(subband, rx) nonnegative
+        variable powerAmplitude(subband, tx) nonnegative
+        variable infoAmplitude(subband, tx) nonnegative
         variable powerSplitRatio nonnegative
         variable infoSplitRatio nonnegative
 
         % formulate the expression of monomials
-        [~, monomialOfTarget, ~] = target_function_decoupling(k2, k4, resistance, subbandAmplitude, subband, powerAmplitude, infoAmplitude, powerSplitRatio);
-        [~, monomialOfMutualInfo, ~] = mutual_information_decoupling(noisePower, subband, subbandAmplitude, infoAmplitude, infoSplitRatio);
+        [~, negativePosynomialOfTarget, positiveMonomialOfTarget, ~] = target_function_mimo(k2, k4, tx, rx, resistance, subbandAmplitude, subband, powerAmplitude, infoAmplitude, powerPhase, infoPhase, powerSplitRatio);
+        [~, negativePosynomialOfMi, positiveMonomialOfMi, ~] = mutual_information_mimo(tx, rx, noisePower, subband, subbandAmplitude, infoAmplitude, infoPhase, infoSplitRatio);
 
         minimize (1 / t0)
         subject to
             0.5 * (norm(powerAmplitude, 'fro') ^ 2 + norm(infoAmplitude, 'fro') ^ 2) <= txPower;
-            t0 * prod((monomialOfTarget ./ exponentOfTarget) .^ (-exponentOfTarget)) <= 1;
-            2 ^ sumRateThr * prod(prod((monomialOfMutualInfo ./ exponentOfMutualInfo) .^ (-exponentOfMutualInfo))) <= 1;
+            (t0 + negativePosynomialOfTarget) * prod((positiveMonomialOfTarget ./ positiveExponentOfTarget) .^ (-positiveExponentOfTarget)) <= 1;
+            (2 ^ sumRateThr + negativePosynomialOfMi) * prod((positiveMonomialOfMi ./ positiveExponentOfMi) .^ (-positiveExponentOfMi)) <= 1;
             powerSplitRatio + infoSplitRatio <= 1;
     cvx_end
     
     % update achievable rate and power successively
     if cvx_status == "Solved"
-        [targetFun, ~, exponentOfTarget] = target_function_decoupling(k2, k4, resistance, subbandAmplitude, subband, powerAmplitude, infoAmplitude, powerSplitRatio);
-        [rate, ~, exponentOfMutualInfo] = mutual_information_decoupling(noisePower, subband, subbandAmplitude, infoAmplitude, infoSplitRatio);
+        [targetFun, ~, ~, positiveExponentOfTarget] = target_function_mimo(k2, k4, tx, rx, resistance, subbandAmplitude, subband, powerAmplitude, infoAmplitude, powerPhase, infoPhase, powerSplitRatio);
+        [rate, ~, ~, positiveExponentOfMi] = mutual_information_mimo(tx, rx, noisePower, subband, subbandAmplitude, infoAmplitude, infoPhase, infoSplitRatio);
         isConverged = (targetFun - current) < currentGainThr;
         current = targetFun;
     else
