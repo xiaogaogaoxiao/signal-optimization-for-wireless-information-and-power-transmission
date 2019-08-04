@@ -27,7 +27,7 @@ function [mutualInfo, monomialOfMutualInfo, exponentOfMutualInfo] = mutual_infor
 
 
 % number of terms (Kn) in the result posynomials
-nTerms = 1 + tx ^ 2;
+nTerms = 1 + tx ^ 2 * rx;
 
 % type of variables
 isKnown = isa(infoAmplitude, 'double');
@@ -41,19 +41,26 @@ else
     monomialOfMutualInfo = cvx(ones(subband, nTerms));
 end
 
-for iRx = 1: rx
-    for iSubband = 1: subband
-        iTerm = 1;
-        for iTx0 = 1: tx
-            for iTx1 = 1: tx
+for iSubband = 1: subband
+    iTerm = 1;
+    for iTx0 = 1: tx
+        for iTx1 = 1: tx
+            for iRx = 1: rx
                 iTerm = iTerm + 1;
                 monomialOfMutualInfo(iSubband, iTerm) = infoSplitRatio / noisePower * ...
-                    (infoAmplitude(iSubband, iTx0) * subbandAmplitude(iSubband, iTx0)) * ...
-                    (infoAmplitude(iSubband, iTx1) * subbandAmplitude(iSubband, iTx1)) * ...
+                    (infoAmplitude(iSubband, iTx0) * subbandAmplitude(iSubband, iTx0, iRx)) * ...
+                    (infoAmplitude(iSubband, iTx1) * subbandAmplitude(iSubband, iTx1, iRx)) * ...
                     cos(infoPhase(iSubband, iTx0) - infoPhase(iSubband, iTx1));
             end
         end
     end
+end
+clearvars iSubband iTx0 iTx1 iRx iTerm;
+
+signomial = monomialOfMutualInfo(1, :);
+% unwrap product of signomials
+for iSubband = 1: subband - 1
+    [signomial] = unwrap_signomial(signomial, monomialOfMutualInfo(iSubband + 1, :));
 end
 
 if isKnown

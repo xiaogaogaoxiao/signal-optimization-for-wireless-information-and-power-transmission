@@ -53,7 +53,7 @@ infoPhase = subbandPhase + beamformPhase;
 
 [~, ~, positiveExponent] = target_function_mimo(k2, k4, tx, rx, resistance, subbandAmplitude, subband, powerAmplitude, infoAmplitude, powerPhase, infoPhase, powerSplitRatio);
 % [~, ~, exponentOfTarget] = target_function_mimo(k2, k4, tx, rx, resistance, subbandAmplitude, subband, powerAmplitude, infoAmplitude, powerPhase, infoPhase, powerSplitRatio);
-[~, ~, exponentOfMutualInfo] = mutual_information(tx, noisePower, subband, subbandAmplitude, infoAmplitude, infoPhase, infoSplitRatio);
+[~, ~, exponentOfMutualInfo] = mutual_information_mimo(tx, rx, noisePower, subband, subbandAmplitude, infoAmplitude, infoPhase, infoSplitRatio);
 
 while (~isConverged) && (isSolvable)
     cvx_begin gp
