@@ -1,16 +1,16 @@
 initialize; config;
-% Push.pushNote(Push.Devices, 'MATLAB Assist', sprintf('''%s'' is running', mfilename));
+Push.pushNote(Push.Devices, 'MATLAB Assist', sprintf('''%s'' is running', mfilename));
 %% Channel
 % generate the tap delay and gains based on HIPERLAN/2 model B
 [Channel] = hiperlan2_B(Transceiver, Channel);
 % plot_response;
 % obtain the channel amplitude corresponding to the carrier frequency
 [Channel] = channel_response(Transceiver, Channel);
-save([pwd '/data/channel.mat']);
+% save([pwd '/data/channel.mat']);
 % load([pwd '/data/channel.mat']);
 %% R-E region samples
 ratePapr = zeros(Variable.nPaprCases, Variable.nSamples); currentPapr = zeros(Variable.nPaprCases, Variable.nSamples);
-% try
+try
     for iCase = 1: Variable.nPaprCases
         Transceiver.papr = Variable.papr(iCase);
         % initialize algorithms
@@ -25,11 +25,11 @@ ratePapr = zeros(Variable.nPaprCases, Variable.nSamples); currentPapr = zeros(Va
             end
         end
     end
-% catch
-%     Push.pushNote(Push.Devices, 'MATLAB Assist', 'Houston, we have a problem');
-% end
+catch
+    Push.pushNote(Push.Devices, 'MATLAB Assist', 'Houston, we have a problem');
+end
 %% R-E region plots
-legendStr = cell(Variable.nPaprCases);
+legendStr = cell(Variable.nPaprCases, 1);
 figure('Name', sprintf('R-E region vs PAPR'));
 for iCase = 1: Variable.nPaprCases
     plot(ratePapr(iCase, :), currentPapr(iCase, :) * 1e6);
@@ -41,5 +41,5 @@ grid on; grid minor;
 legend(legendStr);
 xlabel('Rate [bps/Hz]');
 ylabel('I_{DC} [\muA]')
-save('data_papr.mat');
+save([pwd '/data/papr.mat']);
 Push.pushNote(Push.Devices, 'MATLAB Assist', 'Job''s done!');

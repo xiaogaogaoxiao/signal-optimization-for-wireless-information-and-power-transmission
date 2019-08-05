@@ -4,7 +4,7 @@ Push.pushNote(Push.Devices, 'MATLAB Assist', sprintf('''%s'' is running', mfilen
 % generate the tap delay and gains based on HIPERLAN/2 model B
 [Channel] = hiperlan2_B(Transceiver, Channel);
 plot_response;
-save([pwd '/data/channel.mat']);
+% save([pwd '/data/channel.mat']);
 % load([pwd '/data/channel.mat']);
 %% R-E region samples
 rateDecoupling = zeros(Variable.nSubbandCases, Variable.nSamples); currentDecoupling = zeros(Variable.nSubbandCases, Variable.nSamples);
@@ -37,14 +37,16 @@ catch
     Push.pushNote(Push.Devices, 'MATLAB Assist', 'Houston, we have a problem');
 end
 %% R-E region plots
+legendStr = cell(Variable.nSubbandCases, 1);
 figure('Name', 'Superposed waveforms');
 for iCase = 1: Variable.nSubbandCases
     plot(rateDecoupling(iCase, :), currentDecoupling(iCase, :) * 1e6);
+    legendStr{iCase} = sprintf('N = %d', Variable.subband(iCase));
     hold on;
 end
 hold off;
 grid on; grid minor;
-legend(cellstr(num2str(Variable.subband', 'N = %d')));
+legend(legendStr);
 xlabel('Rate [bps/Hz]');
 ylabel('I_{DC} [\muA]');
 
@@ -55,9 +57,9 @@ for iCase = 1: Variable.nSubbandCases
 end
 hold off;
 grid on; grid minor;
-legend(cellstr(num2str(Variable.subband', 'N = %d')));
+legend(legendStr);
 xlabel('Rate [bps/Hz]');
 ylabel('I_{DC} [\muA]');
 
-save('data_subband.mat');
-pushbullet.pushNote(Push.Devices, 'MATLAB Assist', 'Job''s done!');
+save([pwd '/data/subband.mat']);
+Push.pushNote(Push.Devices, 'MATLAB Assist', 'Job''s done!');

@@ -6,7 +6,7 @@ Push.pushNote(Push.Devices, 'MATLAB Assist', sprintf('''%s'' is running', mfilen
 % plot_response;
 % obtain the channel amplitude corresponding to the carrier frequency
 [Channel] = channel_response(Transceiver, Channel);
-save([pwd '/data/channel.mat']);
+% save([pwd '/data/channel.mat']);
 % load([pwd '/data/channel.mat']);
 %% R-E region samples
 rateDecoupling = zeros(Variable.nSnrCases, Variable.nSamples); currentDecoupling = zeros(Variable.nSnrCases, Variable.nSamples);
@@ -57,5 +57,5 @@ for iCase = 1: Variable.nSnrCases
     xlabel('Rate [bps/Hz]');
     ylabel('I_{DC} [\muA]')
 end
-save('data_snr.mat');
+save([pwd '/data/snr.mat']);
 Push.pushNote(Push.Devices, 'MATLAB Assist', 'Job''s done!');

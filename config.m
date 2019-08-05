@@ -23,7 +23,7 @@ k2 = 0.0034; k4 = 0.3829;
 % antenna resistance
 resistance = 50;
 % number of transmit antennas
-tx = 2;
+tx = 1;
 % number of receive antennas
 rx = 1;
 % weight on rectennas
@@ -76,7 +76,7 @@ nSnrCases = length(snrDb);
 % average noise power
 noisePowerDbm = rxPowerDbm - snrDb; noisePower = dbm2pow(noisePowerDbm);
 % different PAPR cases
-paprDb = [4 6 8 10 12]; papr = db2mag(paprDb);
+paprDb = [4 8 12]; papr = db2mag(paprDb);
 % number of PAPR cases
 nPaprCases = length(paprDb);
 % different rectenna cases
