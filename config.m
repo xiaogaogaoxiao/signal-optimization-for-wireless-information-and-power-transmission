@@ -25,7 +25,7 @@ resistance = 50;
 % number of transmit antennas
 tx = 2;
 % number of receive antennas
-rx = 3;
+rx = 1;
 % weight on rectennas
 weight = ones(1, rx);
 % average transmit power
@@ -80,11 +80,16 @@ paprDb = [4 6 8 10 12]; papr = db2mag(paprDb);
 % number of PAPR cases
 nPaprCases = length(paprDb);
 % different rectenna cases
-rx = [3 2];
+rx = [2 3];
 % number of rectenna cases
 nRxCases = length(rx);
+% weight on rectennas
+weight = cell(nRxCases, 1);
+for iCase = 1: nRxCases
+    weight{iCase} = ones(1, rx(iCase));
+end
 
-Variable = v2struct(rateThr, nSamples, subband, nSubbandCases, gapFrequency, sampleFrequency, snrDb, nSnrCases, noisePower, papr, nPaprCases, rx, nRxCases);
+Variable = v2struct(rateThr, nSamples, subband, nSubbandCases, gapFrequency, sampleFrequency, snrDb, nSnrCases, noisePower, papr, nPaprCases, rx, nRxCases, weight);
 %% Pushbullet APIs
 apiKey = "o.vhgHHTD2ZC2umYIGF7sPcYz4lo6L3cNc";
 

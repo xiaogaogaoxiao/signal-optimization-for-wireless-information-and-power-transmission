@@ -49,7 +49,7 @@ for iSubband = 1: subband
             for iRx = 1: rx
                 iTerm = iTerm + 1;
                 coefOfMonomial(iSubband, iTerm) = cos(infoPhase(iSubband, iTx0) - infoPhase(iSubband, iTx1));
-                monomialOfMutualInfo(iSubband, iTerm) = coefOfMonomial(iSubband, iTerm) * infoSplitRatio / noisePower * ...
+                monomialOfMutualInfo(iSubband, iTerm) = abs(coefOfMonomial(iSubband, iTerm)) * infoSplitRatio / noisePower * ...
                     (infoAmplitude(iSubband, iTx0) * subbandAmplitude(iSubband, iTx0, iRx)) * ...
                     (infoAmplitude(iSubband, iTx1) * subbandAmplitude(iSubband, iTx1, iRx));
             end
@@ -67,7 +67,7 @@ for iSubband = 1: subband - 1
 end
 
 positiveMonomial = unwrappedMonomial(coef > 0);
-negativeMonomial = - unwrappedMonomial(coef < 0);
+negativeMonomial = unwrappedMonomial(coef < 0);
 
 negativePosynomial = sum(negativeMonomial);
 

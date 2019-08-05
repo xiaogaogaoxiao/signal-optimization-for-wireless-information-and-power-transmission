@@ -19,7 +19,14 @@ nTerms0 = length(monomial0);
 nTerms1 = length(monomial1);
 % number of terms in the result signomial
 nTerms = nTerms0 * nTerms1;
-monomial = zeros(1, nTerms);
+
+isKnown = isa(monomial0, 'double');
+
+if isKnown
+    monomial = zeros(1, nTerms);
+else
+    monomial = cvx(zeros(1, nTerms));
+end
 
 % unwrap product of signomials
 iTerm = 0;
