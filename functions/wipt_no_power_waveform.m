@@ -12,13 +12,11 @@ function [Solution] = wipt_no_power_waveform(Transceiver, Channel, Solution)
 %   - Transceiver.currentGainThr: iteration threshold for current gain
 %   - Channel.subband: number of subbands (subcarriers)
 %   - Channel.subbandAmplitude: amplitude of channel impulse response
-%   - Solution.powerAmplitude: amplitude of power waveform
 %   - Solution.infoAmplitude: amplitude of information waveform
 %   - Solution.powerSplitRatio: ratio for power transmission
 %   - Solution.infoSplitRatio: ratio for information transmission
 %
 % OutputArg(s):
-%   - Solution.powerAmplitude: amplitude of updated power waveform
 %   - Solution.infoAmplitude: amplitude of updated information waveform
 %   - Solution.powerSplitRatio: ratio for power transmission
 %   - Solution.infoSplitRatio: ratio for information transmission
@@ -33,7 +31,7 @@ function [Solution] = wipt_no_power_waveform(Transceiver, Channel, Solution)
 
 v2struct(Transceiver, {'fieldNames', 'k2', 'k4', 'txPower', 'noisePower', 'resistance', 'rateThr', 'currentGainThr'});
 v2struct(Channel, {'fieldNames', 'subband', 'subbandAmplitude'});
-v2struct(Solution, {'fieldNames', 'powerSplitRatio', 'infoSplitRatio', 'powerAmplitude', 'infoAmplitude'});
+v2struct(Solution, {'fieldNames', 'powerSplitRatio', 'infoSplitRatio', 'infoAmplitude'});
 
 % initialize
 current = NaN;
@@ -42,33 +40,37 @@ isConverged = false;
 isSolvable = true;
 sumRateThr = subband * rateThr;
 
-[~, ~, exponentOfTarget] = target_function_decoupling(k2, k4, resistance, subbandAmplitude, subband, powerAmplitude, infoAmplitude, powerSplitRatio);
+[~, ~, exponentOfTarget] = target_function_no_power_waveform(k2, k4, resistance, subbandAmplitude, subband, infoAmplitude, powerSplitRatio);
 [~, ~, exponentOfMutualInfo] = mutual_information_decoupling(noisePower, subband, subbandAmplitude, infoAmplitude, infoSplitRatio);
 
 while (~isConverged) && (isSolvable)
-    cvx_begin gp
-        cvx_solver sedumi
-        
-        variable t0
-        variable infoAmplitude(subband, 1) nonnegative
-        variable powerSplitRatio nonnegative
-        variable infoSplitRatio nonnegative
+    try
+        cvx_begin gp
+            cvx_solver sedumi
 
-        % formulate the expression of monomials
-        [~, monomialOfTarget, ~] = target_function_decoupling(k2, k4, resistance, subbandAmplitude, subband, powerAmplitude, infoAmplitude, powerSplitRatio);
-        [~, monomialOfMutualInfo, ~] = mutual_information_decoupling(noisePower, subband, subbandAmplitude, infoAmplitude, infoSplitRatio);
+            variable t0
+            variable infoAmplitude(subband, 1) nonnegative
+            variable powerSplitRatio nonnegative
+            variable infoSplitRatio nonnegative
 
-        minimize (1 / t0)
-        subject to
-            0.5 * (norm(powerAmplitude, 'fro') ^ 2 + norm(infoAmplitude, 'fro') ^ 2) <= txPower;
-            t0 * prod((monomialOfTarget ./ exponentOfTarget) .^ (-exponentOfTarget)) <= 1;
-            2 ^ sumRateThr * prod(prod((monomialOfMutualInfo ./ exponentOfMutualInfo) .^ (-exponentOfMutualInfo))) <= 1;
-            powerSplitRatio + infoSplitRatio <= 1;
-    cvx_end
+            % formulate the expression of monomials
+            [~, monomialOfTarget, ~] = target_function_no_power_waveform(k2, k4, resistance, subbandAmplitude, subband, infoAmplitude, powerSplitRatio);
+            [~, monomialOfMutualInfo, ~] = mutual_information_decoupling(noisePower, subband, subbandAmplitude, infoAmplitude, infoSplitRatio);
+
+            minimize (1 / t0)
+            subject to
+                0.5 * (norm(infoAmplitude, 'fro') ^ 2) <= txPower;
+                t0 * prod((monomialOfTarget ./ exponentOfTarget) .^ (-exponentOfTarget)) <= 1;
+                2 ^ sumRateThr * prod(prod((monomialOfMutualInfo ./ exponentOfMutualInfo) .^ (-exponentOfMutualInfo))) <= 1;
+                powerSplitRatio + infoSplitRatio <= 1;
+        cvx_end
+    catch
+        isSolvable = false;
+    end
     
     % update achievable rate and power successively
     if cvx_status == "Solved"
-        [targetFun, ~, exponentOfTarget] = target_function_decoupling(k2, k4, resistance, subbandAmplitude, subband, powerAmplitude, infoAmplitude, powerSplitRatio);
+        [targetFun, ~, exponentOfTarget] = target_function_no_power_waveform(k2, k4, resistance, subbandAmplitude, subband, infoAmplitude, powerSplitRatio);
         [rate, ~, exponentOfMutualInfo] = mutual_information_decoupling(noisePower, subband, subbandAmplitude, infoAmplitude, infoSplitRatio);
         isConverged = (targetFun - current) < currentGainThr;
         current = targetFun;
@@ -77,7 +79,6 @@ while (~isConverged) && (isSolvable)
     end
 end
 
-Solution.powerAmplitude = powerAmplitude;
 Solution.infoAmplitude = infoAmplitude;
 Solution.powerSplitRatio = powerSplitRatio;
 Solution.infoSplitRatio = infoSplitRatio;

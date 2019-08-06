@@ -42,8 +42,8 @@ infoAmplitude = amplitude / norm(amplitude, 'fro') * sqrt(txPower);
 SolutionSuperposedWaveform = v2struct(rate, current, powerSplitRatio, infoSplitRatio, powerAmplitude, infoAmplitude);
 
 % no power waveform
-powerAmplitude = zeros(size(powerAmplitude)) + eps;
-infoAmplitude = amplitude / norm(amplitude, 'fro') * sqrt(txPower) * sqrt(2);
+powerAmplitude = zeros(size(powerAmplitude));
+infoAmplitude = amplitude / norm(amplitude, 'fro') * sqrt(2 * txPower);
 SolutionNoPowerWaveform = v2struct(rate, current, powerSplitRatio, infoSplitRatio, powerAmplitude, infoAmplitude);
 
 end

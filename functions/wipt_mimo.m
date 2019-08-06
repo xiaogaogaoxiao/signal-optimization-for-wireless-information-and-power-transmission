@@ -54,27 +54,37 @@ infoPhase = subbandPhase + beamformPhase;
 [~, ~, positiveExponentOfTarget] = target_function_mimo(k2, k4, tx, rx, resistance, subbandAmplitude, subband, powerAmplitude, infoAmplitude, powerPhase, infoPhase, powerSplitRatio);
 [~, ~, ~, positiveExponentOfMi] = mutual_information_mimo(tx, rx, noisePower, subband, subbandAmplitude, infoAmplitude, infoPhase, infoSplitRatio);
 
+isInvalid = (cvx_remap(positiveExponentOfTarget) == 13 || cvx_remap(positiveExponentOfMi) == 13);
+% invalid expression
+if isInvalid
+    pause;
+end
+
 while (~isConverged) && (isSolvable)
-    cvx_begin gp
-        cvx_solver sedumi
-        
-        variable t0
-        variable powerAmplitude(subband, tx) nonnegative
-        variable infoAmplitude(subband, tx) nonnegative
-        variable powerSplitRatio nonnegative
-        variable infoSplitRatio nonnegative
+    try
+        cvx_begin gp
+            cvx_solver sedumi
 
-        % formulate the expression of monomials
-        [~, negativePosynomialOfTarget, positiveMonomialOfTarget, ~] = target_function_mimo(k2, k4, tx, rx, resistance, subbandAmplitude, subband, powerAmplitude, infoAmplitude, powerPhase, infoPhase, powerSplitRatio);
-        [~, negativePosynomialOfMi, positiveMonomialOfMi, ~] = mutual_information_mimo(tx, rx, noisePower, subband, subbandAmplitude, infoAmplitude, infoPhase, infoSplitRatio);
+            variable t0
+            variable powerAmplitude(subband, tx) nonnegative
+            variable infoAmplitude(subband, tx) nonnegative
+            variable powerSplitRatio nonnegative
+            variable infoSplitRatio nonnegative
 
-        minimize (1 / t0)
-        subject to
-            0.5 * (norm(powerAmplitude, 'fro') ^ 2 + norm(infoAmplitude, 'fro') ^ 2) <= txPower;
-            (t0 + negativePosynomialOfTarget) * prod((positiveMonomialOfTarget ./ positiveExponentOfTarget) .^ (-positiveExponentOfTarget)) <= 1;
-            (2 ^ sumRateThr + negativePosynomialOfMi) * prod((positiveMonomialOfMi ./ positiveExponentOfMi) .^ (-positiveExponentOfMi)) <= 1;
-            powerSplitRatio + infoSplitRatio <= 1;
-    cvx_end
+            % formulate the expression of monomials
+            [~, negativePosynomialOfTarget, positiveMonomialOfTarget, ~] = target_function_mimo(k2, k4, tx, rx, resistance, subbandAmplitude, subband, powerAmplitude, infoAmplitude, powerPhase, infoPhase, powerSplitRatio);
+            [~, negativePosynomialOfMi, positiveMonomialOfMi, ~] = mutual_information_mimo(tx, rx, noisePower, subband, subbandAmplitude, infoAmplitude, infoPhase, infoSplitRatio);
+
+            minimize (1 / t0)
+            subject to
+                0.5 * (norm(powerAmplitude, 'fro') ^ 2 + norm(infoAmplitude, 'fro') ^ 2) <= txPower;
+                (t0 + negativePosynomialOfTarget) * prod((positiveMonomialOfTarget ./ positiveExponentOfTarget) .^ (-positiveExponentOfTarget)) <= 1;
+                (2 ^ sumRateThr + negativePosynomialOfMi) * prod((positiveMonomialOfMi ./ positiveExponentOfMi) .^ (-positiveExponentOfMi)) <= 1;
+                powerSplitRatio + infoSplitRatio <= 1;
+        cvx_end
+    catch
+        isSolvable = false;
+    end
     
     % update achievable rate and power successively
     if cvx_status == "Solved"

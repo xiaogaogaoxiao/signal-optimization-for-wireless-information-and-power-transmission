@@ -48,26 +48,30 @@ sumRateThr = subband * rateThr;
 [~, ~, ~, exponentOfMutualInfo] = mutual_information_lower_bound(tx, noisePower, subband, subbandAmplitude, powerAmplitude, infoAmplitude, infoSplitRatio);
 
 while (~isConverged) && (isSolvable)
-    cvx_begin gp
-        cvx_solver sedumi
-        
-        variable t0
-        variable powerAmplitude(subband, 1) nonnegative
-        variable infoAmplitude(subband, 1) nonnegative
-        variable powerSplitRatio nonnegative
-        variable infoSplitRatio nonnegative
+    try
+        cvx_begin gp
+            cvx_solver sedumi
 
-        % formulate the expression of monomials
-        [~, monomialOfTarget, ~] = target_function_decoupling(k2, k4, resistance, subbandAmplitude, subband, powerAmplitude, infoAmplitude, powerSplitRatio);
-        [~, monomialOfMutualInfo, posynomialOfPowerTerms, ~] = mutual_information_lower_bound(tx, noisePower, subband, subbandAmplitude, powerAmplitude, infoAmplitude, infoSplitRatio);
+            variable t0
+            variable powerAmplitude(subband, 1) nonnegative
+            variable infoAmplitude(subband, 1) nonnegative
+            variable powerSplitRatio nonnegative
+            variable infoSplitRatio nonnegative
 
-        minimize (1 / t0)
-        subject to
-            0.5 * (norm(powerAmplitude, 'fro') ^ 2 + norm(infoAmplitude, 'fro') ^ 2) <= txPower;
-            t0 * prod((monomialOfTarget ./ exponentOfTarget) .^ (-exponentOfTarget)) <= 1;
-            2 ^ sumRateThr * prod((1 + infoSplitRatio / noisePower * posynomialOfPowerTerms) .* prod((monomialOfMutualInfo ./ exponentOfMutualInfo) .^ (-exponentOfMutualInfo), 2)) <= 1;
-            powerSplitRatio + infoSplitRatio <= 1;
-    cvx_end
+            % formulate the expression of monomials
+            [~, monomialOfTarget, ~] = target_function_decoupling(k2, k4, resistance, subbandAmplitude, subband, powerAmplitude, infoAmplitude, powerSplitRatio);
+            [~, monomialOfMutualInfo, posynomialOfPowerTerms, ~] = mutual_information_lower_bound(tx, noisePower, subband, subbandAmplitude, powerAmplitude, infoAmplitude, infoSplitRatio);
+
+            minimize (1 / t0)
+            subject to
+                0.5 * (norm(powerAmplitude, 'fro') ^ 2 + norm(infoAmplitude, 'fro') ^ 2) <= txPower;
+                t0 * prod((monomialOfTarget ./ exponentOfTarget) .^ (-exponentOfTarget)) <= 1;
+                2 ^ sumRateThr * prod((1 + infoSplitRatio / noisePower * posynomialOfPowerTerms) .* prod((monomialOfMutualInfo ./ exponentOfMutualInfo) .^ (-exponentOfMutualInfo), 2)) <= 1;
+                powerSplitRatio + infoSplitRatio <= 1;
+        cvx_end
+    catch
+        isSolvable = false;
+    end
 
     % update achievable rate and power successively
     if cvx_status == "Solved"

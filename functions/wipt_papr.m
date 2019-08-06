@@ -62,34 +62,44 @@ for iOversample = 1: nOversamples
     [~, ~, negativeExponent{iOversample}] = signomial(subband, powerAmplitude, beamformPhase, sampleFrequency, sampleTime(iOversample), txPower, papr);
 end
 
-while (~isConverged) && (isSolvable)
-    cvx_begin gp
-        cvx_solver sedumi
-        
-        variable t0
-        variable powerAmplitude(subband, 1) nonnegative
-        variable infoAmplitude(subband, 1) nonnegative
-        variable powerSplitRatio nonnegative
-        variable infoSplitRatio nonnegative
+isInvalid = (cvx_remap(exponentOfTarget) == 13 || cvx_remap(exponentOfMutualInfo) == 13 || cvx_remap(negativeExponent{:}) == 13);
+% invalid expression
+if isInvalid
+    pause;
+end
 
-        % formulate the expression of monomials
-        [~, monomialOfTarget, ~] = target_function_decoupling(k2, k4, resistance, subbandAmplitude, subband, powerAmplitude, infoAmplitude, powerSplitRatio);
-        [~, monomialOfMutualInfo, ~] = mutual_information_decoupling(noisePower, subband, subbandAmplitude, infoAmplitude, infoSplitRatio);
-        for iOversample = 1: nOversamples
-            [positivePosynomial{iOversample}, negativeMonomial{iOversample}, ~] = signomial(subband, powerAmplitude, beamformPhase, sampleFrequency, sampleTime(iOversample), txPower, papr);
-        end
-        
-        minimize (1 / t0)
-        subject to
-            0.5 * (norm(powerAmplitude, 'fro') ^ 2 + norm(infoAmplitude, 'fro') ^ 2) <= txPower;
-            t0 * prod((monomialOfTarget ./ exponentOfTarget) .^ (-exponentOfTarget)) <= 1;
-            2 ^ sumRateThr * prod(prod((monomialOfMutualInfo ./ exponentOfMutualInfo) .^ (-exponentOfMutualInfo))) <= 1;
-            powerSplitRatio + infoSplitRatio <= 1;
-            % PAPR constraints
-            for iOversample = 2: nOversamples
-                positivePosynomial{iOversample} * prod((negativeMonomial{iOversample} ./ negativeExponent{iOversample}) .^ (-negativeExponent{iOversample})) <= 1;
+while (~isConverged) && (isSolvable)
+    try
+        cvx_begin gp
+            cvx_solver sedumi
+
+            variable t0
+            variable powerAmplitude(subband, 1) nonnegative
+            variable infoAmplitude(subband, 1) nonnegative
+            variable powerSplitRatio nonnegative
+            variable infoSplitRatio nonnegative
+
+            % formulate the expression of monomials
+            [~, monomialOfTarget, ~] = target_function_decoupling(k2, k4, resistance, subbandAmplitude, subband, powerAmplitude, infoAmplitude, powerSplitRatio);
+            [~, monomialOfMutualInfo, ~] = mutual_information_decoupling(noisePower, subband, subbandAmplitude, infoAmplitude, infoSplitRatio);
+            for iOversample = 1: nOversamples
+                [positivePosynomial{iOversample}, negativeMonomial{iOversample}, ~] = signomial(subband, powerAmplitude, beamformPhase, sampleFrequency, sampleTime(iOversample), txPower, papr);
             end
-    cvx_end
+
+            minimize (1 / t0)
+            subject to
+                0.5 * (norm(powerAmplitude, 'fro') ^ 2 + norm(infoAmplitude, 'fro') ^ 2) <= txPower;
+                t0 * prod((monomialOfTarget ./ exponentOfTarget) .^ (-exponentOfTarget)) <= 1;
+                2 ^ sumRateThr * prod(prod((monomialOfMutualInfo ./ exponentOfMutualInfo) .^ (-exponentOfMutualInfo))) <= 1;
+                powerSplitRatio + infoSplitRatio <= 1;
+                % PAPR constraints
+                for iOversample = 2: nOversamples
+                    positivePosynomial{iOversample} * prod((negativeMonomial{iOversample} ./ negativeExponent{iOversample}) .^ (-negativeExponent{iOversample})) <= 1;
+                end
+        cvx_end
+    catch
+        isSolvable = false;
+    end
     
     % update achievable rate and power successively
     if cvx_status == "Solved"
