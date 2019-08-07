@@ -46,7 +46,7 @@ sumRateThr = subband * rateThr;
 while (~isConverged) && (isSolvable)
     try
         cvx_begin gp
-            cvx_solver sedumi
+            cvx_solver mosek
 
             variable t0
             variable infoAmplitude(subband, 1) nonnegative
@@ -74,16 +74,15 @@ while (~isConverged) && (isSolvable)
         [rate, ~, exponentOfMutualInfo] = mutual_information_decoupling(noisePower, subband, subbandAmplitude, infoAmplitude, infoSplitRatio);
         isConverged = (targetFun - current) < currentGainThr;
         current = targetFun;
+        
+        Solution.infoAmplitude = infoAmplitude;
+        Solution.powerSplitRatio = powerSplitRatio;
+        Solution.infoSplitRatio = infoSplitRatio;
+        Solution.current = current;
+        Solution.rate = rate;
     else
         isSolvable = false;
-    end
 end
-
-Solution.infoAmplitude = infoAmplitude;
-Solution.powerSplitRatio = powerSplitRatio;
-Solution.infoSplitRatio = infoSplitRatio;
-Solution.current = current;
-Solution.rate = rate;
 
 end
 

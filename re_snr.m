@@ -1,5 +1,5 @@
 initialize; config;
-Push.pushNote(Push.Devices, 'MATLAB Assist', sprintf('''%s'' is running', mfilename));
+% Push.pushNote(Push.Devices, 'MATLAB Assist', sprintf('''%s'' is running', mfilename));
 %% Channel
 % generate the tap delay and gains based on HIPERLAN/2 model B
 [Channel] = hiperlan2_B(Transceiver, Channel);
@@ -12,7 +12,7 @@ Push.pushNote(Push.Devices, 'MATLAB Assist', sprintf('''%s'' is running', mfilen
 rateDecoupling = zeros(Variable.nSnrCases, Variable.nSamples); currentDecoupling = zeros(Variable.nSnrCases, Variable.nSamples);
 rateLowerBound = zeros(Variable.nSnrCases, Variable.nSamples); currentLowerBound = zeros(Variable.nSnrCases, Variable.nSamples);
 rateNoPowerWaveform = zeros(Variable.nSnrCases, Variable.nSamples); currentNoPowerWaveform = zeros(Variable.nSnrCases, Variable.nSamples);
-try
+% try
     for iCase = 1: Variable.nSnrCases
         Transceiver.snrDb = Variable.snrDb(iCase);
         Transceiver.noisePower = Variable.noisePower(iCase);
@@ -27,21 +27,11 @@ try
             rateDecoupling(iCase, iSample) = SolutionDecoupling.rate; currentDecoupling(iCase, iSample) = SolutionDecoupling.current;
             rateLowerBound(iCase, iSample) = SolutionLowerBound.rate; currentLowerBound(iCase, iSample) = SolutionLowerBound.current;
             rateNoPowerWaveform(iCase, iSample) = SolutionNoPowerWaveform.rate; currentNoPowerWaveform(iCase, iSample) = SolutionNoPowerWaveform.current;
-            % invalid solution cannot be used for iterations
-            if isnan(rateDecoupling(iCase, iSample))
-                [SolutionDecoupling, ~] = initialize_algorithm(Transceiver, Channel);
-            end
-            if isnan(rateLowerBound(iCase, iSample))
-                [SolutionLowerBound, ~] = initialize_algorithm(Transceiver, Channel);
-            end
-            if isnan(rateNoPowerWaveform(iCase, iSample))
-                [~, SolutionNoPowerWaveform] = initialize_algorithm(Transceiver, Channel);
-            end
         end
     end
-catch
-    Push.pushNote(Push.Devices, 'MATLAB Assist', 'Houston, we have a problem');
-end
+% catch
+%     Push.pushNote(Push.Devices, 'MATLAB Assist', 'Houston, we have a problem');
+% end
 %% R-E region plots
 for iCase = 1: Variable.nSnrCases
     figure('Name', sprintf('SNR = %d dB', Variable.snrDb(iCase)));

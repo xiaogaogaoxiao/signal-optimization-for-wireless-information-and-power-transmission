@@ -56,7 +56,8 @@ Response = v2struct(centerFrequency, bandwidth, subband, tap, fadingType, sample
 %% Variables
 % rate constraint per subband
 % rateThr = 0: 0.5: 15;
-rateThr = 1: -0.05: 0;
+% rateThr = 1: -0.1: 0;
+rateThr = 0: 0.1: 1;
 % number of samples
 nSamples = length(rateThr);
 % different subband cases
@@ -71,7 +72,7 @@ for iCase = 1: nSubbandCases
     sampleFrequency{iCase} = centerFrequency - 0.5 * (bandwidth - gapFrequency(iCase)): gapFrequency(iCase): centerFrequency + 0.5 * (bandwidth - gapFrequency(iCase));
 end
 % different SNR cases
-snrDb = [10 20 30 40];
+snrDb = [10];
 % number of SNR cases
 nSnrCases = length(snrDb);
 % average noise power

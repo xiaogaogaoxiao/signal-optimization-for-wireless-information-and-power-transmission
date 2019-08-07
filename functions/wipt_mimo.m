@@ -63,7 +63,7 @@ end
 while (~isConverged) && (isSolvable)
     try
         cvx_begin gp
-            cvx_solver sedumi
+            cvx_solver mosek
 
             variable t0
             variable powerAmplitude(subband, tx) nonnegative
@@ -92,17 +92,17 @@ while (~isConverged) && (isSolvable)
         [rate, ~, ~, positiveExponentOfMi] = mutual_information_mimo(tx, rx, noisePower, subband, subbandAmplitude, infoAmplitude, infoPhase, infoSplitRatio);
         isConverged = (targetFun - current) < currentGainThr;
         current = targetFun;
+        
+        Solution.powerAmplitude = powerAmplitude;
+        Solution.infoAmplitude = infoAmplitude;
+        Solution.powerSplitRatio = powerSplitRatio;
+        Solution.infoSplitRatio = infoSplitRatio;
+        Solution.current = current;
+        Solution.rate = rate;
     else
         isSolvable = false;
     end
 end
-
-Solution.powerAmplitude = powerAmplitude;
-Solution.infoAmplitude = infoAmplitude;
-Solution.powerSplitRatio = powerSplitRatio;
-Solution.infoSplitRatio = infoSplitRatio;
-Solution.current = current;
-Solution.rate = rate;
 
 end
 
