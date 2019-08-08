@@ -1,0 +1,48 @@
+\documentclass[a4paper, twoside]{report}
+
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{listings}
+\usepackage{hyperref}
+\hypersetup{colorlinks=false}
+\usepackage{lscape}
+\usepackage{subfigure}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+
+%% Sets page size and margins
+\usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+\title{Project Title}
+\author{John Smith}
+% Update supervisor and other title stuff in title/title.tex
+
+\begin{document}
+\input{title/title.tex}
+
+\begin{abstract}
+Your abstract goes here. The abstract is a very brief summary of the dissertation's contents. It should be about half a page long. Somebody unfamiliar with your project should have a good idea of what it's about having read the abstract alone and will know whether it will be of interest to them.
+\end{abstract}
+
+\renewcommand{\abstractname}{Acknowledgements}
+\begin{abstract}
+It is usual to thank those individuals who have provided particularly useful assistance, technical or otherwise, during your project.
+\end{abstract}
+
+\tableofcontents
+\listoffigures
+\listoftables
+
+\input{introduction/introduction.tex}
+\input{background/background.tex}
+\input{project/project.tex}
+\input{evaluation/evaluation.tex}
+\input{conclusion/conclusion.tex}
+\input{appendix/appendix.tex}
+
+\bibliographystyle{unsrt}
+\bibliography{bibs/sample}
+
+\end{document}

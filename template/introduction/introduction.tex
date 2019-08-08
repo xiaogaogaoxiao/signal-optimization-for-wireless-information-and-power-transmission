@@ -1,0 +1,81 @@
+\chapter{Introduction}
+This is one of the most important components of the dissertation. It should begin with a clear statement of what the project is about so that the nature and scope of the project can be understood by a lay reader. It should summarise everything you set out to achieve, provide a clear summary of the project's background and relevance to other work and give pointers to the remaining sections of the dissertation which contain the bulk of the technical material.
+
+Hello, here's a citation \cite{greenwade93}. This is an inline equation $\Gamma(t)=K_i e^{\sin^2(\omega_t)}$. The first paragraph appears without indent but the following ones will have an indentation.
+
+This is an actual named equation:
+\begin{equation}
+v(x)=\frac{1}{2}\sin(2 \omega t + \phi) e^{-j s t}
+\label{eq:cacona}
+\end{equation}
+\noindent where $\omega$ is the angular speed. This paragraph didn't have an indentation because the first sentence was linked to the definition of equation (\ref{eq:cacona}). A code snippet for an example program is shown in Listing~\ref{lst:code1}.
+
+\begin{lstlisting}[caption=Source code for {\it hello.m},label=lst:code1,breaklines=true,basewidth=4pt,prebreak=**,postbreak=**,frame=single]
+for i:=maxint to 0 do
+begin
+{ do nothing }
+end;
+Write('Case insensitive ');
+Write('Pascal keywords.');
+\end{lstlisting}
+
+The characteristic parameters of the system are sumarised in Table~\ref{tab:tab1}. A figure is shown Fig~\ref{fig:felix}, we don't necessarily know if this figure will appear below, above or elsewhere; therefore, the text should never refer to the figure with sentences such as {\it "As shown here:"}.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.3\linewidth]{introduction/fig/Felix_the_cat.pdf}
+\caption{Felix the Cat}
+\label{fig:felix}
+\end{figure}
+
+\begin{table}[htbp]
+	\centering
+	\begin{tabular}{lll}
+		Parameter & Value & Units\\
+		\hline
+		$P$ & 1 & kW \\
+		$Q$ & 0 & kVAr\\
+	    \hline
+	\end{tabular}
+	\caption{Characteristic parameters of the system}
+	\label{tab:tab1}
+\end{table}
+
+\begin{landscape}
+	\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.5\linewidth]{introduction/fig/Felix_the_cat.pdf}
+\caption{Here's a large drawing of Felix the Cat that wouldn't fit in a portrait page}
+\label{fig:felix2}
+\end{figure}
+\end{landscape}
+
+Other \textbf{things} that might be useful:  Figure \ref{fig:fig2} contains Subfigure \ref{fig:fig2sub1}.
+
+\begin{figure}[htbp]
+	\centering
+	\subfigure[First one.]{
+		\label{fig:fig2sub1}
+        \includegraphics[width=0.3\linewidth]{introduction/fig/Felix_the_cat.pdf}}
+	\subfigure[Second one.]{
+		\label{fig:fig2sub2}
+		\includegraphics[width=0.3\linewidth]{introduction/fig/Felix_the_cat.pdf}}
+	\caption{A figure with two subfigures.}
+	\label{fig:fig2}
+\end{figure}
+
+Sometimes, the symbols in an equation are defined as follows\footnote{Some authors like to define their symbols that way.}:
+\begin{equation}
+	V(t)=A \sin(\omega t+\theta_0)
+\end{equation}
+
+\begin{tabular}{lll}
+	where & $V$ & is a voltage waveform,\\
+	& $A$ & is the amplitude of the voltage,\\
+	& $\omega$ & is the angular frequency,\\
+	& $t$ & is the time.
+\end{tabular}
+
+\section{Objectives}
+\section{Challenges}
+\section{Contributions}
