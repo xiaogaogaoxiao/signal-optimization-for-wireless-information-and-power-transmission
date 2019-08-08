@@ -5,7 +5,7 @@ centerFrequency = 5.18e9;
 % bandwidth
 bandwidth = 1e6;
 % number of frequency bands
-subband = 4;
+subband = 16;
 % number of taps in the tapped-delay line model
 tap = 18;
 % channel fading type ("flat" or "selective")
@@ -56,8 +56,8 @@ Response = v2struct(centerFrequency, bandwidth, subband, tap, fadingType, sample
 %% Variables
 % rate constraint per subband
 % rateThr = 0: 0.5: 15;
-% rateThr = 1: -0.1: 0;
-rateThr = 0: 0.1: 1;
+% rateThr = 1: -0.2: 0;
+rateThr = 0: 0.2: 1;
 % number of samples
 nSamples = length(rateThr);
 % different subband cases
