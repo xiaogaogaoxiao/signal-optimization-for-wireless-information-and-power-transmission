@@ -1,19 +1,20 @@
-\documentclass[12pt,twoside]{article}
+\documentclass[12pt]{report}
 
-\input{setup/info}
 \input{setup/includes}
-\input{setup/notation}
-
+\input{setup/info}
 
 \begin{document}
 
-\input{setup/titlepage}
+\input{title/title.tex}
 
 \tableofcontents
-\newpage
+\listoffigures
+\listoftables
 
+\input{introduction/introduction.tex}
+\input{theory/theory.tex}
 
 \bibliographystyle{IEEEtran}
-\bibliography{library}
+\bibliography{reference/library}
 
 \end{document} 

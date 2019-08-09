@@ -1,4 +1,4 @@
-A rectenna receives electromagnetic power with antenna and convert it to electric power with rectifier. Diverse configurations are available for energy harvesting, such as \textit{Schottky} \cite{Akkermans2005, Boaventura2013}, \textit{CMOS} \cite{Stoopman2014, Valenta2014}, \textit{series} \cite{Georgiadis2011, Collado2013}, \textit{shunt} \cite{McSpadden1998, Guo2012}. Interestingly, those models are not equally suitable for the same input power, and maximizing the rectenna efficiency ${e_3}$ requires a proper selection according to the power range. As reported in \cite{Valenta2014, Costanzo2016}, low barrier Schottky diodes are commonly used for input power between 1~\muW and 1~mW. Specifically, single diode is preferred for low power below 500~\muW and multiple diodes are typically applied for input power above 500~\muW \cite{Clerckx2019}. Hybrid designs as \cite{Sun2013} may be employed to maintain a high efficiency for large power range.
+A rectenna receives electromagnetic power with antenna and convert it to electric power with rectifier. Diverse configurations are available for energy harvesting, such as \textit{Schottky} \cite{Akkermans2005, Boaventura2013}, \textit{CMOS} \cite{Stoopman2014, Valenta2014}, \textit{series} \cite{Georgiadis2011, Collado2013}, \textit{shunt} \cite{McSpadden1998, Guo2012}. Interestingly, those models are not equally suitable for the same input power, and maximizing the rectenna efficiency ${e_3}$ requires a proper selection according to the power range. As reported in \cite{Valenta2014, Costanzo2016}, low barrier Schottky diodes are commonly used for input power between \SI{1}{\uW} and \SI{1}{\mW}. Specifically, single diode is preferred for low power below \SI{500}{\uW} and multiple diodes are typically applied for input power above \SI{500}{\uW} \cite{Clerckx2019}. Hybrid designs as \cite{Sun2013} may be employed to maintain a high efficiency for large power range.
 
 Besides the rectenna model, the shape of the received signal also influences the RF-to-DC efficiency ${e_3}$. It was first demonstrated in \cite{Trotter2009} that multisine waveform \textit{i.e. Power-Optimized waveform (POW)} outperforms the single tone waveform \textit{i.e. Continuous Wave (CW)} in operation range and power efficiency. The expression of a multisine waveform with $N$ subcarriers writes as a summation of $N$ sine waves:
 
@@ -10,25 +10,25 @@ where ${{f_{\text{0}}}}$ is the minimum frequency and ${\Delta f}$ is the spacin
 
 \begin{figure}
   \centering
-
-  \begin{subfigure}{.5\texiwidth}
+  
+  \begin{subfigure}{.5\textwidth}
     \centering
-      \includegraphics[width=0.5\textwidth]{Frequency domain comparison of a typical 3-subcarrier multisine and CW}
+      \includegraphics[width=0.5\textwidth]{waveform_frequency_domain}
     \caption{Frequency domain}
-    \label{fig:frequency_domain}
+    \label{fig:waveform_frequency_domain}
   \end{subfigure}
 
-  \begin{subfigure}{.5\texiwidth}
+  \begin{subfigure}{.5\textwidth}
     \centering
-      \includegraphics[width=0.5\textwidth]{Time domain comparison of a typical 3-subcarrier multisine and CW}
+      \includegraphics[width=0.5\textwidth]{waveform_time_domain}
     \caption{Time domain}
-    \label{fig:time_domain}
+    \label{fig:waveform_time_domain}
   \end{subfigure}
 
   \caption{Comparison of a typical 3-subcarrier multisine and CW in time and frequency domains (modified from \cite{Trotter2009}). The thick lines are examples of rectifier output voltage.}
   \label{fig:waveform_comparison}
 \end{figure}
 
-The advantage of multisine in WPT is that the high PAPR increases the peak rectifier output voltage. With a proper signal and circuit design, high voltage may be preserved during the cycle if discharging is slow enough, as indicated by the thick blue line in Figure \ref{fig:time_domain}. To enhance the harvested power, a large number of tones may be used to increase PAPR, and the multisine signal will appear as pulses with period of $1/\Delta f$. Most of the signal power will be concentrated in those pulses to trigger the diode and charge the capacitor. However, more subbands can lead to smaller frequency gaps and longer charging cycle when the bandwidth is fixed.
+The advantage of multisine in WPT is that the high PAPR increases the peak rectifier output voltage. With a proper signal and circuit design, high voltage may be preserved during the cycle if discharging is slow enough, as indicated by the thick blue line in Figure \ref{fig:waveform_time_domain}. To enhance the harvested power, a large number of tones may be used to increase PAPR, and the multisine signal will appear as pulses with period of $1/\Delta f$. Most of the signal power will be concentrated in those pulses to trigger the diode and charge the capacitor. However, more subbands can lead to smaller frequency gaps and longer charging cycle when the bandwidth is fixed.
 
 It can be hard to derive an accurate expression of the RF-to-DC efficiency ${e_3}$ on the power and shape of the rectifier input signal, as practical energy harvesting circuits consists of various nonlinear components as diodes, capacitors and inductors. It is also sensitive to parasitic sources, impedance matching, and harmonic generation \cite{Strassner2013, Valenta2014}. In this article, we employ the \textit{diode linear model} and \textit{diode nonlinear model} proposed in \cite{Clerckx2016} based on the diode current-voltage (I-V) characteristics to capture the fundamental pattern of rectenna and investigate its impact on resource allocation and system design. A superposed waveform containing modulated information and multisine power components is optimized according to CSI on top of both models.

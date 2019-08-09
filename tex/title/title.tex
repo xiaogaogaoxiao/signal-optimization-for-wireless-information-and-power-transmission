@@ -6,8 +6,8 @@
 %	LOGO SECTION
 %----------------------------------------------------------------------------------------
 
-\includegraphics[width=8cm]{title/logo.png}\\[1cm] % Include a department/university logo - this will require the graphicx package
- 
+\includegraphics[width=8cm]{imperial} % Include a department/university logo - this will require the graphicx package
+
 %----------------------------------------------------------------------------------------
 
 \center % Center everything on the page
@@ -16,38 +16,41 @@
 %	HEADING SECTIONS
 %----------------------------------------------------------------------------------------
 \quad\\[1.5cm]
-%\textsc{\LARGE MSc Thesis}\\[1.5cm] % Name of your university/college
 \textsc{\Large Imperial College London}\\[0.5cm] % Major heading such as course name
-\textsc{\large Department of Electrical and Electronic Engineering}\\[0.5cm] % Minor heading such as course title
+\textsc{\large Department of Electrical and Electronic Engineering}\\[1cm] % Minor heading such as course title
 
 %----------------------------------------------------------------------------------------
 %	TITLE SECTION
 %----------------------------------------------------------------------------------------
 \makeatletter
-\HRule \\[0.4cm]
-{ \huge \bfseries \@title}\\[0.4cm] % Title of your document
+\HRule \\[0.8cm]
+{ \LARGE \textbf{\projecttitle}}\\[0.4cm] % Title of your document
 \HRule \\[1.5cm]
- 
+
 %----------------------------------------------------------------------------------------
 %	AUTHOR SECTION
 %----------------------------------------------------------------------------------------
 
-\begin{minipage}{0.4\textwidth}
-\begin{flushleft} \large
+\begin{minipage}[t]{0.31\textwidth}
+\centering
+\large
 \emph{Author:}\\
-\@author % Your name
-\end{flushleft}
+\articleauthor\\
+(CID: \cid) % Your name
 \end{minipage}
 ~
-\begin{minipage}{0.4\textwidth}
-\begin{flushright} \large
+\begin{minipage}[t]{0.31\textwidth}
+\centering
+\large
 \emph{Supervisor:} \\
-Prof. Lily Smith 
-% Uncomment the following lines if there's a co-supervisor
-%\\[1.2em] % Supervisor's Name
-%\emph{Co-Supervisor:} \\
-%Dr. Adam Smith % second marker's name
-\end{flushright}
+\projectsupervisor % Supervisor
+\end{minipage}
+~
+\begin{minipage}[t]{0.31\textwidth}
+\centering
+\large
+\emph{Co-Supervisor:} \\
+\projectcosupervisor % Co-supervisor
 \end{minipage}\\[3cm]
 \makeatother
 
@@ -57,9 +60,9 @@ Prof. Lily Smith
 %----------------------------------------------------------------------------------------
 
 {\large A thesis submitted for the degree of}\\[0.5cm]
-{\large \emph{MSc Future Power Networks}}\\[0.5cm]
+{\large \emph{MSc Communications and Signal Processing}}\\[0.5cm]
 {\large \today}\\[2cm] % Date, change the \today to a set date if you want to be precise
 
 \vfill % Fill the rest of the page with whitespace
 
-\end{titlepage}
+\end{titlepage} 
