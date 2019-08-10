@@ -1,0 +1,30 @@
+Consider the single diode rectifier presented in Figure \ref{rectenna_circuit} for simplicity. Without loss of generality, the proposed diode models hold for general circuits as voltage doubler and bridge rectifiers \cite{Clerckx2017}. 
+
+The voltage across the diode ${v_d}(t) = {v_{{\text{in}}}}(t) - {v_{{\text{out}}}}(t)$ where ${v_{{\text{in}}}}(t)$ and ${v_{{\text{out}}}}(t)$ are diode input and output voltages. It determines the current flowing through the diode:
+
+\begin{equation}\label{eqn:diode_current}
+  {i_d}(t) = {i_s}\left( {{e^{\frac{{{v_d}(t)}}{{n{v_t}}}}} - 1} \right)
+\end{equation}
+
+where ${i_s}$ is the reverse saturation current, $n$ is the ideality factor, and ${{v_t}}$ is the thermal voltage. With a Taylor series expansion around a quiescent point $a = {v_d}(t)$, equation \ref{eqn:diode_current} rewrites as:
+
+\begin{equation}\label{eqn:diode_current_expansion}
+  {i_d}(t) = \sum\limits_{i = 0}^\infty  {k_i^\prime } {\left( {{v_d}(t) - a} \right)^i}
+\end{equation}
+
+where
+
+\begin{equation}\label{eqn:diode_k_prime}
+  k_i^\prime  = 
+  \left\{ {
+    \begin{array}{*{20}{c}}
+      {{i_s}\left( {{e^{\frac{a}{{n{v_t}}}}} - 1} \right),}&{i = 0} \\
+      {{i_s}\frac{{{e^{\frac{a}{{n{v_t}}}}}}}{{i!{{\left( {n{v_t}} \right)}^i}}},}&{i \in {\mathbb{N}^ + }}
+    \end{array}}
+  \right.
+\end{equation}
+
+
+$k_i^\prime $ relates to the diode parameters and is a constant when $a$ is fixed. Note the Taylor series expression is a small-signal model that only fits for the nonlinear operation region of the diode. Therefore, equation \ref{eqn:diode_current_expansion} is no longer available when the input voltage ${v_{{\text{in}}}}(t)$ is large, where the diode behavior is dominated by the series resistor and the I-V relationship is linear \cite{Boaventura2013}.
+
+In equation \ref{eqn:diode_current_expansion}, ${v_{{\text{in}}}}(t)$ and ${v_{{\text{out}}}}(t)$ depend on the waveform and time. We assume an ideal rectifier with steady-state response that delivers a constant output voltage ${v_{{\text{out}}}}$, whose amplitude is only a function of the peaks of the input voltage ${v_{{\text{in}}}}(t)$ \cite{Curty2005}. On top of this, a proper choice of $a$ would be 
