@@ -1,13 +1,13 @@
-Consider a point-to-point MISO WIPT system in multipath environment. The $M$-antenna transmitter delivers information and power simultaneously to the single-antenna receiver through $N$ orthogonal subbands. It is assumed the carrier frequencies are with even spacing $\Delta f$ and equal bandwidth ${B_{\text{s}}}$ (${B_{\text{s}}} \leqslant \Delta f$). The $n$-th subband has carrier frequency ${f_n} = {f_0} + n\Delta f$ for $n = 0, \ldots ,N - 1$. To maximize the R-E tradeoff, we employ a superposed signal consists of a multi-carrier deterministic multisine waveform and a multi-carrier random modulated waveform for power and information delivery respectively. Both components are transmitted on the same frequency bands.
+Consider a point-to-point MISO WIPT system in multipath environment. The $M$-antenna transmitter delivers information and power simultaneously to the single-antenna receiver through $N$ orthogonal subbands. It is assumed the carrier frequencies are with even spacing $\Delta f$ and equal bandwidth ${B_{\text{s}}}$. The $n$-th subband has carrier frequency ${f_n} = {f_0} + n\Delta f$ for $n = 0, \ldots ,N - 1$. To maximize the rate-energy tradeoff, we employ a superposed signal consists of a multi-carrier deterministic multisine waveform and a multi-carrier random modulated waveform for power and information delivery respectively. Both components are transmitted on the same frequency bands.
 
-\section{Information Waveform}
+\subsection{Information Waveform}
 Denote the information symbol carried by the modulated waveform on subband $n$ as ${{\tilde x}_n}$, we assume the input symbol is with the capacity-achieving i.i.d. Circular Symmetric Complex Gaussian (CSCG) distribution with zero mean and unit variance \cite{Varasteh2017a}:
 
 \begin{equation}\label{eqn:unmodulated_symbol}
-  {{\tilde x}_n} = \left| {{{\tilde x}_n}} \right|{e^{j{\phi _{\tilde x}}n}}\~\mathcal{C}\mathcal{N}(0,1)
+  {{\tilde x}_n} = \left| {{{\tilde x}_n}} \right|{e^{j{\phi _{{{\tilde x}_n}}}}}\sim\mathcal{C}\mathcal{N}(0,1)
 \end{equation}
 
-Hence, the modulated waveform on antenna $m = 1, \ldots ,M$ subband $n$ writes as
+Hence, the modulated waveform on antenna $m = 1, \ldots ,M$, subband $n$ writes as
 
 \begin{equation}\label{eqn:modulated_symbol}
   {x_{n,m}} = {w_{I,n,m}}{{\tilde x}_n}
@@ -19,43 +19,31 @@ where ${w_{I,n,m}}$ is the corresponding information weight and is a constant fo
   {w_{I,n,m}} = \left| {{w_{I,n,m}}} \right|{e^{j{\phi _{I,n,m}}}} = {s_{I,n,m}}{e^{j{\phi _{I,n,m}}}}
 \end{equation}
 
-Note the amplitude ${s_I}$ and phase ${\phi _I}$ are separated for individual design. The modulated symbol of equation \ref{modulated_symbol} can be further expressed as:
+Note the amplitude ${s_I}$ and phase ${\phi _I}$ are separated for individual design. Therefore, the modulated symbol of equation \ref{eqn:modulated_symbol} can be further expressed as:
 
 \begin{equation}\label{eqn:modulated_symbol_further}
   {x_{n,m}} = {s_{I,n,m}}{e^{j{\phi _{I,n,m}}}} \cdot \left| {{{\tilde x}_n}} \right|{e^{j{\phi _{{{\tilde x}_n}}}}} = {{\tilde s}_{I,n,m}}{e^{j{{\tilde \phi }_{I,n,m}}}}
 \end{equation}
 
-with ${{\tilde s}_{I,n,m}} = {s_{I,n,m}}\left| {{{\tilde x}_n}} \right|$ and ${{\tilde \phi }_{I,n,m}} = {\phi _{I,n,m}} + {\phi _{{{\tilde x}_n}}}$. In this way, the impact of symbol distribution and waveform design are combined, and it can be derived that the modulated waveform also follows an i.i.d. CSCG distribution with enhanced variance ${x_{n,m}}\~\mathcal{C}\mathcal{N}\left( {0,s_{I,n,m}^2} \right)$.
+with ${{\tilde s}_{I,n,m}} = {s_{I,n,m}}\left| {{{\tilde x}_n}} \right|$ and ${{\tilde \phi }_{I,n,m}} = {\phi _{I,n,m}} + {\phi _{{{\tilde x}_n}}}$. In this way, the impact of symbol distribution and waveform design are combined, and the modulated waveform also follows an i.i.d. CSCG distribution with variance equal to the subband power ${x_{n,m}}\sim\mathcal{C}\mathcal{N}\left( {0,s_{I,n,m}^2} \right)$.
+
+\subsection{Power Waveform}
+The unmodulated deterministic power waveform on antenna $m$, subband $n$ is given by:
+
+\begin{equation}\label{eqn:unmodulated}
+  {w_{P,n,m}} = {s_{P,n,m}}{e^{j{\phi _{P,n,m}}}}
+\end{equation}
+
+where ${s_{P}}$ and ${{\phi _{P}}}$ are the amplitude and phase of the multisine signal.
+
+\subsection{Superposed Waveform}
+The transmit signal on antenna $m$ at time $t$ is a summation over $N$ subbands:
+
+\begin{align}\label{eqn:transmit_signal}
+  {x_m}(t) &= {x_{P,m}}(t) + {x_{I,m}}(t) \\
+   &= \sum\limits_{n = 0}^{N - 1} {{s_{P,n,m}}} \cos \left( {2\pi {f_n}t + {\phi _{P,n,m}}} \right) + {{\tilde s}_{I,n,m}}(t)\cos \left( {2\pi {f_n}t + {{\tilde \phi }_{I,n,m}}(t)} \right) \\
+   &= \Re \left\{ {\sum\limits_{n = 0}^{N - 1} {\left( {{w_{P,n,m}} + {x_{n,m}}(t)} \right)} {e^{j2\pi {f_n}t}}} \right\} \\
+   &= \Re \left\{ {\sum\limits_{n = 0}^{N - 1} {\left( {{w_{P,n,m}} + {w_{I,n,m}}{{\tilde x}_n}(t)} \right)} {e^{j2\pi {f_n}t}}} \right\}
+\end{align}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-At time $t$ on antenna $m = 1, \ldots ,M$, the transmit signal ${x_m}(t)$, can be decomposed as
-
-\begin{equation}\label{eqn:transmit_signal}
-  
-\end{equation} 
