@@ -62,12 +62,6 @@ for iOversample = 1: nOversamples
     [~, ~, negativeExponent{iOversample}] = signomial(subband, powerAmplitude, beamformPhase, sampleFrequency, sampleTime(iOversample), txPower, papr);
 end
 
-isInvalid = (cvx_remap(exponentOfTarget) == 13 || cvx_remap(exponentOfMutualInfo) == 13 || cvx_remap(negativeExponent{:}) == 13);
-% invalid expression
-if isInvalid
-    pause;
-end
-
 while (~isConverged) && (isSolvable)
     try
         cvx_begin gp
@@ -111,10 +105,10 @@ while (~isConverged) && (isSolvable)
         isConverged = (targetFun - current) < currentGainThr;
         current = targetFun;
         
-        Solution.powerAmplitude = powerAmplitude;
-        Solution.infoAmplitude = infoAmplitude;
-        Solution.powerSplitRatio = powerSplitRatio;
-        Solution.infoSplitRatio = infoSplitRatio;
+%         Solution.powerAmplitude = powerAmplitude;
+%         Solution.infoAmplitude = infoAmplitude;
+%         Solution.powerSplitRatio = powerSplitRatio;
+%         Solution.infoSplitRatio = infoSplitRatio;
         Solution.current = current;
         Solution.rate = rate;
     else

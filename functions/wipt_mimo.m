@@ -54,12 +54,6 @@ infoPhase = subbandPhase + beamformPhase;
 [~, ~, positiveExponentOfTarget] = target_function_mimo(k2, k4, tx, rx, resistance, subbandAmplitude, subband, powerAmplitude, infoAmplitude, powerPhase, infoPhase, powerSplitRatio);
 [~, ~, ~, positiveExponentOfMi] = mutual_information_mimo(tx, rx, noisePower, subband, subbandAmplitude, infoAmplitude, infoPhase, infoSplitRatio);
 
-isInvalid = (cvx_remap(positiveExponentOfTarget) == 13 || cvx_remap(positiveExponentOfMi) == 13);
-% invalid expression
-if isInvalid
-    pause;
-end
-
 while (~isConverged) && (isSolvable)
     try
         cvx_begin gp
@@ -93,10 +87,10 @@ while (~isConverged) && (isSolvable)
         isConverged = (targetFun - current) < currentGainThr;
         current = targetFun;
         
-        Solution.powerAmplitude = powerAmplitude;
-        Solution.infoAmplitude = infoAmplitude;
-        Solution.powerSplitRatio = powerSplitRatio;
-        Solution.infoSplitRatio = infoSplitRatio;
+%         Solution.powerAmplitude = powerAmplitude;
+%         Solution.infoAmplitude = infoAmplitude;
+%         Solution.powerSplitRatio = powerSplitRatio;
+%         Solution.infoSplitRatio = infoSplitRatio;
         Solution.current = current;
         Solution.rate = rate;
     else

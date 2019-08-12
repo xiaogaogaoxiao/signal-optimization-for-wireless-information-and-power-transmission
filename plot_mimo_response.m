@@ -20,4 +20,4 @@ ylabel('Dominant eigenvalue');
 xlim([-1.25, 1.25]);
 xticks(-1.25: 0.25: 1.25);
 
-clearvars iSubband Response;
+% clearvars iSubband Response;

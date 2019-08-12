@@ -80,10 +80,10 @@ while (~isConverged) && (isSolvable)
         isConverged = (targetFun - current) < currentGainThr;
         current = targetFun;
         
-        Solution.powerAmplitude = powerAmplitude;
-        Solution.infoAmplitude = infoAmplitude;
-        Solution.powerSplitRatio = powerSplitRatio;
-        Solution.infoSplitRatio = infoSplitRatio;
+%         Solution.powerAmplitude = powerAmplitude;
+%         Solution.infoAmplitude = infoAmplitude;
+%         Solution.powerSplitRatio = powerSplitRatio;
+%         Solution.infoSplitRatio = infoSplitRatio;
         Solution.current = current;
         Solution.rate = rate;
     else
