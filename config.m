@@ -23,7 +23,7 @@ k2 = 0.0034; k4 = 0.3829;
 % antenna resistance
 resistance = 50;
 % number of transmit antennas
-tx = 1;
+tx = 2;
 % number of receive antennas
 rx = 1;
 % weight on rectennas
@@ -57,7 +57,8 @@ Response = v2struct(centerFrequency, bandwidth, subband, tap, fadingType, sample
 % rate constraint per subband
 % rateThr = 0: 0.5: 15;
 % rateThr = 1: -0.2: 0;
-rateThr = 0: 0.2: 1;
+% rateThr = 0: 0.2: 1;
+rateThr = 5: 5: 25;
 % number of samples
 nSamples = length(rateThr);
 % different subband cases
@@ -72,7 +73,7 @@ for iCase = 1: nSubbandCases
     sampleFrequency{iCase} = centerFrequency - 0.5 * (bandwidth - gapFrequency(iCase)): gapFrequency(iCase): centerFrequency + 0.5 * (bandwidth - gapFrequency(iCase));
 end
 % different SNR cases
-snrDb = [10];
+snrDb = [10 20 30 40];
 % number of SNR cases
 nSnrCases = length(snrDb);
 % average noise power
