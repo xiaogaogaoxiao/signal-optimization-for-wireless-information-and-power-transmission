@@ -71,6 +71,10 @@ negativeMonomial = unwrappedMonomial(coef < 0);
 
 negativePosynomial = sum(negativeMonomial);
 
+if isempty(negativePosynomial)
+    negativePosynomial = 0;
+end
+
 if isKnown
     positivePosynomial = sum(positiveMonomial);
     positiveExponent = positiveMonomial / positivePosynomial;
