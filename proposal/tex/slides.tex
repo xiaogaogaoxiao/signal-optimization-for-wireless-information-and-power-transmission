@@ -1,0 +1,264 @@
+\documentclass{beamer}
+
+\usepackage[bottom]{footmisc}
+\usetheme{Boadilla}
+
+\AtBeginSection[]
+{
+  \begin{frame}
+    \frametitle{Table of Contents}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+\title{PhD proposal}
+\subtitle{for research in wireless information and power transfer}
+
+\author{Yang Zhao}
+\institute[IC]{Imperial College London}
+\date{15 Aug 19}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\section{Background}
+\subsection{Education and work experience}
+
+\begin{frame}
+\frametitle{Education and work experience}
+
+%% Education
+\begin{block}{Education}
+
+\begin{minipage}[t]{0.7\textwidth}
+\flushleft{\textbf{Imperial College London}}
+\end{minipage}
+~
+\begin{minipage}[t]{0.2\textwidth}
+\flushright{2018 -- 2019}
+\end{minipage}
+
+\textit{MSc Communications and Signal Processing, expected distinction} \\
+
+\begin{minipage}[t]{0.7\textwidth}
+\flushleft{\textbf{University of Liverpool}}
+\end{minipage}
+~
+\begin{minipage}[t]{0.2\textwidth}
+\flushright{2016 -- 2018}
+\end{minipage}
+
+\textit{BEng Communications and Electronics, with distinction} \\
+
+\begin{minipage}[t]{0.7\textwidth}
+\flushleft{\textbf{Xi'an Jiaotong-Liverpool University}\footnotemark}
+\end{minipage}
+~
+\begin{minipage}[t]{0.2\textwidth}
+\flushright{2014 -- 2016}
+\end{minipage}
+
+\textit{BEng Telecommunications, with distinction}
+\footnotetext{\tiny A UK-China 2+2 bachelor programme}
+\end{block}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Education and work experience}
+
+%% Work
+\begin{block}{Internship}
+
+\begin{minipage}[t]{0.7\textwidth}
+\flushleft{\textbf{China Mobile Group}}
+\end{minipage}
+~
+\begin{minipage}[t]{0.2\textwidth}
+\flushright{Jun 2018}
+\end{minipage}
+
+\textit{  - Network maintainer}
+
+\begin{itemize}
+  \item Deployed emergency response vehicles for events
+  \item Maintained base stations
+  \item Investigated the coverage of smartcells
+\end{itemize}
+
+
+
+\begin{minipage}[t]{0.7\textwidth}
+\flushleft{\textbf{China Mobile Group Design Institute}}
+\end{minipage}
+~
+\begin{minipage}[t]{0.2\textwidth}
+\flushright{Jul 2017}
+\end{minipage}
+
+\textit{  - Assistant}
+
+\begin{itemize}
+  \item Summarized business solutions of NB-IoT and FDD LTE
+  \item Simulated FDD coverage of Guangdong Province with tower and cell distribution
+  \item Measured LTE performance (RSRP, SINR, CSFB rates) for F and D bands in typical regions
+\end{itemize}
+
+\end{block}
+
+\end{frame}
+
+
+\subsection{Courses}
+
+\begin{frame}
+\frametitle{Courses}
+
+%% Courses
+\begin{itemize}
+  \item \alert{Antennas and array processing}
+  \item Communication systems
+  \item Computer vision
+  \item Data structure and microprocessors
+  \item Electromagnetics and RF engineering
+  \item \alert{Information and coding theory}
+  \item Instrumentation and control
+  \item Integrated circuits
+  \item Machine learning
+  \item Power systems
+  \item Probability and stochastic processes
+  \item Signal processing
+  \item \alert{Wireless communications}
+\end{itemize}
+
+\end{frame}
+
+
+\subsection{Skills and honors}
+
+\begin{frame}
+\frametitle{Skills and honors}
+
+%% Skills
+\begin{block}{Skills (in descending order)}
+\begin{itemize}
+  \item Data collection and analysis
+  \item Comprehension and innovation
+  \item Asking questions
+  \item Programming
+  \item Self-learning
+  \item Academic writing
+  \item Communication and collaboration
+  \item Project management
+  \item Critical thinking
+\end{itemize}
+\end{block}
+
+%% Honors
+\begin{block}{Honors}
+\begin{minipage}[t]{0.7\textwidth}
+\flushleft{\textit{University achievement award}}
+\end{minipage}
+~
+\begin{minipage}[t]{0.2\textwidth}
+\flushright{2016}
+\end{minipage}
+
+
+\begin{minipage}[t]{0.7\textwidth}
+\flushleft{\textit{IET student prize}}
+\end{minipage}
+~
+\begin{minipage}[t]{0.2\textwidth}
+\flushright{2018}
+\end{minipage}
+
+\end{block}
+
+\end{frame}
+
+
+\section{Research experience}
+
+\subsection{Cross-Layer Optimization for 4G Broadband Wireless Communication Networks}
+
+\begin{frame}
+\frametitle{Cross-Layer Optimization for 4G Broadband Wireless Communication Networks}
+
+\begin{block}{Why?}
+\begin{itemize}
+  \item To meet requirements of various services
+  \item To improve system performance (throughput, delay, packet drop rate)
+  \item To increase spectrum and power efficiency
+\end{itemize}
+\end{block}
+
+\begin{block}{Where?}
+\begin{itemize}
+  \item Downlink traffic in OFDM systems
+  \item PHY layer (CSI, capacity)
+  \item MAC layer (traffic characteristics)
+\end{itemize}
+\end{block}
+
+\begin{block}{What?}
+\begin{itemize}
+  \item Joint optimization of resource allocation and data scheduling
+  \item Adaptive algorithms with low complexity
+  \item Adjustable weight configuration (queue- and packet-based)
+\end{itemize}
+\end{block}
+
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Algorithms}
+
+\begin{block}{Subcarrier allocation}
+\begin{itemize}
+  \item Maximum Weighted Capacity (MWC): balance QoS and capacity
+  \item Proportional Fairness (PF): equalize rate for users
+\end{itemize}
+\end{block}
+
+\begin{block}{Power allocation}
+\begin{itemize}
+  \item Weighted Water-Filling (WWF): based on subcarrier allocation under equal power assumption (low-complexity but suboptimal)
+\end{itemize}
+\end{block}
+
+\begin{block}{Data scheduling}
+\begin{itemize}
+  \item Modified Largest Weighted Delay First (M-LWDF): serve the queues on service nature, delay, and queue length
+  \item Packet Dependent (PD): data is sent packet by packet with individual weight design (depends on QoS, delay, and packet size)
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Conclusion and limitations}
+
+We investigated the performance for conventional services (background, voice, video) and extended the research to networks with haptic traffic.
+
+\begin{block}{Conclusion}
+
+\begin{itemize}
+  \item With a flexible transmission scheme, PD provides larger throughput and lower packet drop rate than M-LWDF, especially for heavy traffic (large number of users, low SNR, multiple service types).
+  \item By properly choosing the number of packets for weight calculation, the proposed design requires lower overall complexity than conventional queue-based ones.
+  \item The low-complexity suboptimal power allocation performs similarly to the optimal strategy, as subcarrier allocation has more significant impact on system performance.
+\end{itemize}
+\end{block}
+
+\begin{block}{Limitations}
+\begin{itemize}
+  \item Only SISO case is considered.
+  \item There exists fairness issues.
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+\end{document} 
