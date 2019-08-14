@@ -2,6 +2,7 @@
 
 \usepackage{subcaption}
 \usepackage{graphicx}
+\usepackage{pgfgantt}
 \graphicspath{{src/}}
 
 \usepackage[bottom]{footmisc}
@@ -19,7 +20,6 @@
 \subtitle{for research in wireless information and power transfer}
 
 \author{Yang Zhao}
-\institute[IC]{Imperial College London}
 \date{15 Aug 19}
 
 \begin{document}
@@ -29,7 +29,7 @@
 
 
 \section{Background}
-\subsection{Education and work experience}
+\subsection{Education experience}
 
 \begin{frame}
 \frametitle{Education and work experience}
@@ -73,7 +73,7 @@
 
 
 \begin{frame}
-\frametitle{Education and work experience}
+\frametitle{Work experience}
 
 %% Work
 \begin{block}{Internship}
@@ -402,7 +402,7 @@ Two receiver architectures are available:
 \begin{frame}
 \frametitle{Algorithms}
 
-The optimization is based on geometric programming (GP) using CVX. We aim to maximize harvested current subject to transmit power and rate constraints. The following cases are investigated:
+The optimization is based on geometric programming (GP) using CVX. We aim to maximize harvested current subject to transmit power and rate constraints. The following cases are being investigated:
 
 \begin{block}{Algorithms}
 \begin{itemize}
@@ -425,7 +425,7 @@ We explored the impact of subcarrier number and SNR on rate-energy tradeoff. PAP
 \begin{block}{Conclusion}
 \begin{itemize}
   \item With a large number of subcarrier ($N \geqslant 4$), the superposed waveform is useful to enlarge the rate-energy region.
-  \item TS is favoured for large $N$ and low SNR; PS is preferred for small $N$ and high SNR.
+  \item TS is favoured for large $N$ and low SNR; PS on the contrary.
   \item Number of Rx has significant influence on rate-energy tradeoff.
 \end{itemize}
 \end{block}
@@ -433,7 +433,8 @@ We explored the impact of subcarrier number and SNR on rate-energy tradeoff. PAP
 \begin{block}{Limitations}
 \begin{itemize}
   \item GP is suboptimal for multiple Rx.
-  \item The iterative algorithms are sensitive to initialization and require long time to handle for large $N$ and Rx.
+  \item The iterative algorithms are sensitive to initialization and take long time to solve for large $N$ and Rx.
+  \item It requires perfect CSIT.
   \item (To be fixed) If initialized with previous solutions, the algorithm may collapse due to precision issues.
 \end{itemize}
 \end{block}
@@ -454,7 +455,6 @@ Let's start with some questions and novel ideas:
 \begin{itemize}
   \item What's the optimal resource allocation strategy for MIMO?
   \item How to reduce the complexity while maintaining the performance?
-  \item What if with imperfect CSIT?
   \item Are there any other harvester models?
 \end{itemize}
 \end{block}
@@ -467,6 +467,150 @@ Let's start with some questions and novel ideas:
 \end{itemize}
 \end{block}
 
+\end{frame}
+
+\begin{frame}
+\frametitle{Motivations}
+
+\begin{block}{In industry}
+\begin{itemize}
+  \item To prolong the lifetime for mobile devices
+  \item To reduce the cost in battery recharging and replacement
+  \item To make devices smaller and lighter
+\end{itemize}
+\end{block}
+
+\begin{block}{In academia}
+\begin{itemize}
+  \item To propose a low-complexity suboptimal waveform design for WIPT
+  \item To investigate the performance of tone-index multisine modulation on FF and FS channels
+  \item To explore the possibility of dual-mode WIPT for MIMO systems with multiple harvesters
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Proposed system architecture}
+
+\begin{figure}
+  \centering
+    \includegraphics[width=0.8\textwidth]{system_architecture}
+  \caption{System architecture of the MIMO multi-rectifier WIPT system \cite{Ma2019}}
+  \label{fig:system_architecture}
+\end{figure}
+
+Each receive antenna is followed by a power splitter to reallocate the power:
+
+\begin{itemize}
+  \item when the received power level is relatively low, the splitters will combine all energy branches in one rectifier to enjoy the benefit of harvester nonlinearity.
+  \item when the power is sufficiently high, the components will be equally divided to avoid the saturation of diode breakdown region.
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Transmitter}
+
+\begin{figure}
+  \centering
+    \includegraphics[width=0.8\textwidth]{transmitter}
+  \caption{Transmitter architecture \cite{Park2018}}
+  \label{fig:transmitter}
+\end{figure}
+
+\end{frame}
+
+
+\begin{frame}
+
+\begin{block}{Transmitted waveform}
+\frametitle{Transmitter}
+
+\begin{itemize}
+  \item \textbf{single-tone}: phase- and amplitude-modulated, optimized for information transmission
+  \item \textbf{multi-tone}: PAPR-modulated, optimized for power transmission
+  \item The transmission mode depends on the adaptive mode-switching algorithm to design
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Receiver}
+
+\begin{figure}
+  \centering
+    \includegraphics[width=0.8\textwidth]{receiver}
+  \caption{Receiver architecture \cite{Park2018}}
+  \label{fig:receiver}
+\end{figure}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Receiver}
+
+\begin{block}{Receiver blocks}
+\begin{itemize}
+  \item \textbf{energy path}: harvest energy and supply information path or store in battery
+  \item \textbf{information path}: demodulate phase and amplitude information [for single-tone mode]
+  \item \textbf{PAPR path}: decode PAPR-based information [for multisine mode]
+\end{itemize}
+\end{block}
+
+Two possible ways:
+
+\begin{itemize}
+  \item One unified energy path, harvests power only
+  \item One energy path for each receiver, decodes amplitude information as well
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Comments}
+
+\begin{block}{Advantages}
+\begin{itemize}
+  \item Optimization on the mode-switching design is with lower complexity than superposed waveform.
+  \item We expect a significant larger rate-energy region with multi-harvester MIMO.
+  \item The operation range can also be increased.
+\end{itemize}
+\end{block}
+
+\begin{block}{Opportunities}
+\begin{itemize}
+  \item Harvester model: diode models vs logistic curve fitting models \cite{Boshkovska2015}
+  \item CSIT: perfect vs imperfect
+  \item Receiver strategy: PS, TS vs antenna switching \cite{Liu2013}
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Timeline}
+
+\begin{figure}
+  \centering
+    \includegraphics[width=\textwidth]{gantt_chart}
+  \caption{Gantt chart of the project}
+  \label{fig:gantt_chart}
+\end{figure}
+
+\end{frame}
+
+
+\begin{frame}
+  \centering
+  \Large \emph{Thank you!}
 \end{frame}
 
 \bibliographystyle{IEEEtran}
