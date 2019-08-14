@@ -1,5 +1,9 @@
 \documentclass{beamer}
 
+\usepackage{subcaption}
+\usepackage{graphicx}
+\graphicspath{{src/}}
+
 \usepackage[bottom]{footmisc}
 \usetheme{Boadilla}
 
@@ -21,6 +25,8 @@
 \begin{document}
 
 \frame{\titlepage}
+
+
 
 \section{Background}
 \subsection{Education and work experience}
@@ -65,6 +71,7 @@
 
 \end{frame}
 
+
 \begin{frame}
 \frametitle{Education and work experience}
 
@@ -108,6 +115,7 @@
 \end{block}
 
 \end{frame}
+
 
 
 \subsection{Courses}
@@ -179,6 +187,7 @@
 \end{frame}
 
 
+
 \section{Research experience}
 
 \subsection{Cross-Layer Optimization for 4G Broadband Wireless Communication Networks}
@@ -210,8 +219,8 @@
 \end{itemize}
 \end{block}
 
-
 \end{frame}
+
 
 \begin{frame}
 \frametitle{Algorithms}
@@ -238,13 +247,13 @@
 
 \end{frame}
 
+
 \begin{frame}
 \frametitle{Conclusion and limitations}
 
 We investigated the performance for conventional services (background, voice, video) and extended the research to networks with haptic traffic.
 
 \begin{block}{Conclusion}
-
 \begin{itemize}
   \item With a flexible transmission scheme, PD provides larger throughput and lower packet drop rate than M-LWDF, especially for heavy traffic (large number of users, low SNR, multiple service types).
   \item By properly choosing the number of packets for weight calculation, the proposed design requires lower overall complexity than conventional queue-based ones.
@@ -260,5 +269,207 @@ We investigated the performance for conventional services (background, voice, vi
 \end{block}
 
 \end{frame}
+
+
+
+\subsection{Signal Optimization for Wireless Information and Power Transmission}
+
+\begin{frame}
+\frametitle{Signal Optimization for Wireless Information and Power Transmission}
+
+\begin{block}{Why?}
+\begin{itemize}
+  \item To provide perpetual and reliable energy supply for low-power devices
+  \item To reduce the use of batteries and get rid of wires, with increased operation range
+  \item To improve rate-energy tradeoff in WIPT
+\end{itemize}
+\end{block}
+
+\begin{block}{Where?}
+\begin{itemize}
+  \item Transmitter (waveform design, resource allocation)
+  \item Receiver (information decoding (ID) and energy harvesting (EH))
+\end{itemize}
+\end{block}
+
+\begin{block}{What?}
+\begin{itemize}
+  \item Nonlinear harvester model and superposed waveform
+  \item Fundamental dependency of harvested power on signal design
+  \item Waveform optimization and rate-energy region characterization
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{System architecture}
+
+\begin{figure}
+  \centering
+    \includegraphics[width=\textwidth]{wpt_block_diagram}
+  \caption{Block diagram of WPT \cite{Clerckx2018a}}
+  \label{fig:wpt-block-diagram}
+\end{figure}
+
+\textbf{RF-to-DC conversion efficiency ${e_3}$}: \alert{rectenna} and \alert{waveform design}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Rectenna model}
+
+\begin{figure}
+  \centering
+    \includegraphics[width=0.8\textwidth]{rectenna_circuit}
+  \caption{Rectenna equivalent circuit (left) and a single diode rectifier (right) \cite{Clerckx2018a}}
+  \label{fig:rectenna_circuit}
+\end{figure}
+
+\begin{itemize}
+  \item Diodes account for the nonlinearity
+  \item Taylor expansion of diode characteristic equation (small-signal model)
+  \item Truncate to the ${n_o}$-th order
+  \begin{itemize}
+    \item diode linear model (${n_o} = 2$): output power is proportional to input power
+    \item diode nonlinear model (${n_o} > 2$): significant contributions of higher order terms
+  \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Waveform design and receiver architecture}
+
+A superposed signal containing \alert{modulated information waveform} and \alert{multisine power waveform} is demonstrated to bring a two-fold benefit:
+
+\begin{block}{Benefits of proposed waveform}
+\begin{itemize}
+  \item \textbf{rate}: multisine is deterministic with no interference on information component
+  \item \textbf{energy}: multisine reduce the threshold to enjoy the benefit of diode nonlinear model (-20 dBm to -30 dBm)
+\end{itemize}
+\end{block}
+
+Two receiver architectures are available:
+
+\begin{block}{Receiver architectures}
+\begin{itemize}
+  \item Time Switching (TS): switch between EH and ID on time basis
+  \item Power Splitting (PS): split the received signal into separate portions
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Multisine}
+
+\begin{figure}
+  \centering
+
+  \begin{subfigure}{.35\textwidth}
+    \centering
+      \includegraphics[width=\textwidth]{waveform_frequency_domain}
+    \caption{Frequency domain}
+    \label{fig:waveform_frequency_domain}
+  \end{subfigure}
+  \begin{subfigure}{.35\textwidth}
+    \centering
+      \includegraphics[width=\textwidth]{waveform_time_domain}
+    \caption{Time domain}
+    \label{fig:waveform_time_domain}
+  \end{subfigure}
+
+  \caption{Comparison of 3-subcarrier multisine and continuous wave (modified from \cite{Trotter2009}). The thick lines are typical rectifier output voltage.}
+  \label{fig:waveform_comparison}
+\end{figure}
+
+\begin{block}{Characteristics}
+\begin{itemize}
+  \item High peak-to-average power ratio (PAPR)
+  \item Concentrated power triggers the diode
+  \item Pulse amplitude determined by number of tones $N$
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Algorithms}
+
+The optimization is based on geometric programming (GP) using CVX. We aim to maximize harvested current subject to transmit power and rate constraints. The following cases are investigated:
+
+\begin{block}{Algorithms}
+\begin{itemize}
+  \item Decoupling spatial and frequency design
+  \item Lower-bound (assume interference from power waveform)
+  \item No multisine waveform
+  \item PAPR constraint
+  \item MIMO (suboptimal by GP)
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Conclusion and limitations}
+
+We explored the impact of subcarrier number and SNR on rate-energy tradeoff. PAPR and MIMO require further simulations.
+
+\begin{block}{Conclusion}
+\begin{itemize}
+  \item With a large number of subcarrier ($N \geqslant 4$), the superposed waveform is useful to enlarge the rate-energy region.
+  \item TS is favoured for large $N$ and low SNR; PS is preferred for small $N$ and high SNR.
+  \item Number of Rx has significant influence on rate-energy tradeoff.
+\end{itemize}
+\end{block}
+
+\begin{block}{Limitations}
+\begin{itemize}
+  \item GP is suboptimal for multiple Rx.
+  \item The iterative algorithms are sensitive to initialization and require long time to handle for large $N$ and Rx.
+  \item (To be fixed) If initialized with previous solutions, the algorithm may collapse due to precision issues.
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+
+
+\section{Proposal}
+\subsection{Waveform and Transceiver Design for Dual Mode MIMO Wireless Information and Power Transfer}
+
+\begin{frame}
+\frametitle{Questions and ideas}
+
+Let's start with some questions and novel ideas:
+
+\begin{block}{Questions}
+\begin{itemize}
+  \item What's the optimal resource allocation strategy for MIMO?
+  \item How to reduce the complexity while maintaining the performance?
+  \item What if with imperfect CSIT?
+  \item Are there any other harvester models?
+\end{itemize}
+\end{block}
+
+\begin{block}{Ideas}
+\begin{itemize}
+  \item Improve RF-to-DC conversion efficiency with multiple rectifiers \cite{Ma2019}
+  \item Encode information with PAPR of multisine rather than individual waveform \cite{Park2018, Krikidis2019}
+  \item Switch between single and multi-tone transmission adaptively to CSI and rate requirement \cite{Park2018}
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+\bibliographystyle{IEEEtran}
+\bibliography{library}
 
 \end{document} 
