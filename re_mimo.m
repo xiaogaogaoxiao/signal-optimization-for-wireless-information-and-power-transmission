@@ -13,10 +13,12 @@ for iCase = 1: Variable.nRxCases
     % decompose channel matrix
     [Transceiver{iCase}, Channel{iCase}] = preprocessing(Transceiver{iCase}, Channel{iCase});
 end
-plot_mimo_response; 
+plot_mimo_response;
+% save([pwd sprintf('/data/mimo_%s_channel.mat',Channel.fadingType)], 'Channel');
+% load([pwd sprintf('/data/mimo_%s_channel.mat',Channel.fadingType)], 'Channel');
 %% R-E region samples
 rateMimo = zeros(Variable.nRxCases, Variable.nSamples); currentMimo = zeros(Variable.nRxCases, Variable.nSamples);
-% try
+try
     for iCase = 1: Variable.nRxCases
         % initialize algorithms
         [SolutionMimo, ~] = initialize_algorithm(Transceiver{iCase}, Channel{iCase});
@@ -30,9 +32,9 @@ rateMimo = zeros(Variable.nRxCases, Variable.nSamples); currentMimo = zeros(Vari
             end
         end
     end
-% catch
-%     Push.pushNote(Push.Devices, 'MATLAB Assist', 'Houston, we have a problem');
-% end
+catch
+    Push.pushNote(Push.Devices, 'MATLAB Assist', 'Houston, we have a problem');
+end
 %% R-E region plots
 legendStr = cell(Variable.nRxCases, 1);
 figure('Name', sprintf('R-E region vs number of rectennas'));

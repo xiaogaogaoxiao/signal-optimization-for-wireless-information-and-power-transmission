@@ -5,12 +5,12 @@ centerFrequency = 5.18e9;
 % bandwidth
 bandwidth = 1e6;
 % number of frequency bands
-subband = 4;
+subband = 16;
 % number of taps in the tapped-delay line model
 tap = 18;
 % channel fading type ("flat" or "selective")
-% fadingType = "flat";
-fadingType = "selective";
+fadingType = "flat";
+% fadingType = "selective";
 % gap frequency
 gapFrequency = bandwidth / subband;
 % sample frequency
@@ -23,7 +23,7 @@ k2 = 0.0034; k4 = 0.3829;
 % antenna resistance
 resistance = 50;
 % number of transmit antennas
-tx = 3;
+tx = 1;
 % number of receive antennas
 rx = 1;
 % weight on rectennas
@@ -55,10 +55,10 @@ validIndex = find(basebandFrequency >= -bandwidth / 2 & basebandFrequency <= ban
 Response = v2struct(centerFrequency, bandwidth, subband, tap, fadingType, sampleFrequency, basebandFrequency, validIndex);
 %% Variables
 % rate constraint per subband
-% rateThr = 0: 0.5: 15;
+rateThr = 0: 0.5: 15;
 % rateThr = 1: -0.2: 0;
 % rateThr = 0: 0.2: 1;
-rateThr = 5: 5: 25;
+% rateThr = 5: 5: 25;
 % number of samples
 nSamples = length(rateThr);
 % different subband cases

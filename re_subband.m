@@ -4,8 +4,8 @@ Push.pushNote(Push.Devices, 'MATLAB Assist', sprintf('''%s'' is running', mfilen
 % generate the tap delay and gains based on HIPERLAN/2 model B
 [Channel] = hiperlan2_B(Transceiver, Channel);
 plot_response;
-% save([pwd '/data/channel.mat']);
-% load([pwd '/data/channel.mat']);
+% save([pwd sprintf('/data/siso_%s_channel.mat',Channel.fadingType)], 'Channel');
+% load([pwd sprintf('/data/siso_%s_channel.mat',Channel.fadingType)], 'Channel');
 %% R-E region samples
 rateDecoupling = zeros(Variable.nSubbandCases, Variable.nSamples); currentDecoupling = zeros(Variable.nSubbandCases, Variable.nSamples);
 rateNoPowerWaveform = zeros(Variable.nSubbandCases, Variable.nSamples); currentNoPowerWaveform = zeros(Variable.nSubbandCases, Variable.nSamples);

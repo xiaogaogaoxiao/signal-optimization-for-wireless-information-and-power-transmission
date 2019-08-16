@@ -3,16 +3,16 @@ initialize; config;
 %% Channel
 % generate the tap delay and gains based on HIPERLAN/2 model B
 [Channel] = hiperlan2_B(Transceiver, Channel);
-% plot_response;
+plot_response;
 % obtain the channel amplitude corresponding to the carrier frequency
 [Channel] = channel_response(Transceiver, Channel);
-% save([pwd '/data/channel.mat']);
-% load([pwd '/data/channel.mat']);
+% save([pwd sprintf('/data/siso_%s_channel.mat',Channel.fadingType)], 'Channel');
+% load([pwd sprintf('/data/siso_%s_channel.mat',Channel.fadingType)], 'Channel');
 %% R-E region samples
 rateDecoupling = zeros(Variable.nSnrCases, Variable.nSamples); currentDecoupling = zeros(Variable.nSnrCases, Variable.nSamples);
 rateLowerBound = zeros(Variable.nSnrCases, Variable.nSamples); currentLowerBound = zeros(Variable.nSnrCases, Variable.nSamples);
 rateNoPowerWaveform = zeros(Variable.nSnrCases, Variable.nSamples); currentNoPowerWaveform = zeros(Variable.nSnrCases, Variable.nSamples);
-% try
+try
     for iCase = 1: Variable.nSnrCases
         Transceiver.snrDb = Variable.snrDb(iCase);
         Transceiver.noisePower = Variable.noisePower(iCase);
@@ -29,9 +29,9 @@ rateNoPowerWaveform = zeros(Variable.nSnrCases, Variable.nSamples); currentNoPow
             rateNoPowerWaveform(iCase, iSample) = SolutionNoPowerWaveform.rate; currentNoPowerWaveform(iCase, iSample) = SolutionNoPowerWaveform.current;
         end
     end
-% catch
-%     Push.pushNote(Push.Devices, 'MATLAB Assist', 'Houston, we have a problem');
-% end
+catch
+    Push.pushNote(Push.Devices, 'MATLAB Assist', 'Houston, we have a problem');
+end
 %% R-E region plots
 for iCase = 1: Variable.nSnrCases
     figure('Name', sprintf('SNR = %d dB', Variable.snrDb(iCase)));
