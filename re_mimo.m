@@ -1,27 +1,32 @@
 initialize; config;
-Push.pushNote(Push.Devices, 'MATLAB Assist', sprintf('''%s'' is running', mfilename));
+% Push.pushNote(Push.Devices, 'MATLAB Assist', sprintf('''%s'' is running', mfilename));
 %% Channel and R-E region samples
+Transceiver = num2cell(repmat(Transceiver, [Variable.nRxCases, 1]));
+Channel = num2cell(repmat(Channel, [Variable.nRxCases, 1]));
+for iCase = 1: Variable.nRxCases
+    Transceiver{iCase}.rx = Variable.rx(iCase);
+    Transceiver{iCase}.weight = Variable.weight{iCase};
+    % generate the tap delay and gains based on HIPERLAN/2 model B
+    [Channel{iCase}] = hiperlan2_B(Transceiver{iCase}, Channel{iCase});
+    % obtain the channel amplitude corresponding to the carrier frequency
+    [Channel{iCase}] = channel_response(Transceiver{iCase}, Channel{iCase});
+    % decompose channel matrix
+    [Transceiver{iCase}, Channel{iCase}] = preprocessing(Transceiver{iCase}, Channel{iCase});
+end
+plot_mimo_response; 
+%% R-E region samples
 rateMimo = zeros(Variable.nRxCases, Variable.nSamples); currentMimo = zeros(Variable.nRxCases, Variable.nSamples);
 % try
     for iCase = 1: Variable.nRxCases
-        Transceiver.rx = Variable.rx(iCase);
-        Transceiver.weight = Variable.weight{iCase};
-        % generate the tap delay and gains based on HIPERLAN/2 model B
-        [Channel] = hiperlan2_B(Transceiver, Channel);
-        % obtain the channel amplitude corresponding to the carrier frequency
-        [Channel] = channel_response(Transceiver, Channel);
-        % reshape channel matrix to 2-D
-        [Transceiver, Channel] = preprocessing(Transceiver, Channel);
-        plot_mimo_response;
         % initialize algorithms
-        [SolutionMimo, ~] = initialize_algorithm(Transceiver, Channel);
+        [SolutionMimo, ~] = initialize_algorithm(Transceiver{iCase}, Channel{iCase});
         for iSample = 1: Variable.nSamples
-            Transceiver.rateThr = Variable.rateThr(iSample);
-            [SolutionMimo] = wipt_mimo(Transceiver, Channel, SolutionMimo);
+            Transceiver{iCase}.rateThr = Variable.rateThr(iSample);
+            [SolutionMimo] = wipt_mimo(Transceiver{iCase}, Channel{iCase}, SolutionMimo);
             rateMimo(iCase, iSample) = SolutionMimo.rate; currentMimo(iCase, iSample) = SolutionMimo.current;
             % invalid solution cannot be used for iterations
             if isnan(rateMimo(iCase, iSample))
-                [SolutionMimo, ~] = initialize_algorithm(Transceiver, Channel);
+                [SolutionMimo, ~] = initialize_algorithm(Transceiver{iCase}, Channel{iCase});
             end
         end
     end

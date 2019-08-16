@@ -26,7 +26,7 @@ v2struct(Transceiver, {'fieldNames', 'k2', 'tx', 'rx', 'weight'});
 v2struct(Channel, {'fieldNames', 'subband', 'subbandAmplitude', 'subbandPhase'});
 
 beamformPhase = zeros(subband, tx);
-mimoAmplitude = zeros(subband, tx);
+mimoAmplitude = zeros(subband, 1);
 
 % subbandGain = repmat(reshape(sqrt(k2 * weight), [1 1 rx]), [subband tx]) .* subbandAmplitude .* exp(1i * subbandPhase);
 subbandGain = repmat(reshape(sqrt(weight), [1 1 rx]), [subband tx]) .* subbandAmplitude .* exp(1i * subbandPhase);
@@ -34,8 +34,10 @@ subbandGain = repmat(reshape(sqrt(weight), [1 1 rx]), [subband tx]) .* subbandAm
 for iSubband = 1: subband
     [~, lambda, v] = svd(squeeze(subbandGain(iSubband, :, :)).');
     beamformPhase(iSubband, :) = angle(v(:, 1)).';
-    mimoAmplitude(iSubband, :) = diag(lambda).';
+    mimoAmplitude(iSubband) = max(diag(lambda));
 end
+
+mimoAmplitude = repmat(mimoAmplitude, [1, tx]);
 
 Channel.subbandGain = subbandGain;
 Channel.mimoAmplitude = mimoAmplitude;

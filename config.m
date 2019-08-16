@@ -5,7 +5,7 @@ centerFrequency = 5.18e9;
 % bandwidth
 bandwidth = 1e6;
 % number of frequency bands
-subband = 16;
+subband = 4;
 % number of taps in the tapped-delay line model
 tap = 18;
 % channel fading type ("flat" or "selective")
@@ -23,7 +23,7 @@ k2 = 0.0034; k4 = 0.3829;
 % antenna resistance
 resistance = 50;
 % number of transmit antennas
-tx = 2;
+tx = 3;
 % number of receive antennas
 rx = 1;
 % weight on rectennas
