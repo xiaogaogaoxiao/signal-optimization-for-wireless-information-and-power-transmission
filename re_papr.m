@@ -33,7 +33,7 @@ legendStr = cell(Variable.nPaprCases, 1);
 figure('Name', sprintf('R-E region vs PAPR'));
 for iCase = 1: Variable.nPaprCases
     plot(ratePapr(iCase, :), currentPapr(iCase, :) * 1e6);
-    legendStr{iCase} = sprintf('PAPR = %d dB', mag2db(Variable.papr(iCase)));
+    legendStr{iCase} = sprintf('PAPR = %s dB', num2str(mag2db(Variable.papr(iCase))));
     hold on;
 end
 hold off;
