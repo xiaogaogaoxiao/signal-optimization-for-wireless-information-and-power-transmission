@@ -1,6 +1,6 @@
 Consider a point-to-point MISO WIPT system in multipath environment. The $M$-antenna transmitter delivers information and power simultaneously to the single-antenna receiver through $N$ orthogonal subbands. It is assumed the carrier frequencies are with even spacing $\Delta f$ and equal bandwidth ${B_{\text{s}}}$. The $n$-th subband has carrier frequency ${f_n} = {f_0} + n\Delta f$ for $n = 0, \ldots ,N - 1$. To maximize the rate-energy tradeoff, we employ a superposed signal consists of a multi-carrier deterministic multisine waveform and a multi-carrier random modulated waveform for power and information delivery respectively. Both components are transmitted on the same frequency bands.
 
-\subsection{Information Waveform}
+\subsection{Transmitted Information Waveform}
 Denote the information symbol carried by the modulated waveform on subband $n$ as ${{\tilde x}_n}$, we assume the input symbol is with the capacity-achieving i.i.d. Circular Symmetric Complex Gaussian (CSCG) distribution with zero mean and unit variance \cite{Varasteh2017a}:
 
 \begin{equation}\label{eqn:unmodulated_symbol}
@@ -25,17 +25,17 @@ Note the amplitude and phase are separated in resource allocation. Define matric
   {x_{n,m}} = {s_{I,n,m}}{e^{j{\phi _{I,n,m}}}} \cdot \left| {{{\tilde x}_n}} \right|{e^{j{\phi _{{{\tilde x}_n}}}}} = {{\tilde s}_{I,n,m}}{e^{j{{\tilde \phi }_{I,n,m}}}}
 \end{equation}
 
-with ${{\tilde s}_{I,n,m}} = {s_{I,n,m}}\left| {{{\tilde x}_n}} \right|$ and ${{\tilde \phi }_{I,n,m}} = {\phi _{I,n,m}} + {\phi _{{{\tilde x}_n}}}$. In this way, the impact of symbol distribution and waveform design are combined. Also, the modulated waveform follows an i.i.d. CSCG distribution with variance equal to the subband power ${x_{n,m}}\sim\mathcal{C}\mathcal{N}\left( {0,s_{I,n,m}^2} \right)$.
+with ${{\tilde s}_{I,n,m}} = {s_{I,n,m}}\left| {{{\tilde x}_n}} \right|$ and ${{\tilde \phi }_{I,n,m}} = {\phi _{I,n,m}} + {\phi _{{{\tilde x}_n}}}$. In this way, the impact of symbol distribution and waveform design are combined. The modulated waveform also follows an i.i.d. CSCG distribution with variance equal to the subband power ${x_{n,m}}\sim\mathcal{C}\mathcal{N}\left( {0,s_{I,n,m}^2} \right)$.
 
-The information waveform ${x_{I,m}}(t)$ on antenna $m$ at time $t$ writes as
+Therefore, the information waveform ${x_{I,m}}(t)$ on antenna $m$ at time $t$ writes as
 
 \begin{align}\label{eqn:information_waveform}
   {x_{I,m}}(t) &= \sum\limits_{n = 0}^{N - 1} {{{\tilde s}_{I,n,m}}(t)\cos \left( {2\pi {f_n}t + {{\tilde \phi }_{I,n,m}}(t)} \right)}  \hfill \\
    &= \Re \left\{ {\sum\limits_{n = 0}^{N - 1} {{x_{n,m}}(t){e^{j2\pi {f_n}t}}} } \right\} \hfill \\
-   &= \Re \left\{ {\sum\limits_{n = 0}^{N - 1} {{w_{I,n,m}}{{\tilde x}_n}(t){e^{j2\pi {f_n}t}}} } \right\} \hfill 
+   &= \Re \left\{ {\sum\limits_{n = 0}^{N - 1} {{w_{I,n,m}}{{\tilde x}_n}(t){e^{j2\pi {f_n}t}}} } \right\} \hfill
 \end{align}
 
-On top of this, the WIT signal vector is a summation over $M$ antennas
+On top of this, the WIT signal vector is spread over $M$ antennas
 
 \begin{equation}\label{eqn:wit_vector}
   {{\mathbf{x}}_I}(t) = \Re \left\{ {\sum\limits_{n = 0}^{N - 1} {{{\mathbf{w}}_{I,n}}} {{\tilde x}_n}(t){e^{j2\pi {f_n}t}}} \right\}
@@ -43,23 +43,21 @@ On top of this, the WIT signal vector is a summation over $M$ antennas
 
 where ${{\mathbf{w}}_{I,n}} = {\left[ {{w_{I,n,1}} \cdots {w_{I,n,M}}} \right]^T}$.
 
-\subsection{Power Waveform}
-The multisine power component is unmodulated and deterministic compared with the information component. Therefore, there is no dependency on the distribution of input symbol $\tilde{x}_{n}(t)$. The power waveform on antenna $m$, subband $n$ is given by
+\subsection{Transmitted Power Waveform}
+Comparing with the information component, the multisine power component is unmodulated and deterministic, so there is no dependency on the distribution of input symbol $\tilde{x}_{n}(t)$. The power waveform on antenna $m$, subband $n$ is given by
 
 \begin{equation}\label{eqn:unmodulated}
   {w_{P,n,m}} = {s_{P,n,m}}{e^{j{\phi _{P,n,m}}}}
 \end{equation}
 
-where ${s_{P,n,m}}$ and ${{\phi _{P,n,m}}}$ are the amplitude and phase of the multisine signal. Collect them into the $(n,m)$ entries of matrices ${{\mathbf{S}}_P}$ and ${{\mathbf{\Phi }}_P}$, the average power of the WPT waveform is $\frac{1}{2}\left\|\mathbf{S}_{P}\right\|_{F}^{2}$. 
-
-Similarly, the power waveform ${x_{P,m}}(t)$ on antenna $m$ at time $t$ is
+where ${s_{P,n,m}}$ and ${{\phi _{P,n,m}}}$ are the amplitude and phase of the multisine signal. Collect them into the $(n,m)$ entries of matrices ${{\mathbf{S}}_P}$ and ${{\mathbf{\Phi }}_P}$, the average power of the WPT waveform is $\frac{1}{2}\left\|\mathbf{S}_{P}\right\|_{F}^{2}$. Similarly, the power waveform ${x_{P,m}}(t)$ on antenna $m$ at time $t$ is
 
 \begin{align}\label{eqn:power_waveform}
   {x_{P,m}}(t) &= \sum\limits_{n = 0}^{N - 1} {{s_{P,n,m}}\cos \left( {2\pi {f_n}t + {\phi _{P,n,m}}} \right)}  \hfill \\
    &= \Re \left\{ {\sum\limits_{n = 0}^{N - 1} {{w_{P,n,m}}{e^{j2\pi {f_n}t}}} } \right\} \hfill
 \end{align}
 
-Combine the power signals on all $M$ antennas, the WPT signal vector writes as 
+Combine the power signals on all $M$ antennas, the WPT signal vector writes as
 
 \begin{equation}\label{eqn:wpt_vector}
   {{\mathbf{x}}_P}(t) = \Re \left\{ {\sum\limits_{n = 0}^{N - 1} {{{\mathbf{w}}_{P,n}}} {e^{j2\pi {f_n}t}}} \right\}
@@ -71,10 +69,10 @@ with ${{\mathbf{w}}_{P,n}} = {\left[ {{w_{P,n,1}} \cdots {w_{P,n,M}}} \right]^T}
 Consider a multipath channel with $L$ paths. For the $l$-th path ($l = 1, \ldots ,L$), denote the phase shift between the receive antenna and transmit antenna $m$ of subband $n$ as ${\zeta _{n,m,l}}$. Let ${\tau _l}$ and ${\alpha _l}$ be the delay and magnitude gain, and indicate the transmit signal on subband $n$ of antenna $m$ as ${v_{n,m}}(t) = {w_{P,n,m}} + {w_{I,n,m}}{{\tilde x}_n}(t)$. The channel frequency response is expressed as
 
 \begin{equation}\label{eqn:channel}
-  {h_{n,m}} = \sum\limits_{l = 0}^{L - 1} {{\alpha _l}{e^{j\left( { - 2\pi {f_n}{\tau _l} + {\zeta _{n,m,l}}} \right)}}} 
+  {h_{n,m}} = \sum\limits_{l = 0}^{L - 1} {{\alpha _l}{e^{j\left( { - 2\pi {f_n}{\tau _l} + {\zeta _{n,m,l}}} \right)}}}
 \end{equation}
 
-To ensure $v_{n, m}(t)$ and $\tilde{x}_{n}(t)$ being narrowband signals, assume ${\max _{l \ne {l^\prime }}}\left| {{\tau _l} - {\tau _{{l^\prime }}}} \right| <  < 1/{B_{\text{s}}}$. We also suppose ${v_{n,m}}\left( {t - {\tau _l}} \right) = {v_{n,m}}(t)$ and ${{\tilde x}_n}\left( {t - {\tau _l}} \right) = {{\tilde x}_n}(t)$. The received signal corresponding to transmit antenna $m$ contains the power component $y_{P, m}(t)$$y_{P, m}(t)$ and the information component $y_{I, m}(t)$
+To ensure $v_{n, m}(t)$ and $\tilde{x}_{n}(t)$ being narrowband signals, we assume ${\max _{l \ne {l^\prime }}}\left| {{\tau _l} - {\tau _{{l^\prime }}}} \right| <  < 1/{B_{\text{s}}}$. It is also supposed that ${v_{n,m}}\left( {t - {\tau _l}} \right) = {v_{n,m}}(t)$ and ${{\tilde x}_n}\left( {t - {\tau _l}} \right) = {{\tilde x}_n}(t)$. The received signal corresponding to transmit antenna $m$ contains the power component $y_{P, m}(t)$ and the information component $y_{I, m}(t)$
 
 \begin{align}\label{eqn:received_signal_component}
   {y_m}(t) &= {y_{P,m}}(t) + {y_{I,m}}(t) \hfill \\
@@ -85,8 +83,8 @@ To ensure $v_{n, m}(t)$ and $\tilde{x}_{n}(t)$ being narrowband signals, assume 
 Hence, the total received signal can be obtained by stacking up equation \ref{eqn:received_signal_component} over all transmit signals
 
 \begin{align}\label{eqn:received_signal}
-  y(t) &= {y_P}(t) + {y_I}(t) \hfill \\
+  {\mathbf{y}}(t) &= {{\mathbf{y}}_P}(t) + {{\mathbf{y}}_I}(t) \hfill \\
    &= \Re \left\{ {\sum\limits_{n = 0}^{N - 1} {{{\mathbf{h}}_n}} \left( {{{\mathbf{w}}_{P,n}} + {{\mathbf{w}}_{I,n}}{{\tilde x}_n}} \right){e^{j2\pi {f_n}t}}} \right\} \hfill
-\end{align} 
+\end{align}
 
-where the channel vector is ${{\mathbf{h}}_n} = \left[ {{h_{n,1}} \ldots {h_{n,M}}} \right]$.
+where the channel vector is defined as ${{\mathbf{h}}_n} = \left[ {{h_{n,1}} \ldots {h_{n,M}}} \right]$. 
