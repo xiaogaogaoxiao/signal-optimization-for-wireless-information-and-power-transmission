@@ -14,8 +14,8 @@ for iCase = 1: Variable.nRxCases
     [Transceiver{iCase}, Channel{iCase}] = preprocessing(Transceiver{iCase}, Channel{iCase});
 end
 plot_mimo_response;
-% save([pwd sprintf('/data/mimo_%s_channel.mat',Channel.fadingType)], 'Channel');
-% load([pwd sprintf('/data/mimo_%s_channel.mat',Channel.fadingType)], 'Channel');
+% save([pwd sprintf('/data/mimo_%s_channel.mat',Channel{1}.fadingType)], 'Channel', 'Transceiver');
+% load([pwd sprintf('/data/mimo_%s_channel.mat',Channel{1}.fadingType)], 'Channel', 'Transceiver');
 %% R-E region samples
 rateMimo = zeros(Variable.nRxCases, Variable.nSamples); currentMimo = zeros(Variable.nRxCases, Variable.nSamples);
 try
