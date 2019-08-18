@@ -72,7 +72,13 @@ with ${{\mathbf{w}}_{P,n}} = {\left[ {{w_{P,n,1}} \cdots {w_{P,n,M}}} \right]^T}
 
 
 \subsection{Multipath Channel and Received Signal}\label{sec:multipath-and-received-signal}
-Consider a multipath channel with $L$ paths. For the $l$-th path ($l = 1, \ldots ,L$), denote the phase shift between the receive antenna and transmit antenna $m$ of subband $n$ as ${\zeta _{n,m,l}}$. Let ${\tau _l}$ and ${\alpha _l}$ be the delay and magnitude gain, and indicate the transmit signal on subband $n$ of antenna $m$ as ${v_{n,m}}(t) = {w_{P,n,m}} + {w_{I,n,m}}{{\tilde x}_n}(t)$. The channel frequency response is expressed as
+Consider a multipath channel with $L$ paths. For the $l$-th path ($l = 1, \ldots ,L$), denote the phase shift between the receive antenna and transmit antenna $m$ of subband $n$ as ${\zeta _{n,m,l}}$. Let ${\tau _l}$ and ${\alpha _l}$ be the delay and magnitude gain, and indicate the transmit signal on subband $n$ of antenna $m$ as 
+
+\begin{equation}\label{eqn:superposed_waveform}
+  {v_{n,m}}(t) = {w_{P,n,m}} + {w_{I,n,m}}{{\tilde x}_n}(t)
+\end{equation}
+
+The superposed signal containing modulated information waveform and multisine power waveform is demonstrated to bring a two-fold benefit on rate and energy \cite{Clerckx2019}. Also, the channel frequency response is expressed as
 
 \begin{equation}\label{eqn:channel}
   {h_{n,m}} = \sum\limits_{l = 0}^{L - 1} {{\alpha _l}{e^{j\left( { - 2\pi {f_n}{\tau _l} + {\zeta _{n,m,l}}} \right)}}}
