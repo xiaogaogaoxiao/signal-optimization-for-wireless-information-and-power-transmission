@@ -15,47 +15,40 @@ Also, it is derived in \cite{Clerckx2016} that the expectation of the received p
 
 \begin{align}\label{eqn:power_waveform_fourth_order}
   \mathbb{E}\left[ {{y_P}{{(t)}^4}} \right] &= \frac{3}{8}\Re \left\{ {\sum\limits_{\substack{{n_0},{n_1},{n_2},{n_3} \\ {n_0} + {n_1} = {n_2} + {n_3}}} {{{\mathbf{h}}_{{n_0}}}{{\mathbf{w}}_{P,{n_0}}}{{\mathbf{h}}_{{n_1}}}{{\mathbf{w}}_{P,{n_1}}}{{\left( {{{\mathbf{h}}_{{n_2}}}{{\mathbf{w}}_{P,{n_2}}}} \right)}^*}{{\left( {{{\mathbf{h}}_{{n_3}}}{{\mathbf{w}}_{P,{n_3}}}} \right)}^*}} } \right\} \\
-   &= \frac{3}{8}\sum\limits_{\substack{{n_0},{n_1},{n_2},{n_3} \\ {n_0} + {n_1} = {n_2} + {n_3}}} {\sum\limits_{{m_0},{m_1},{m_2},{m_3}} {\left[ {\prod\limits_{j = 0}^3 {{s_{{n_j},{m_j}}}} {A_{{n_j},{m_j}}}} \right] }} \nonumber \\
-   &\quad \cos \left( {{\psi _{{n_0},{m_0}}} + {\psi _{{n_1},{m_1}}} - {\psi _{{n_2},{m_2}}} - {\psi _{{n_3},{m_3}}}} \right)
+   &= \frac{3}{8}\sum\limits_{\substack{{n_0},{n_1},{n_2},{n_3} \\ {n_0} + {n_1} = {n_2} + {n_3}}} {\sum\limits_{{m_0},{m_1},{m_2},{m_3}} {\left[ {\prod\limits_{j = 0}^3 {{s_{{P},{n_j},{m_j}}}} {A_{{n_j},{m_j}}}} \right] }} \nonumber \\
+   &\quad \cos \left( {{\psi _{{P},{n_0},{m_0}}} + {\psi _{{P},{n_1},{m_1}}} - {\psi _{{P},{n_2},{m_2}}} - {\psi _{{P},{n_3},{m_3}}}} \right)
 \end{align}
 
-We then turn to the multicarrier modulated waveform ${y_I}(t)$. Interestingly, it can be regarded as a multisine waveform for the input symbols $\{ {{\tilde x}_n}\} $ that vary randomly with symbol rate $1/{B_{\text{s}}}$. Similarly, the approximated DC current provided by the rectifier is given by
+We then turn to the multicarrier modulated waveform ${y_I}(t)$. It can be treated as a multisine waveform for the input symbols $\{ {{\tilde x}_n}\} $ that vary randomly with symbol rate $1/{B_{\text{s}}}$. Similarly, the approximated DC current provided by the rectifier is given by
 
 \begin{equation}\label{eqn:current_information}
   {i_{out}} \approx k_0^\prime  + \sum\limits_{i{\text{ even }},i \geqslant 2}^{{n_o}} {k_i^\prime } {\rho ^{i/2}}R_{ant}^{i/2}{\mathbb{E}_{\{ {{\tilde x}_n}\} }}\left[ {{y_I}{{(t)}^i}} \right]
 \end{equation}
 
-where the expectation is taken over both time and the distribution of input symbols $\{ {{\tilde x}_n}\} $.
+To obtain the expectation, we first extract the DC currents corresponding to a given set of amplitudes $\{ {{\tilde s}_{I,n,m}}\} $ and phases $\{ {{\tilde \phi }_{I,n,m}}\} $, then take the expectation over the distribution of the input symbol ${{\tilde x}_n}$. As an i.i.d. CSCG distribution ${{\tilde x}_n}\sim\mathcal{C}\mathcal{N}(0,1)$ is assumed, the amplitude square ${\left| {{{\tilde x}_n}} \right|^2}$ is exponentially distributed with $\mathbb{E}\left[ {{{\left| {{{\tilde x}_n}} \right|}^2}} \right] = 1$. Using the moment generating function, we also have $\mathbb{E}\left[ {{{\left| {{{\tilde x}_n}} \right|}^4}} \right] = \mathbb{E}\left[ {{{\left( {{{\left| {{{\tilde x}_n}} \right|}^2}} \right)}^2}} \right] = 2$. Note this gain applies to the output current, which measures the contribution of modulation and does not exist for multisine waveform. Following \cite{Clerckx2018}, we can obtain the expectation of the received information waveform to the second and fourth orders
 
+\begin{align}\label{eqn:information_waveform_second_order}
+  \mathbb{E}\left[ {{y_I}{{(t)}^2}} \right] &= \frac{1}{2}\sum\limits_{n = 0}^{N - 1} {\sum\limits_{{m_0},{m_1}} {{s_{I,n,{m_0}}}} } {s_{I,n,{m_1}}}{A_{n,{m_0}}}{A_{n,{m_1}}}\cos \left( {{\psi _{I,n,{m_0}}} - {\psi _{I,n,{m_1}}}} \right) \\
+   &= \frac{1}{2}\sum\limits_{n = 0}^{N - 1} {{{\left| {{{\mathbf{h}}_n}{{\mathbf{w}}_{I,n}}} \right|}^2}}
+\end{align}
 
+\begin{align}\label{eqn:information_waveform_fourth_order}
+  \mathbb{E}\left[ {{y_I}{{(t)}^4}} \right] &= \frac{6}{8}\sum\limits_{{n_0},{n_1}} {\sum\limits_{{m_0},{m_1},{m_2},{m_3}} {\left[ {\prod\limits_{j = 0,2} {{s_{I,{n_0},{m_j}}}{A_{{n_0},{m_j}}}} } \right]\left[ {\prod\limits_{j = 1,3} {{s_{I,{n_1},{m_j}}}{A_{{n_1},{m_j}}}} } \right]} } \nonumber \\
+   &\quad \cos \left( {{\psi _{I,{n_0},{m_0}}} + {\psi _{I,{n_1},{m_1}}} - {\psi _{I,{n_0},{m_2}}} - {\psi _{I,{n_1},{m_3}}}} \right) \\
+   &= \frac{6}{8}{\left[ {\sum\limits_{n = 0}^{N - 1} {{{\left| {{{\mathbf{h}}_n}{{\mathbf{w}}_{I,n}}} \right|}^2}} } \right]^2}
+\end{align}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-It is worth noting that ${n_o}$ determines the relationship between the subband power and total harvested power. Different models are derived based on its contributions:
+It is worth noting that the truncation order ${n_o}$ in equation \ref{eqn:current_information} determines the relationship between the received signal and the harvested power. On top of it, \cite{Clerckx2016} proposed two diode models:
 
 \begin{itemize}
-  \item diode linear model (${n_o} = 2$): the total
-  \item diode nonlinear model (${n_o} > 2$): significant contributions of higher order terms
+  \item \textit{diode linear model} (${n_o} = 2$) is the conventional perspective that assumes the total output power is the sum of the subband power. It omits the rectifier nonlinearity and is typically suitable for a very low input power.
+  \item \textit{diode nonlinear model} (${n_o} > 2$) considers the contributions of higher order terms to the harvested power. It captures the nonlinear behavior of the diode with the product terms that consist of contributions from different frequencies (as indicated by ${{n_0},{n_1}}$ in equation \ref{eqn:information_waveform_fourth_order} and \ref{eqn:power_waveform_fourth_order}). The model is complicated but accurate, and especially fits the input power between \SI{1}{\uW} and \SI{1}{\mW}.
 \end{itemize} 
+
+In this paper, we set ${n_o} = 4$ to explore the fundamental nonlinear behaviour of the diode and its impact on the harvested current. Since $\mathbb{E}\left[ {{y_P}(t){y_I}(t)} \right] = \mathbb{E}\left[ {{y_P}{{(t)}^3}{y_I}(t)} \right] = \mathbb{E}\left[ {{y_P}(t){y_I}{{(t)}^3}} \right] = 0$ and $\mathbb{E}\left[ {{y_P}{{(t)}^2}{y_I}{{(t)}^2}} \right] = \mathbb{E}\left[ {{y_P}{{(t)}^2}} \right]\mathbb{E}\left[ {{y_I}{{(t)}^2}} \right]$, the approximated output DC current of equation \ref{eqn:output_current} reduces to
+
+\begin{align}\label{eqn:current}
+  {i_{out}} &\approx k_0^\prime  + k_2^\prime \rho {R_{{\text{ant}}}}\mathbb{E}\left[ {{y_P}{{(t)}^2}} \right] + k_4^\prime {\rho ^2}R_{ant}^2\mathbb{E}\left[ {{y_P}{{(t)}^4}} \right] \nonumber \\
+   &\quad + k_2^\prime \rho {R_{{\text{ant}}}}\mathbb{E}\left[ {{y_I}{{(t)}^2}} \right] + k_4^\prime {\rho ^2}R_{ant}^2\mathbb{E}\left[ {{y_I}{{(t)}^4}} \right] \nonumber \\
+   &\quad + 6k_4^\prime {\rho ^2}R_{{\text{ant}}}^2\mathbb{E}\left[ {{y_P}{{(t)}^2}} \right]\mathbb{E}\left[ {{y_I}{{(t)}^2}} \right]
+\end{align}
