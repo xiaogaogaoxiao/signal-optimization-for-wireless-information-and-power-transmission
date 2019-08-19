@@ -1,0 +1,61 @@
+To investigate the impact of the proposed waveform on the harvested power, we apply the received signal expression \ref{eqn:received_signal_component} to the diode current equation \ref{eqn:output_current}.
+
+First, we consider the multicarrier multisine waveform ${y_P}(t)$. The approximated harvester DC current with multisine excitation writes as
+
+\begin{equation}\label{eqn:current_power}
+  {i_{out}} \approx k_0^\prime  + \sum\limits_{i{\text{ even }},i \geqslant 2}^{{n_o}} {k_i^\prime } {\rho ^{i/2}}R_{ant}^{i/2}\mathbb{E}\left[ {{y_P}{{(t)}^i}} \right]
+\end{equation}
+
+Also, it is derived in \cite{Clerckx2016} that the expectation of the received power waveform to the second and fourth orders write respectively as
+
+\begin{align}\label{eqn:power_waveform_second_order}
+  \mathbb{E}\left[ {{y_P}{{(t)}^2}} \right] &= \frac{1}{2}\sum\limits_{n = 0}^{N - 1} {{{\left| {{{\mathbf{h}}_n}{{\mathbf{w}}_{P,n}}} \right|}^2}}  \\
+   &= \frac{1}{2}\sum\limits_{n = 0}^{N - 1} {\sum\limits_{{m_0},{m_1}} {{s_{P,n,{m_0}}}{s_{P,n,{m_1}}}{A_{n,{m_0}}}{A_{n,{m_1}}}\cos \left( {{\psi _{P,n,{m_0}}} - {\psi _{P,n,{m_1}}}} \right)} }
+\end{align}
+
+\begin{align}\label{eqn:power_waveform_fourth_order}
+  \mathbb{E}\left[ {{y_P}{{(t)}^4}} \right] &= \frac{3}{8}\Re \left\{ {\sum\limits_{\substack{{n_0},{n_1},{n_2},{n_3} \\ {n_0} + {n_1} = {n_2} + {n_3}}} {{{\mathbf{h}}_{{n_0}}}{{\mathbf{w}}_{P,{n_0}}}{{\mathbf{h}}_{{n_1}}}{{\mathbf{w}}_{P,{n_1}}}{{\left( {{{\mathbf{h}}_{{n_2}}}{{\mathbf{w}}_{P,{n_2}}}} \right)}^*}{{\left( {{{\mathbf{h}}_{{n_3}}}{{\mathbf{w}}_{P,{n_3}}}} \right)}^*}} } \right\} \\
+   &= \frac{3}{8}\sum\limits_{\substack{{n_0},{n_1},{n_2},{n_3} \\ {n_0} + {n_1} = {n_2} + {n_3}}} {\sum\limits_{{m_0},{m_1},{m_2},{m_3}} {\left[ {\prod\limits_{j = 0}^3 {{s_{{n_j},{m_j}}}} {A_{{n_j},{m_j}}}} \right] }} \nonumber \\
+   &\quad \cos \left( {{\psi _{{n_0},{m_0}}} + {\psi _{{n_1},{m_1}}} - {\psi _{{n_2},{m_2}}} - {\psi _{{n_3},{m_3}}}} \right)
+\end{align}
+
+We then turn to the multicarrier modulated waveform ${y_I}(t)$. Interestingly, it can be regarded as a multisine waveform for the input symbols $\{ {{\tilde x}_n}\} $ that vary randomly with symbol rate $1/{B_{\text{s}}}$. Similarly, the approximated DC current provided by the rectifier is given by
+
+\begin{equation}\label{eqn:current_information}
+  {i_{out}} \approx k_0^\prime  + \sum\limits_{i{\text{ even }},i \geqslant 2}^{{n_o}} {k_i^\prime } {\rho ^{i/2}}R_{ant}^{i/2}{\mathbb{E}_{\{ {{\tilde x}_n}\} }}\left[ {{y_I}{{(t)}^i}} \right]
+\end{equation}
+
+where the expectation is taken over both time and the distribution of input symbols $\{ {{\tilde x}_n}\} $.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+It is worth noting that ${n_o}$ determines the relationship between the subband power and total harvested power. Different models are derived based on its contributions:
+
+\begin{itemize}
+  \item diode linear model (${n_o} = 2$): the total
+  \item diode nonlinear model (${n_o} > 2$): significant contributions of higher order terms
+\end{itemize} 
