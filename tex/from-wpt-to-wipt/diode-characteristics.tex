@@ -66,3 +66,33 @@ The contribution of odd terms is indeed zero, as $\mathbb{E}\left[ {y{{(t)}^i}} 
 \begin{equation}\label{eqn:output_current}
   {i_{{\text{out}}}} \approx \sum\limits_{i{\text{ even,i}} \geqslant 0}^{{n_o}} {k_i^\prime } R_{{\text{ant}}}^{i/2}\mathbb{E}\left[ {y{{(t)}^i}} \right]
 \end{equation}
+
+Recall from equation \ref{eqn:diode_k_prime} that the diode parameter $k_i^\prime $ is a function of $a =  - {v_{{\text{out}}}}$ and relates to the output current as well. Therefore, equation \ref{eqn:current_power} is actually
+
+\begin{equation}\label{eqn:output_current_function}
+  {i_{{\text{out}}}} \approx \sum\limits_{i{\text{ even,i}} \geqslant 0}^{{n_o}} {k_i^\prime \left( {{i_{{\text{out}}}}} \right)} R_{{\text{ant}}}^{i/2}\mathbb{E}\left[ {y{{(t)}^i}} \right]
+\end{equation}
+
+Following \cite{Clerckx2016}, we denote 
+
+\begin{equation}\label{eqn:diode_k_prime_prime}
+  k_0^{\prime \prime } = {e^{\frac{a}{{n{v_{\text{t}}}}}}} = {e^{ - \frac{{{R_{\text{L}}}{i_{{\text{out}}}}}}{{n{v_{\text{t}}}}}}}
+\end{equation}
+
+Hence, $k_0^\prime  = {i_{\text{s}}}(k_0^{\prime \prime } - 1)$ and \ref{eqn:output_current_function} rewrites as
+
+\begin{equation}\label{eqn:output_current_rewritten}
+  {e^{\frac{{{R_{\text{L}}}{i_{{\text{out}}}}}}{{n{v_{\text{t}}}}}}}\left( {{i_{{\text{out}}}} + {i_{\text{s}}}} \right) \approx {i_{\text{s}}} + \sum\limits_{i{\text{ even}},i \geqslant 2}^{{n_o}} {\frac{{k_i^\prime }}{{k_0^{\prime \prime }}}} R_{{\text{ant}}}^{i/2}\mathbb{E}\left[ {y{{(t)}^i}} \right]
+\end{equation}
+
+Further, denote
+
+\begin{equation}\label{eqn:diode_k}
+  {k_i} = \frac{{k_i^\prime }}{{k_0^{\prime \prime }}} = \frac{{{i_{\text{s}}}}}{{i!{{\left( {n{v_{\text{t}}}} \right)}^i}}}
+\end{equation}
+
+Note the r.h.s. of equation \ref{eqn:output_current_rewritten} depends on ${k_i}$ and is independent of ${i_{{\text{out}}}}$. On the other hand, the l.h.s. is a monotonic increasing function of ${i_{{\text{out}}}}$. Therefore, maximizing ${i_{{\text{out}}}}$ is equivalent to maximizing the target function
+
+\begin{equation}\label{eqn:target_function}
+  {z_{DC}} = \sum\limits_{i{\text{ even,i}} \geqslant 2}^{{n_o}} {{k_i}} R_{{\text{ant}}}^{i/2}\mathbb{E}\left[ {y{{(t)}^i}} \right]
+\end{equation}
