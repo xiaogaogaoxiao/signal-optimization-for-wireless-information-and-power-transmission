@@ -1,10 +1,13 @@
 The achievable rate-energy region is defined as
 
-\begin{equation}\label{eqn:rate-energy-region}
+\begin{equation}\label{eqn:rate_energy_region}
   {C_{R - {I_{DC}}}}(P) \triangleq \left\{ {\left( {R,{I_{DC}}} \right):R \leqslant I,{I_{DC}} \leqslant {i_{{\text{out}}}},\frac{1}{2}\left[ {\left\| {{{\mathbf{S}}_I}} \right\|_F^2 + \left\| {{{\mathbf{S}}_P}} \right\|_F^2} \right] \leqslant P} \right\}
 \end{equation}
 
-where ${\left( {R,{I_{DC}}} \right)}$ is the achievable rate-energy pair, $P$ is the transmit power budget, $I$ is the mutual information, ${{I_{DC}}}$ is the harvested DC current, ${{i_{{\text{out}}}}}$ is the rectifier output current, and ${{{\mathbf{S}}_I}}$, ${{{\mathbf{S}}_P}}$ hold the amplitudes of information and power signals respectively.
+where ${\left( {R,{I_{DC}}} \right)}$ is the rate-energy pair, $P$ is the transmit power budget, $I$ is the mutual information, ${{I_{DC}}}$ is the harvested DC current, ${{i_{{\text{out}}}}}$ is the rectifier output current, and ${{{\mathbf{S}}_I}}$, ${{{\mathbf{S}}_P}}$ hold the amplitudes of information and power signals respectively. With the target function ${{z_{DC}}}$ given by \ref{eqn:target_function_truncated}, it is redefined in \cite{Clerckx2018} as
+
+\begin{equation}\label{eqn:rate_energy_region_redefined}
+  {C_{R - {I_{DC}}}}(P) \triangleq \left\{ {\left( {R,{I_{DC}}} \right):R \leqslant I,{I_{DC}} \leqslant {z_{DC}},\frac{1}{2}\left[ {\left\| {{{\mathbf{S}}_I}} \right\|_F^2 + \left\| {{{\mathbf{S}}_P}} \right\|_F^2} \right] \leqslant P} \right\}
+\end{equation}
 
 To obtain the maximum rate-energy region, we aim to find the optimal amplitudes ${\mathbf{S}}_I^ \star ,{\mathbf{S}}_P^ \star $ and phases ${\mathbf{\Phi }}_I^ \star ,{\mathbf{\Phi }}_P^ \star $ for both waveforms at the transmitter, and obtain the best power splitting ratio ${\rho ^ \star }$ at the receiver. It is assumed in the optimization that perfect CSIT is available in the form of channel frequency response ${h_{n,m}}$.
-

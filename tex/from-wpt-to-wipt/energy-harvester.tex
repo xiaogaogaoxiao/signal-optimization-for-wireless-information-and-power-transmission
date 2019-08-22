@@ -9,7 +9,7 @@ First, we consider the multicarrier multisine waveform ${y_P}(t)$. The approxima
 Also, it is derived in \cite{Clerckx2016} that the expectation of the received power waveform to the second and fourth orders write respectively as
 
 \begin{align}\label{eqn:power_waveform_second_order}
-  \mathbb{E}\left[ {{y_P}{{(t)}^2}} \right] &= \frac{1}{2}\sum\limits_{n = 0}^{N - 1} {{{\left| {{{\mathbf{h}}_n}{{\mathbf{w}}_{P,n}}} \right|}^2}}  \\
+  \mathbb{E}\left[ {{y_P}{{(t)}^2}} \right] &= \frac{1}{2}\sum\limits_{n = 0}^{N - 1} {{{\left| {{{\mathbf{h}}_n}{{\mathbf{w}}_{P,n}}} \right|}^2}} \\
    &= \frac{1}{2}\sum\limits_{n = 0}^{N - 1} {\sum\limits_{{m_0},{m_1}} {{s_{P,n,{m_0}}}{s_{P,n,{m_1}}}{A_{n,{m_0}}}{A_{n,{m_1}}}\cos \left( {{\psi _{P,n,{m_0}}} - {\psi _{P,n,{m_1}}}} \right)} }
 \end{align}
 
@@ -35,7 +35,7 @@ To obtain the expectation, we first extract the DC currents corresponding to a g
 \begin{align}\label{eqn:information_waveform_fourth_order}
   \mathbb{E}\left[ {{y_I}{{(t)}^4}} \right] &= \frac{6}{8}\sum\limits_{{n_0},{n_1}} {\sum\limits_{{m_0},{m_1},{m_2},{m_3}} {\left[ {\prod\limits_{j = 0,2} {{s_{I,{n_0},{m_j}}}{A_{{n_0},{m_j}}}} } \right]\left[ {\prod\limits_{j = 1,3} {{s_{I,{n_1},{m_j}}}{A_{{n_1},{m_j}}}} } \right]} } \nonumber \\
    &\quad \cos \left( {{\psi _{I,{n_0},{m_0}}} + {\psi _{I,{n_1},{m_1}}} - {\psi _{I,{n_0},{m_2}}} - {\psi _{I,{n_1},{m_3}}}} \right) \\
-   &= \frac{6}{8}{\left[ {\sum\limits_{n = 0}^{N - 1} {{{\left| {{{\mathbf{h}}_n}{{\mathbf{w}}_{I,n}}} \right|}^2}} } \right]^2}
+   &= \frac{6}{8}{\left[ {\sum\limits_{n = 0}^{N - 1} {{{\left| {{{\mathbf{h}}_n}{{\mathbf{w}}_{I,n}}} \right|}^2}} } \right]^2} \label{eqn:waveform_end}
 \end{align}
 
 It is worth noting that the truncation order ${n_o}$ in equation \ref{eqn:current_information} determines the relationship between the received signal and the harvested power. On top of it, \cite{Clerckx2016} proposed two diode models:
@@ -61,4 +61,4 @@ whose corresponding target function is
   {z_{\text{DC}}} &\approx k_0  + k_2 \rho {R_{{\text{ant}}}}\mathbb{E}\left[ {{y_P}{{(t)}^2}} \right] + k_4 {\rho ^2}R_{ant}^2\mathbb{E}\left[ {{y_P}{{(t)}^4}} \right] \nonumber \\
    &\quad + k_2 \rho {R_{{\text{ant}}}}\mathbb{E}\left[ {{y_I}{{(t)}^2}} \right] + k_4 {\rho ^2}R_{ant}^2\mathbb{E}\left[ {{y_I}{{(t)}^4}} \right] \nonumber \\
    &\quad + 6k_4 {\rho ^2}R_{{\text{ant}}}^2\mathbb{E}\left[ {{y_P}{{(t)}^2}} \right]\mathbb{E}\left[ {{y_I}{{(t)}^2}} \right]
-\end{align}
+\end{align} 
