@@ -44,13 +44,13 @@ The new problem so far is not a standard GP as $1/{z_{DC}}\left( {{{\mathbf{S}}_
 Consider constraint \ref{eqn:transformed_current_constraint} first. The posynomial at the denominator can be decomposed as sum of monomials
 
 \begin{equation}\label{eqn:transformed_current_posynomial_decomposition}
-  {z_{DC}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\rho } \right) = \sum\limits_{k = 1}^K {{g_k}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\rho } \right)} 
+  {z_{DC}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\rho } \right) = \sum\limits_{k = 1}^K {{g_k}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\rho } \right)}
 \end{equation}
 
 Since monomial $\left\{ {{g_k}} \right\}$ is nonnegative for all $k$, the AM-GM inequality suggests a posynomial upper bound for the previous non-posynomial term
 
 \begin{equation}\label{eqn:transformed_current_am_gm}
-  \frac{1}{{\sum\limits_{k = 1}^K {{g_k}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\rho } \right)} }} \leqslant \prod\limits_{k = 1}^K {{{\left( {\frac{{{g_k}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\rho } \right)}}{{{\gamma _k}}}} \right)}^{ - {\gamma _k}}}} 
+  \frac{1}{{\sum\limits_{k = 1}^K {{g_k}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\rho } \right)} }} \leqslant \prod\limits_{k = 1}^K {{{\left( {\frac{{{g_k}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\rho } \right)}}{{{\gamma _k}}}} \right)}^{ - {\gamma _k}}}}
 \end{equation}
 
 The nonnegative coefficients $\left\{ {{\gamma _k}} \right\}$ are chosen to satisfy $\sum\nolimits_{k = 1}^K {{\gamma _k}}  = 1$. Similarly, define $\bar \rho  = 1 - \rho $ and let $\left\{ {{g_{nk}}\left( {{{\mathbf{S}}_I},\bar \rho } \right)} \right\}$ be the monomials of the posynomial $1 + \frac{{\bar \rho }}{{\sigma _n^2}}{C_n}$
@@ -62,7 +62,7 @@ The nonnegative coefficients $\left\{ {{\gamma _k}} \right\}$ are chosen to sati
 Apply the AM-GM inequality to \ref{eqn:transformed_rate_posynomial_decomposition}, we have
 
 \begin{equation}\label{eqn:transformed_rate_am_gm}
-  \frac{1}{{1 + \frac{{\bar \rho }}{{\sigma _n^2}}{C_n}}} \leqslant \prod\limits_{k = 1}^{{K_n}} {{{\left( {\frac{{{g_{nk}}\left( {{{\mathbf{S}}_I},\bar \rho } \right)}}{{{\gamma _{nk}}}}} \right)}^{ - {\gamma _{nk}}}}} 
+  \frac{1}{{1 + \frac{{\bar \rho }}{{\sigma _n^2}}{C_n}}} \leqslant \prod\limits_{k = 1}^{{K_n}} {{{\left( {\frac{{{g_{nk}}\left( {{{\mathbf{S}}_I},\bar \rho } \right)}}{{{\gamma _{nk}}}}} \right)}^{ - {\gamma _{nk}}}}}
 \end{equation}
 
 with ${\gamma _{nk}} \geqslant 0$ and $\sum\nolimits_{k = 1}^{{K_n}} {{\gamma _{nk}}}  = 1$. In this way, we transformed the problem into a standard GP
@@ -72,7 +72,7 @@ with ${\gamma _{nk}} \geqslant 0$ and $\sum\nolimits_{k = 1}^{{K_n}} {{\gamma _{
   {{\text{ subject to }}}&{\frac{1}{2}\left[ {\left\| {{{\mathbf{S}}_I}} \right\|_F^2 + \left\| {{{\mathbf{S}}_P}} \right\|_F^2} \right] \leqslant P} \label{eqn:general_power_constraint} \\
   {}&{{t_0}\prod\limits_{k = 1}^K {{{\left( {\frac{{{g_k}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\rho } \right)}}{{{\gamma _k}}}} \right)}^{ - {\gamma _k}}}}  \leqslant 1} \label{eqn:general_current_constraint} \\
   {}&{2^{\bar R}}\prod\limits_{n = 0}^{N - 1} {\prod\limits_{k = 1}^{{K_n}} {{{\left( {\frac{{{g_{nk}}\left( {{{\mathbf{S}}_I},\bar \rho } \right)}}{{{\gamma _{nk}}}}} \right)}^{ - {\gamma _{nk}}}}} }  \leqslant 1 \label{eqn:general_rate_constraint} \\
-  {}&{\rho  + \bar \rho  \leqslant 1} \label{eqn:general_ratio_constraint} 
+  {}&{\rho  + \bar \rho  \leqslant 1} \label{eqn:general_ratio_constraint}
 \end{eqnarray}
 
 It is worth noting that the tightness of the AM-GM inequality depends on the choice of $\left\{ {{\gamma _k},{\gamma _{nk}}} \right\}$. In this paper, we employ the iterative method proposed in \cite{Clerckx2018} that updates the coefficient sets at iteration $i$ with the previous solution ${{\mathbf{S}}_P^{(i - 1)},{\mathbf{S}}_I^{(i - 1)},{\rho ^{(i - 1)}}}$
@@ -85,4 +85,19 @@ It is worth noting that the tightness of the AM-GM inequality depends on the cho
 \end{gathered}
 \end{eqnarray}
 
-Once $\left\{ {{\gamma _k},{\gamma _{nk}}} \right\}$ are obtained, we solve problem \ref{eqn:general_target} -- \ref{eqn:general_ratio_constraint} to obtain ${\mathbf{S}}_P^{(i)},{\mathbf{S}}_I^{(i)},{\rho ^{(i)}}$. The iterations are repeated until convergence. Algorithm 1 summarizes all the procedures involved in the optimization. The successive approximation approach is also known as inner approximation method \cite{Marks1978}, which cannot guarantee a global optimal solution but the converged point satisfies the KKT conditions.  
+Once $\left\{ {{\gamma _k},{\gamma _{nk}}} \right\}$ are obtained, we solve problem \ref{eqn:general_target} -- \ref{eqn:general_ratio_constraint} to obtain ${\mathbf{S}}_P^{(i)},{\mathbf{S}}_I^{(i)},{\rho ^{(i)}}$. The iterations are repeated until convergence. Algorithm 1 summarizes all the procedures involved in the optimization. The successive approximation approach is also known as inner approximation method \cite{Marks1978}, which cannot guarantee a global optimal solution but the converged point satisfies the KKT conditions.
+
+\begin{algorithm}
+  \caption{General Waveform Design}
+  \label{alg:general}
+  \begin{algorithmic}[1]
+    \State \textbf{Initialize:} $i \leftarrow 0$, ${\mathbf{\Phi }}_P^ \star $ and ${\mathbf{\Phi }}_I^ \star $ by phase response, ${{\mathbf{S}}_P}$ and ${{\mathbf{S}}_I}$ by matched filter, $\rho ,\bar \rho  = 1 - \rho ,\bar R,z_{DC}^{(0)} = 0$
+    \Repeat
+      \State $i \leftarrow i + 1,\mathop {{{\mathbf{S}}_P}}\limits^{..}  \leftarrow {{\mathbf{S}}_P},\mathop {{{\mathbf{S}}_P}}\limits^{..}  \leftarrow {{\mathbf{S}}_I},\ddot \rho  \leftarrow \rho ,\ddot \bar \rho  \leftarrow \bar \rho $
+      \State ${\gamma _k} \leftarrow {g_k}\left( {{{\mathop {\mathbf{S}}\limits^{..} }_P},{{\mathop {\mathbf{S}}\limits^{..} }_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\ddot \rho } \right)/{z_{DC}}\left( {{{\mathop {\mathbf{S}}\limits^{..} }_P},{{\mathop {\mathbf{S}}\limits^{..} }_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\ddot \rho } \right),k = 1, \ldots ,K$
+      \State ${\gamma _{nk}} \leftarrow {g_{nk}}\left( {{{\mathop {\mathbf{S}}\limits^{..} }_I},\ddot \bar \rho } \right)/\left( {1 + \frac{{\ddot \bar \rho }}{{\sigma _n^2}}{C_n}\left( {{{\mathop {\mathbf{S}}\limits^{..} }_I}} \right)} \right),n = 0, \ldots ,N - 1,k = 1, \ldots ,{K_n}$
+      \State ${{\mathbf{S}}_P},{{\mathbf{S}}_I},\rho ,\bar \rho  \leftarrow \arg \min $ \ref{eqn:general_target} -- \ref{eqn:general_ratio_constraint}
+      \State $z_{DC}^{(i)} \leftarrow {z_{DC}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\rho } \right)$
+    \Until{$\left| {z_{DC}^{(i)} - z_{DC}^{(i - 1)}} \right| < $ or $i = {i_{\max }}$}
+  \end{algorithmic}
+\end{algorithm} 
