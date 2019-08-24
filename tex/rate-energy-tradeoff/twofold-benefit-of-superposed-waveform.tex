@@ -1,0 +1,52 @@
+The deterministic multisine waveform not only boosts the harvested energy but also avoids interference to the modulated waveform. To highlight its contribution to the twofold benefit, we compare the performance of superposed waveform to two baselines. In the first one, there is no multisine component and only modulated waveform is used for WIPT (i.e. ${{\mathbf{S}}_P} = 0,\frac{1}{2}\left\| {{{\mathbf{S}}_I}} \right\|_F^2 = P$). Therefore, the twofold benefit disappears. In contrast, it is assumed for the second baseline that the power waveform behaves as a deterministic multisine for energy delivery but as CSCG distributed for information transmission. In this configuration, the energy benefit of the multisine is maintained but the rate benefit is lost, as the power waveform creates an interference term $\sqrt {1 - \rho } {{\mathbf{h}}_n}{{\mathbf{w}}_{P,n}}$. The achievable rate for this configuration writes as
+
+\begin{equation}\label{eqn:mutual_information_lower_bound}
+  {I_{LB}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{{\mathbf{\Phi }}_P},{{\mathbf{\Phi }}_I},\rho } \right) = \sum\limits_{n = 0}^{N - 1} {{{\log }_2}} \left( {1 + \frac{{(1 - \rho ){{\left| {{{\mathbf{h}}_n}{{\mathbf{w}}_{I,n}}} \right|}^2}}}{{\sigma _n^2 + (1 - \rho ){{\left| {{{\mathbf{h}}_n}{{\mathbf{w}}_{P,n}}} \right|}^2}}}} \right)
+\end{equation}
+
+It contributes to a smaller rate-energy region compared with the one produced by the superposed waveform. It is important to notice that the MRT beamformers in \ref{eqn:mrt_weights} is not optimal due to the interference term. Also, the phases ${\mathbf{\Phi }}_P^ \star $ and ${\mathbf{\Phi }}_I^ \star $ by \ref{eqn:optimal_phases} are not best solutions for $M > 1$. The problem requires a more general approach for the joint weight design over space and frequency domains.
+
+Consider the suboptimal phases ${\mathbf{\Phi }}_P^ \star $ and ${\mathbf{\Phi }}_I^ \star $ in \ref{eqn:optimal_phases} for simplicity. In such cases, the target function is given by equation \ref{eqn:target_function_truncated} and the lower bound on the achievable rate can be expressed as
+
+\begin{equation}\label{mutual_information_lower_bound_rewritten}
+  {I_{LB}}\left( {{{\mathbf{S}}_I},{\mathbf{\Phi }}_I^ \star ,\rho } \right) = {\log _2}\left( {\prod\limits_{n = 0}^{N - 1} {\left( {1 + \frac{{(1 - \rho ){C_n}}}{{\sigma _n^2 + (1 - \rho ){D_n}}}} \right)} } \right)
+\end{equation}
+
+with ${C_n} = \sum\nolimits_{{m_0},{m_1}} {\prod\nolimits_{j = 0}^1 {{s_{I,n,{m_j}}}{A_{n,{m_j}}}} } $ and ${D_n} = \sum\nolimits_{{m_0},{m_1}} {\prod\nolimits_{j = 0}^1 {{s_{P,n,{m_j}}}{A_{n,{m_j}}}} } $. Therefore, the problem is formulated into \ref{eqn:transformed_target} -- \ref{eqn:transformed_rate_constraint} with \ref{eqn:transformed_rate_constraint} replaced by
+
+\begin{equation}\label{eqn:transformed_rate_constraint_lower_bound}
+  {2^{\bar R}}\frac{{\prod\limits_{n = 0}^{N - 1} {\left( {1 + \frac{{\bar \rho }}{{\sigma _n^2}}{D_n}} \right)} }}{{\prod\limits_{n = 0}^{N - 1} {\left( {1 + \frac{{\bar \rho }}{{\sigma _n^2}}\left( {{D_n} + {C_n}} \right)} \right)} }} \leqslant 1
+\end{equation}
+
+Decompose the posynomials in the denominators as
+
+\begin{equation}\label{eqn:posynomial_lower_bound}
+  1 + \frac{{\bar \rho }}{{\sigma _n^2}}\left( {{D_n} + {C_n}} \right) = \sum\limits_{j = 1}^{{J_n}} {{f_{nj}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},\rho } \right)}
+\end{equation}
+
+where $\left\{ {{f_{nj}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},\rho } \right)} \right\}$ is the monomial terms. With a proper choice of nonnegative $\left\{ {{\gamma _{nj}}} \right\}$ such that $\sum\limits_{j = 1}^{{J_n}} {{\gamma _{nj}}}  = 1$, the standard GP can be written as
+
+\begin{eqnarray}
+  {\mathop {\min }\limits_{{{\mathbf{S}}_P},{{\mathbf{S}}_I},\rho ,\bar \rho ,{t_0}} }&{1/{t_0}} \label{eqn:lower_bound_target} \\
+  {{\text{subject to}}}&{\frac{1}{2}\left[ {\left\| {{{\mathbf{S}}_I}} \right\|_F^2 + \left\| {{{\mathbf{S}}_P}} \right\|_F^2} \right] \leqslant P} \label{eqn:lower_bound_power_constraint} \\
+  {}&{{t_0}\prod\limits_{k = 1}^K {{{\left( {\frac{{{g_k}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\rho } \right)}}{{{\gamma _k}}}} \right)}^{ - {\gamma _k}}}}  \leqslant 1} \label{eqn:lower_bound_current_constraint} \\
+  {}&{{2^{\bar R}}\prod\limits_{n = 0}^{N - 1} {\left( {1 + \frac{{\bar \rho }}{{\sigma _n^2}}{D_n}\left( {{{\mathbf{S}}_P}} \right)} \right)} \prod\limits_{j = 1}^{{J_n}} {{{\left( {\frac{{{f_{nj}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},\rho } \right)}}{{{\gamma _{nj}}}}} \right)}^{ - {\gamma _{nj}}}}}  \leqslant 1} \label{eqn:lower_bound_rate_constraint} \\
+  {}&{\rho  + \bar \rho  \leqslant 1 \label{eqn:lower_bound_ratio_constraint}}
+\end{eqnarray}
+
+Algorithm \ shows the basic idea to obtain the lower-bound of rate-energy region. It boils down to Algorithm \ref{alg:general} when the interference posynomial ${D_n} = 0$ for all $n$.
+
+\begin{algorithm}
+  \caption{Lower-Bound of R-E Region}
+  \label{alg:lower-bound}
+  \begin{algorithmic}[1]
+    \State \textbf{Initialize:} $i \leftarrow 0$, ${{\mathbf{w}}_{P,n}},{{\mathbf{w}}_{I,n}}$ in \ref{eqn:mrt_weights}, ${{{\mathbf{S}}_P},{{\mathbf{S}}_I}}$ in \ref{eqn:initial_amplitude}, $\rho ,\bar \rho  = 1 - \rho ,\bar R,z_{DC}^{(0)} = 0$
+    \Repeat
+      \State $i \leftarrow i + 1,\mathop {{{\mathbf{S}}_P}}\limits^{..}  \leftarrow {{\mathbf{S}}_P},\mathop {{{\mathbf{S}}_I}}\limits^{..}  \leftarrow {{\mathbf{S}}_I},\ddot \rho  \leftarrow \rho ,\ddot \bar \rho  \leftarrow \bar \rho $
+      \State ${\gamma _k} \leftarrow {g_k}\left( {\mathop {{{\mathbf{S}}_P}}\limits^{..} ,\mathop {{{\mathbf{S}}_I}}\limits^{..} ,\ddot \rho } \right)/{z_{DC}}\left( {\mathop {{{\mathbf{S}}_P}}\limits^{..} ,\mathop {{{\mathbf{S}}_I}}\limits^{..} ,\ddot \rho } \right),k = 1, \ldots ,K$
+      \State ${\gamma _{nj}} \leftarrow {f_{nj}}\left( {\mathop {{{\mathbf{S}}_P}}\limits^{..} ,\mathop {{{\mathbf{S}}_I}}\limits^{..} ,\ddot \rho } \right)/\left( {1 + \frac{{\ddot \bar \rho }}{{\sigma _n^2}}\left( {{D_n}\left( {\mathop {{{\mathbf{S}}_P}}\limits^{..} } \right) + {C_n}\left( {\mathop {{{\mathbf{S}}_I}}\limits^{..} } \right)} \right)} \right)$
+      \State ${{\mathbf{S}}_P},{{\mathbf{S}}_I},\rho ,\bar \rho  \leftarrow \arg \min $ \ref{eqn:lower_bound_target} -- \ref{eqn:lower_bound_ratio_constraint}
+      \State $z_{DC}^{(i)} \leftarrow {z_{DC}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},\rho } \right)$
+    \Until{$\left| {z_{DC}^{(i)} - z_{DC}^{(i - 1)}} \right| < $ or $i = {i_{\max }}$}
+  \end{algorithmic}
+\end{algorithm}  
