@@ -72,7 +72,7 @@ with ${{\mathbf{w}}_{P,n}} = {\left[ {{w_{P,n,1}} \cdots {w_{P,n,M}}} \right]^T}
 
 
 \subsection{Multipath Channel and Received Signal}\label{sec:multipath-and-received-signal}
-Consider a multipath channel with $L$ paths. For the $l$-th path ($l = 1, \ldots ,L$), denote the phase shift between the receive antenna and transmit antenna $m$ of subband $n$ as ${\zeta _{n,m,l}}$. Let ${\tau _l}$ and ${\alpha _l}$ be the delay and magnitude gain, and indicate the transmit signal on subband $n$ of antenna $m$ as 
+Consider a multipath channel with $L$ paths. For the $l$-th path ($l = 1, \ldots ,L$), denote the phase shift between the receive antenna and transmit antenna $m$ of subband $n$ as ${\zeta _{n,m,l}}$. Let ${\tau _l}$ and ${\alpha _l}$ be the delay and magnitude gain, and indicate the transmit signal on subband $n$ of antenna $m$ as
 
 \begin{equation}\label{eqn:superposed_waveform}
   {v_{n,m}}(t) = {w_{P,n,m}} + {w_{I,n,m}}{{\tilde x}_n}(t)
@@ -95,7 +95,7 @@ To ensure $v_{n, m}(t)$ and $\tilde{x}_{n}(t)$ being narrowband signals, we assu
 Hence, the total received signal can be obtained by stacking up equation \ref{eqn:received_signal_component} over all transmit signals
 
 \begin{align}\label{eqn:received_signal}
-  {\mathbf{y}}(t) &= {{\mathbf{y}}_P}(t) + {{\mathbf{y}}_I}(t) \hfill \\
+  y(t) &= {y_P}(t) + {y_I}(t) \hfill \\
    &= \Re \left\{ {\sum\limits_{n = 0}^{N - 1} {{{\mathbf{h}}_n}} \left( {{{\mathbf{w}}_{P,n}} + {{\mathbf{w}}_{I,n}}{{\tilde x}_n}} \right){e^{j2\pi {f_n}t}}} \right\} \hfill
 \end{align}
 

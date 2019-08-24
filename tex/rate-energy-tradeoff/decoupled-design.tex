@@ -1,0 +1,67 @@
+For the transmitter with multiple antennas ($M > 1$), the previous method is involved with weight design across space and frequency. In this part, we will investigate an approach proposed in \cite{Clerckx2018} that decouples the optimization in spatial and frequency domains without impacting performance. As suggested by equations \ref{eqn:mutual_information} and \ref{eqn:power_waveform_second_order} -- \ref{eqn:waveform_end}, to maximize the rate and energy, the optimum weight vectors ${{\mathbf{w}}_{P,n}}$ and ${{\mathbf{w}}_{I,n}}$ correspond to the MRT beamformers
+
+\begin{equation}\label{eqn:mrt_weights}
+  \left\{ \begin{gathered}
+  {{\mathbf{w}}_{P,n}} = {s_{P,n}}{\mathbf{h}}_n^H/\left\| {{{\mathbf{h}}_n}} \right\| \hfill \\
+  {{\mathbf{w}}_{I,n}} = {s_{I,n}}{\mathbf{h}}_n^H/\left\| {{{\mathbf{h}}_n}} \right\| \hfill \\
+  \end{gathered}  \right.
+\end{equation}
+
+Therefore, from equation \ref{eqn:received_signal}, we have
+
+\begin{equation}\label{eqn:mrt_received_components}
+\left\{ \begin{gathered}
+  {y_P}(t) = \sum\limits_{n = 0}^{N - 1} {\left\| {{{\mathbf{h}}_n}} \right\|} {s_{P,n}}\cos \left( {{w_n}t} \right) = \Re \left\{ {\sum\limits_{n = 0}^{N - 1} {\left\| {{{\mathbf{h}}_n}} \right\|} {s_{P,n}}{e^{j{w_n}t}}} \right\} \hfill \\
+  {y_I}(t) = \sum\limits_{n = 0}^{N - 1} {\left\| {{{\mathbf{h}}_n}} \right\|} {s_{I,n}}{{\tilde x}_n}\cos \left( {{w_n}t} \right) = \Re \left\{ {\sum\limits_{n = 0}^{N - 1} {\left\| {{{\mathbf{h}}_n}} \right\|} {s_{I,n}}{{\tilde x}_n}{e^{j{w_n}t}}} \right\} \hfill \\
+\end{gathered}  \right.
+\end{equation}
+
+In this way, the weight optimization on multiple transmit antennas is converted into an equivalent problem on a single antenna. For the $n$-th subband, the equivalent channel gain is $\left\| {{{\mathbf{h}}_n}} \right\|$ with power $s_{P,n}^2$ and $s_{I,n}^2$ allocated to multisine and modulated waveform respectively (with power budget $\frac{1}{2}\sum\limits_{n = 0}^{N - 1} {\left( {s_{P,n}^2 + s_{I,n}^2} \right)}  = P$). The problem can be solved with Algorithm \ref{alg:general}, with the second and fourth order terms reduce to
+
+\begin{equation}\label{eqn:decoupled_terms}
+\begin{gathered}
+  \mathbb{E}\left[ {{y_P}{{(t)}^2}} \right] = \frac{1}{2}\sum\limits_{n = 0}^{N - 1} {{{\left\| {{{\mathbf{h}}_n}} \right\|}^2}} s_{P,n}^2 \hfill \\
+  \mathbb{E}\left[ {{y_P}{{(t)}^4}} \right] = \frac{3}{8}\sum\limits_{\substack{ {n_0},{n_1},{n_2},{n_3} \\ {n_0} + {n_1} = {n_2} + {n_3} }}  {\left[ {\prod\limits_{j = 0}^3 {{s_{P,{n_j}}}} \left\| {{{\mathbf{h}}_{{n_j}}}} \right\|} \right]}  \hfill \\
+  \mathbb{E}\left[ {{y_I}{{(t)}^2}} \right]{\text{ = }}\frac{1}{2}\sum\limits_{n = 0}^{N - 1} {{{\left\| {{{\mathbf{h}}_n}} \right\|}^2}} s_{I,n}^2 \hfill \\
+  \mathbb{E}\left[ {{y_I}{{(t)}^4}} \right] = \frac{6}{8}{\left[ {\sum\limits_{n = 0}^{N - 1} {{{\left\| {{{\mathbf{h}}_n}} \right\|}^2}} s_{I,n}^2} \right]^2} \hfill \\
+\end{gathered}
+\end{equation}
+
+Hence, the target function ${z_{DC}}$ is only a function of two $N$-dimensional vectors ${{\mathbf{s}}_{P/I}} = \left[ {{s_{P/I,0}}, \ldots ,{s_{P/I,N - 1}}} \right]$, and the mutual information can be simplified as
+
+\begin{equation}\label{eqn:decoupled_mutual_information}
+  I\left( {{{\mathbf{s}}_I},\rho } \right) = {\log _2}\left( {\prod\limits_{n = 0}^{N - 1} {\left( {1 + \frac{{(1 - \rho )}}{{\sigma _n^2}}s_{I,n}^2{{\left\| {{{\mathbf{h}}_n}} \right\|}^2}} \right)} } \right)
+\end{equation}
+
+Similarly, we decompose the posynomials ${z_{DC}}\left( {{{\mathbf{s}}_P},{{\mathbf{s}}_I},\rho } \right) = \sum\limits_{k = 1}^K {{g_k}} \left( {{{\mathbf{s}}_P},{{\mathbf{s}}_I},\rho } \right)$ and $1 + \frac{{\bar \rho }}{{\sigma _n^2}}{C_n} = \sum\limits_{k = 1}^{{K_n}} {{g_{nk}}} \left( {{{\mathbf{s}}_I},\bar \rho } \right)$ with ${C_n} = s_{I,n}^2{\left\| {{{\mathbf{h}}_n}} \right\|^2}$, then apply the AM-GM inequality to the constraints with posynomials in the denominator. The equivalent GP problem write as
+
+\begin{eqnarray}
+  {\mathop {\min }\limits_{{{\mathbf{s}}_P},{{\mathbf{s}}_I},\rho ,\bar \rho ,{t_0}} }&{1/{t_0}} \label{eqn:decoupled_target} \\
+  {{\text{ subject to }}}&{\frac{1}{2}\left[ {\left\| {{{\mathbf{s}}_I}} \right\|^2 + \left\| {{{\mathbf{s}}_P}} \right\|^2} \right] \leqslant P} \label{eqn:decoupled_power_constraint} \\
+  {}&{{t_0}\prod\limits_{k = 1}^K {{{\left( {\frac{{{g_k}\left( {{{\mathbf{s}}_P},{{\mathbf{s}}_I},\rho } \right)}}{{{\gamma _k}}}} \right)}^{ - {\gamma _k}}}}  \leqslant 1} \label{eqn:decoupled_current_constraint} \\
+  {}&{2^{\bar R}}\prod\limits_{n = 0}^{N - 1} {\prod\limits_{k = 1}^{{K_n}} {{{\left( {\frac{{{g_{nk}}\left( {{{\mathbf{s}}_I},\bar \rho } \right)}}{{{\gamma _{nk}}}}} \right)}^{ - {\gamma _{nk}}}}} }  \leqslant 1 \label{eqn:decoupled_rate_constraint} \\
+  {}&{\rho  + \bar \rho  \leqslant 1} \label{eqn:decoupled_ratio_constraint}
+\end{eqnarray}
+
+Similar to \ref{eqn:initial_amplitude}, the amplitudes of power and information waveform can be initialized to
+
+\begin{equation}\label{eqn:initial_amplitude_decoupled}
+  {s_{P,n}} = {s_{I,n}} = c\left\| {{{\mathbf{h}}_n}} \right\|
+\end{equation}
+
+Compared with the general approach, the decoupled design guarantees the same performance by a joint space-frequency design with a lower computational complexity, which converts the original $N \times M$ matrices ${{{\mathbf{S}}_P},{{\mathbf{S}}_I}}$ to $N$-dimensional vectors ${{{\mathbf{s}}_P},{{\mathbf{s}}_I}}$ via MRT beamformers. Algorithm \ summarizes the optimization process for the decoupling strategy.
+
+\begin{algorithm}
+  \caption{Decoupled Waveform Design}
+  \label{alg:decoupled}
+  \begin{algorithmic}[1]
+    \State \textbf{Initialize:} $i \leftarrow 0$, ${\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star $ in \ref{eqn:optimal_phases}, ${{{\mathbf{s}}_P},{{\mathbf{s}}_I}}$ in \ref{eqn:initial_amplitude_decoupled}, $\rho ,\bar \rho  = 1 - \rho ,\bar R,z_{DC}^{(0)} = 0$
+    \Repeat
+      \State $i \leftarrow i + 1,\mathop {{{\mathbf{s}}_P}}\limits^{..}  \leftarrow {{\mathbf{s}}_P},\mathop {{{\mathbf{s}}_P}}\limits^{..}  \leftarrow {{\mathbf{s}}_I},\ddot \rho  \leftarrow \rho ,\ddot \bar \rho  \leftarrow \bar \rho $
+      \State ${\gamma _k} \leftarrow {g_k}\left( {{{\mathop {\mathbf{s}}\limits^{..} }_P},{{\mathop {\mathbf{s}}\limits^{..} }_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\ddot \rho } \right)/{z_{DC}}\left( {{{\mathop {\mathbf{s}}\limits^{..} }_P},{{\mathop {\mathbf{s}}\limits^{..} }_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\ddot \rho } \right),k = 1, \ldots ,K$
+      \State ${\gamma _{nk}} \leftarrow {g_{nk}}\left( {{{\mathop {\mathbf{s}}\limits^{..} }_I},\ddot \bar \rho } \right)/\left( {1 + \frac{{\ddot \bar \rho }}{{\sigma _n^2}}{C_n}\left( {{{\mathop {\mathbf{s}}\limits^{..} }_I}} \right)} \right),n = 0, \ldots ,N - 1,k = 1, \ldots ,{K_n}$
+      \State ${{\mathbf{s}}_P},{{\mathbf{s}}_I},\rho ,\bar \rho  \leftarrow \arg \min $ \ref{eqn:decoupled_target} -- \ref{eqn:decoupled_ratio_constraint}
+      \State $z_{DC}^{(i)} \leftarrow {z_{DC}}\left( {{{\mathbf{s}}_P},{{\mathbf{s}}_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\rho } \right)$
+    \Until{$\left| {z_{DC}^{(i)} - z_{DC}^{(i - 1)}} \right| < $ or $i = {i_{\max }}$}
+  \end{algorithmic}
+\end{algorithm} 

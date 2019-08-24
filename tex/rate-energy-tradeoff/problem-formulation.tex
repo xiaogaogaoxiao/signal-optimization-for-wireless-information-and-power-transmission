@@ -14,7 +14,15 @@ Such phase decisions can guarantee all the cosine terms in \ref{eqn:power_wavefo
    &\quad + \frac{{3{k_4}{\rho ^2}}}{2}R_{\text{ant}}^2\left[ {\sum\limits_{n = 0}^{N - 1} {\sum\limits_{{m_0},{m_1}} {\left[ {\prod\limits_{j = 0}^1 {{s_{P,n,{m_j}}}} {A_{n,{m_j}}}} \right]} } } \right]\left[ {\sum\limits_{n = 0}^{N - 1} {\sum\limits_{{m_0},{m_1}} {\left[ {\prod\limits_{j = 0}^1 {{s_{I,n,{m_j}}}} {A_{n,{m_j}}}} \right]} } } \right]
 \end{align}
 
-Similarly, the mutual information is given by
+Also, \cite{Clerckx2017} demonstrated that using matched filter for amplitude design leads to a performance close to the optimal one. Therefore, it can be employed as a feasible initialization for the optimization. On antenna $m$ and subband $n$, the amplitudes of power and information waveform are initialized to
+
+\begin{equation}\label{eqn:initial_amplitude}
+  {s_{P,n,m}} = {s_{I,n,m}} = c{A_{n,m}}
+\end{equation}
+
+where $c$ is the constant to guarantee the transmit power constraint.
+
+On the other hand, the mutual information is given by
 
 \begin{equation}\label{eqn:mutual_information_posynomial}
   I\left( {{{\mathbf{S}}_I},{\mathbf{\Phi }}_I^ \star ,\rho } \right) = {\log _2}\left( {\prod\limits_{n = 0}^{N - 1} {\left( {1 + \frac{{(1 - \rho )}}{{\sigma _n^2}}{C_n}} \right)} } \right)
@@ -85,17 +93,17 @@ It is worth noting that the tightness of the AM-GM inequality depends on the cho
 \end{gathered}
 \end{eqnarray}
 
-Once $\left\{ {{\gamma _k},{\gamma _{nk}}} \right\}$ are obtained, we solve problem \ref{eqn:general_target} -- \ref{eqn:general_ratio_constraint} to obtain ${\mathbf{S}}_P^{(i)},{\mathbf{S}}_I^{(i)},{\rho ^{(i)}}$. The iterations are repeated until convergence. Algorithm 1 summarizes all the procedures involved in the optimization. The successive approximation approach is also known as inner approximation method \cite{Marks1978}, which cannot guarantee a global optimal solution but the converged point satisfies the KKT conditions.
+Once $\left\{ {{\gamma _k},{\gamma _{nk}}} \right\}$ are obtained, we solve problem \ref{eqn:general_target} -- \ref{eqn:general_ratio_constraint} to obtain ${\mathbf{S}}_P^{(i)},{\mathbf{S}}_I^{(i)},{\rho ^{(i)}}$. The iterations are repeated until convergence. Algorithm \ref{alg:general} summarizes all the procedures involved in the optimization. The successive approximation approach is also known as inner approximation method \cite{Marks1978}, which cannot guarantee a global optimal solution but the converged point satisfies the KKT conditions. 
 
 \begin{algorithm}
   \caption{General Waveform Design}
   \label{alg:general}
   \begin{algorithmic}[1]
-    \State \textbf{Initialize:} $i \leftarrow 0$, ${\mathbf{\Phi }}_P^ \star $ and ${\mathbf{\Phi }}_I^ \star $ by phase response, ${{\mathbf{S}}_P}$ and ${{\mathbf{S}}_I}$ by matched filter, $\rho ,\bar \rho  = 1 - \rho ,\bar R,z_{DC}^{(0)} = 0$
+    \State \textbf{Initialize:} $i \leftarrow 0$, ${\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star $ in \ref{eqn:optimal_phases}, ${{{\mathbf{S}}_P},{{\mathbf{S}}_I}}$ in \ref{eqn:initial_amplitude}, $\rho ,\bar \rho  = 1 - \rho ,\bar R,z_{DC}^{(0)} = 0$
     \Repeat
       \State $i \leftarrow i + 1,\mathop {{{\mathbf{S}}_P}}\limits^{..}  \leftarrow {{\mathbf{S}}_P},\mathop {{{\mathbf{S}}_P}}\limits^{..}  \leftarrow {{\mathbf{S}}_I},\ddot \rho  \leftarrow \rho ,\ddot \bar \rho  \leftarrow \bar \rho $
-      \State ${\gamma _k} \leftarrow {g_k}\left( {{{\mathop {\mathbf{S}}\limits^{..} }_P},{{\mathop {\mathbf{S}}\limits^{..} }_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\ddot \rho } \right)/{z_{DC}}\left( {{{\mathop {\mathbf{S}}\limits^{..} }_P},{{\mathop {\mathbf{S}}\limits^{..} }_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\ddot \rho } \right),k = 1, \ldots ,K$
-      \State ${\gamma _{nk}} \leftarrow {g_{nk}}\left( {{{\mathop {\mathbf{S}}\limits^{..} }_I},\ddot \bar \rho } \right)/\left( {1 + \frac{{\ddot \bar \rho }}{{\sigma _n^2}}{C_n}\left( {{{\mathop {\mathbf{S}}\limits^{..} }_I}} \right)} \right),n = 0, \ldots ,N - 1,k = 1, \ldots ,{K_n}$
+      \State ${\gamma _k} \leftarrow {g_k}\left( {\mathop {{{\mathbf{S}}_P}}\limits^{..} ,\mathop {{{\mathbf{S}}_I}}\limits^{..} ,{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\ddot \rho } \right)/{z_{DC}}\left( {\mathop {{{\mathbf{S}}_P}}\limits^{..} ,\mathop {{{\mathbf{S}}_I}}\limits^{..} ,{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\ddot \rho } \right),k = 1, \ldots ,K$
+      \State ${\gamma _{nk}} \leftarrow {g_{nk}}\left( {\mathop {{{\mathbf{S}}_I}}\limits^{..} ,\ddot \bar \rho } \right)/\left( {1 + \frac{{\ddot \bar \rho }}{{\sigma _n^2}}{C_n}\left( {\mathop {{{\mathbf{S}}_I}}\limits^{..} } \right)} \right),n = 0, \ldots ,N - 1,k = 1, \ldots ,{K_n}$
       \State ${{\mathbf{S}}_P},{{\mathbf{S}}_I},\rho ,\bar \rho  \leftarrow \arg \min $ \ref{eqn:general_target} -- \ref{eqn:general_ratio_constraint}
       \State $z_{DC}^{(i)} \leftarrow {z_{DC}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\rho } \right)$
     \Until{$\left| {z_{DC}^{(i)} - z_{DC}^{(i - 1)}} \right| < $ or $i = {i_{\max }}$}
