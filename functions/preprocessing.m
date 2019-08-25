@@ -6,14 +6,12 @@ function [Transceiver, Channel] = preprocessing(Transceiver, Channel)
 % InputArg(s):
 %   - Transceiver.k2: diode k-parameters
 %   - Transceiver.tx: number of transmit antennas
-%   - Transceiver.rx: number of receive antennas
-%   - Transceiver.weight: weight on rectennas
 %   - Channel.subband: number of subbands (subcarriers)
-%   - Channel.subbandAmplitude: subband amplitude of the MIMO channel
-%   - Channel.subbandPhase: multipath channel phase on the subbands
+%   - Channel.subbandGain: complex gain on each subband
 %
 % OutputArg(s):
-%   - Channel.subbandGain: reshaped channel matrix H
+%   - Channel.mimoAmplitude: maximum eigenvalue of channel matrix on each
+%   subband, repeated for all transmit antennas
 %   - Transceiver.beamformPhase: the beamforming phase
 %
 % Comments:
@@ -22,26 +20,21 @@ function [Transceiver, Channel] = preprocessing(Transceiver, Channel)
 % Author & Date: Yang (i@snowztail.com) - 02 Aug 19
 
 
-v2struct(Transceiver, {'fieldNames', 'k2', 'tx', 'rx', 'weight'});
-v2struct(Channel, {'fieldNames', 'subband', 'subbandAmplitude', 'subbandPhase'});
+v2struct(Transceiver, {'fieldNames', 'k2', 'tx'});
+v2struct(Channel, {'fieldNames', 'subband', 'subbandGain'});
 
 beamformPhase = zeros(subband, tx);
 mimoAmplitude = zeros(subband, 1);
 
-% subbandGain = repmat(reshape(sqrt(k2 * weight), [1 1 rx]), [subband tx]) .* subbandAmplitude .* exp(1i * subbandPhase);
-subbandGain = repmat(reshape(sqrt(weight), [1 1 rx]), [subband tx]) .* subbandAmplitude .* exp(1i * subbandPhase);
-
 for iSubband = 1: subband
-    [~, lambda, v] = svd(squeeze(subbandGain(iSubband, :, :)).');
+    [~, sigma, v] = svd(squeeze(subbandGain(iSubband, :, :)).');
     beamformPhase(iSubband, :) = angle(v(:, 1)).';
-    mimoAmplitude(iSubband) = max(diag(lambda));
+    mimoAmplitude(iSubband) = max(diag(sigma));
 end
 
 mimoAmplitude = repmat(mimoAmplitude, [1, tx]);
 
-Channel.subbandGain = subbandGain;
 Channel.mimoAmplitude = mimoAmplitude;
 Transceiver.beamformPhase = beamformPhase;
 
 end
-
