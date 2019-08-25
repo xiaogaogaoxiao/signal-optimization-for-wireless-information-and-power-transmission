@@ -81,7 +81,7 @@ Consider a multipath channel with $L$ paths. For the $l$-th path ($l = 1, \ldots
 The superposed signal containing modulated information waveform and multisine power waveform is demonstrated to bring a two-fold benefit on rate and energy \cite{Clerckx2019}. Also, the channel frequency response is expressed as
 
 \begin{equation}\label{eqn:channel}
-  {h_{n,m}} = \sum\limits_{l = 0}^{L - 1} {{\alpha _l}{e^{j\left( { - 2\pi {f_n}{\tau _l} + {\zeta _{n,m,l}}} \right)}}}
+  {h_{n,m}} = \sum\limits_{l = 0}^{L - 1} {{\alpha _l}{e^{j\left( { - 2\pi {f_n}{\tau _l} + {\zeta _{n,m,l}}} \right)}}}  = {A_{n,m}}{e^{j{{\bar \psi }_{n,m}}}}
 \end{equation}
 
 To ensure $v_{n, m}(t)$ and $\tilde{x}_{n}(t)$ being narrowband signals, we assume ${\max _{l \ne {l^\prime }}}\left| {{\tau _l} - {\tau _{{l^\prime }}}} \right| <  < 1/{B_{\text{s}}}$. It is also supposed that ${v_{n,m}}\left( {t - {\tau _l}} \right) = {v_{n,m}}(t)$ and ${{\tilde x}_n}\left( {t - {\tau _l}} \right) = {{\tilde x}_n}(t)$. The received signal corresponding to transmit antenna $m$ contains the power component $y_{P, m}(t)$ and the information component $y_{I, m}(t)$

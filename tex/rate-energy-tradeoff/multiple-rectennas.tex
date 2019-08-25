@@ -1,0 +1,87 @@
+The rate-energy region is expected to be enlarged with multiple rectennas. In this part, we extend the general MISO strategy in section \ref{sec:problem-formulation} to $U$ rectennas, which can either serve a single user in a point-to-point MIMO WIPT or spread across multiple users in a MU-MISO WIPT. Since the rectennas have specific preference on the transmitted waveform, there exists a tradeoff between the energy collected in different harvesters. The fairness issue can be solved by introducing weight ${v_u}$ for rectenna $u = 1, \ldots ,U$ and considering the weighted sum of DC components as new target function
+
+\begin{equation}\label{eqn:weighted_target}
+  {Z_{DC}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\rho } \right) = \sum\limits_{u = 1}^U {{v_u}{z_{DC,u}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\rho } \right)} 
+\end{equation}
+
+With multiple rectennas, the frequency response is extended from \ref{eqn:channel} as
+
+\begin{equation}\label{eqn:mo_channel}
+  {h_{n,m,u}} = {A_{n,m,u}}{e^{j{{\bar \psi }_{n,m,u}}}}
+\end{equation}
+
+Therefore, the phase of the received signal on rectenna $u$ in subband $n$ transmitted by antenna $m$ is
+
+\begin{equation}\label{eqn:received_phase}
+  {\psi _{n,m,u}} = {\phi _{n,m}} + {{\bar \psi }_{n,m,u}}
+\end{equation}
+
+where ${\phi _{n,m}}$ is the beamforming phase. It is impossible to ensure ${\psi _{n,m,u}} = 0$ for all rectennas with three constraints $n,m,u$ but only two variables $n,m$. Therefore, the arguments of cosines in \ref{eqn:power_waveform_second_order} -- \ref{eqn:waveform_end} are not guaranteed as zero with a specific phase design ${\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime $, and the target function ${Z_{DC}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\rho } \right)$ is indeed a signomial as some coefficients are negative. 
+
+For subband $n$, the channel matrix can be constructed as
+
+\begin{equation}\label{eqn:mo_channel_matrox}
+  {\widetilde {\mathbf{H}}_n} = {\left[ {\widetilde {\mathbf{h}}_{n,1}^T \ldots \widetilde {\mathbf{h}}_{n,U}^T} \right]^T}
+\end{equation}
+
+with ${\widetilde {\mathbf{h}}_{n,u}} = \sqrt {{k_2}{v_u}} {{\mathbf{h}}_{n,u}}$. It is argued in \cite{Clerckx2016} that a possible choice of ${\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime $ is to set the $\left( {n,m} \right)$ entries as $\phi _{P,n,m}^\prime  = \phi _{I,n,m}^\prime  = \angle {v_{{\text{max}},n,m}}$ where ${v_{{\text{max}},n,m}}$ is the $m$-th term of the dominant right singular vector ${{\mathbf{v}}_{{\text{max}},n}}$ that can be obtained through singular value decomposition of ${\widetilde {\mathbf{H}}_n}$.
+
+To convert the problem into a standard GP, we introduce an auxiliary variable ${t_0}$ and rewrite the signomial as the difference of two posynomials
+
+\begin{equation}\label{eqn:mo_current_signomial}
+  {Z_{DC}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right) = {f_1}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right) - {f_2}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right) \geqslant {t_0}
+\end{equation}
+
+Furthermore, decompose the first posynomial as
+
+\begin{equation}\label{eqn:mo_current_posynomial}
+  {f_1}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right) = \sum\limits_{k = 1}^{{K_1}} {{g_{1k}}} \left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right)
+\end{equation}
+
+With a proper choice of nonnegative $\left\{ {{\gamma _{1k}}} \right\}$ satisfying $\sum\nolimits_{k = 1}^{{K_1}} {{\gamma _{1k}}}  = 1$, inequation \ref{eqn:mo_current_signomial} rewrites as
+
+\begin{equation}\label{eqn:mo_current_signomial_rewritten}
+  \frac{{{t_0} + {f_2}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right)}}{{{f_1}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right)}} = \left( {{t_0} + {f_2}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right)} \right)\prod\limits_{k = 1}^{{K_1}} {{{\left( {\frac{{{g_{1k}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right)}}{{{\gamma _{1k}}}}} \right)}^{ - {\gamma _{1k}}}}}  \leqslant 1
+\end{equation}
+
+Similarly, the denominator of rate constraint \ref{eqn:transformed_rate_constraint} is indeed a product of signomials
+
+\begin{equation}\label{eqn:mo_rate_signomial}
+  1 + \frac{{(1 - \rho )}}{{\sigma _n^2}}{C_n} = {f_{1nk}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right) - {f_{2nk}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right)
+\end{equation}
+
+Therefore, we can rewrite \ref{eqn:transformed_rate_constraint} as
+
+\begin{equation}\label{eqn:mo_rate_constraint_original}
+  \prod\limits_{n = 0}^{N - 1} {\left( {1 + \frac{{(1 - \rho )}}{{\sigma _n^2}}{C_n}} \right)}  = \prod\limits_{n = 0}^{N - 1} {\left( {{f_{1nk}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right) - {f_{2nk}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right)} \right)}  \geqslant {2^{\bar R}}
+\end{equation}
+
+One possible approach is to unwrap the result of signomial multiplication as a new signomial. That is
+
+\begin{equation}\label{eqn:mo_rate_constraint_unwrapped}
+  f_1^\prime \left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right) - f_2^\prime \left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right) \geqslant {2^{\bar R}}
+\end{equation}
+
+which is equivalent to
+
+\begin{equation}\label{eqn:mo_rate_constraint_rewritten}
+  \frac{{{2^{\bar R}} + f_2^\prime \left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right)}}{{f_1^\prime \left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right)}} \leqslant 1
+\end{equation}
+
+By decomposing $f_1^\prime \left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right) = \sum\limits_{k = 1}^{K_1^\prime } {g_{1k}^\prime \left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right)} $ and introducing another nonnegative coefficient set $\left\{ {\gamma _{1k}^\prime } \right\}$ with $\sum\nolimits_{k = 1}^{K_1^\prime } {\gamma _{1k}^\prime }  = 1$ for AM-GM inequality, it can be converted into constraint in standard form
+
+\begin{equation}\label{eqn:mo_rate_constraint_standard}
+  {2^{\bar R}} + f_2^\prime \left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right)\prod\limits_{k = 1}^{K_1^\prime } {{{\left( {\frac{{g_{1k}^\prime \left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right)}}{{\gamma _{1k}^\prime }}} \right)}^{ - \gamma _{1k}^\prime }}}  \leqslant 1
+\end{equation}
+
+Hence, the problem is transformed into a standard GP
+
+\begin{eqnarray}
+  {\mathop {\min }\limits_{{{\mathbf{S}}_P},{{\mathbf{S}}_I},\rho ,\bar \rho ,{t_0}} }&{1/{t_0}} \label{eqn:mo_target} \\
+  {{\text{ subject to }}}&{\frac{1}{2}\left[ {\left\| {{{\mathbf{S}}_I}} \right\|_F^2 + \left\| {{{\mathbf{S}}_P}} \right\|_F^2} \right] \leqslant P} \label{eqn:mo_power_constraint} \\
+  {}&{\left( {{t_0} + {f_2}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right)} \right)\prod\limits_{k = 1}^{{K_1}} {{{\left( {\frac{{{g_{1k}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right)}}{{{\gamma _{1k}}}}} \right)}^{ - {\gamma _{1k}}}}}  \leqslant 1} \label{eqn:mo_current_constraint} \\
+  {}&{\left( {{2^{\bar R}} + f_2^\prime \left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right)} \right)\prod\limits_{k = 1}^{K_1^\prime } {{{\left( {\frac{{g_{1k}^\prime \left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right)}}{{\gamma _{1k}^\prime }}} \right)}^{ - \gamma _{1k}^\prime }}}  \leqslant 1} \label{eqn:mo_rate_constraint} \\
+  {}&{\rho  + \bar \rho  \leqslant 1 \label{eqn:mo_ratio_constraint}}
+\end{eqnarray}
+
+It is worth noting that the GP method is not the best approach for waveform design, as the beamforming phases ${\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime $ determined before optimization are suboptimal. Another disadvantage of the proposed strategy is the unwrap process from \ref{eqn:mo_rate_constraint_original} to \ref{eqn:mo_rate_constraint_unwrapped} significantly increases the computational complexity and is typically suitable for small $n$ and $m$. 
