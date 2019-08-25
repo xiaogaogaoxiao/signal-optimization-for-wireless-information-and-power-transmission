@@ -24,13 +24,6 @@ try
             [SolutionNoPowerWaveform] = wipt_no_power_waveform(Transceiver, Channel, SolutionNoPowerWaveform);
             rateDecoupling(iCase, iSample) = SolutionDecoupling.rate; currentDecoupling(iCase, iSample) = SolutionDecoupling.current;
             rateNoPowerWaveform(iCase, iSample) = SolutionNoPowerWaveform.rate; currentNoPowerWaveform(iCase, iSample) = SolutionNoPowerWaveform.current;
-            % invalid solution cannot be used for iterations
-            if isnan(rateDecoupling(iCase, iSample))
-                [SolutionDecoupling, ~] = initialize_algorithm(Transceiver, Channel);
-            end
-            if isnan(rateNoPowerWaveform(iCase, iSample))
-                [~, SolutionNoPowerWaveform] = initialize_algorithm(Transceiver, Channel);
-            end
         end
     end
 catch

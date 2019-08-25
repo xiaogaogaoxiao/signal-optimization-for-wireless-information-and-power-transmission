@@ -32,8 +32,6 @@ for iSubband = 1: subband
     mimoAmplitude(iSubband) = max(diag(sigma));
 end
 
-mimoAmplitude = repmat(mimoAmplitude, [1, tx]);
-
 Channel.mimoAmplitude = mimoAmplitude;
 Transceiver.beamformPhase = beamformPhase;
 

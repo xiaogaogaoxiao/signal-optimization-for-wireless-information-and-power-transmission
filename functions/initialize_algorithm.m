@@ -3,6 +3,7 @@ function [SolutionSuperposedWaveform, SolutionNoPowerWaveform] = initialize_algo
 %   - initialize resource allocation with matched filers
 %
 % InputArg(s):
+%   - Transceiver.tx: number of transmit antennas
 %   - Transceiver.rx: number of receive antennas
 %   - Transceiver.txPower: average transmit power
 %   - Channel.subbandAmplitude: amplitude of channel impulse response
@@ -18,14 +19,12 @@ function [SolutionSuperposedWaveform, SolutionNoPowerWaveform] = initialize_algo
 % Author & Date: Yang (i@snowztail.com) - 22 Jul 19
 
 
-v2struct(Transceiver, {'fieldNames', 'rx', 'txPower'});
+v2struct(Transceiver, {'fieldNames', 'tx', 'rx', 'txPower'});
 
 if rx == 1
-    v2struct(Channel, {'fieldNames', 'subbandAmplitude'});
-    amplitude = subbandAmplitude;
+    amplitude = Channel.subbandAmplitude;
 else
-    v2struct(Channel, {'fieldNames', 'mimoAmplitude'});
-    amplitude = mimoAmplitude;
+    amplitude = repmat(Channel.mimoAmplitude, [1, tx]);
 end
 
 % initialize results

@@ -19,10 +19,6 @@ try
             Transceiver.rateThr = Variable.rateThr(iSample);
             [SolutionPapr] = wipt_papr(Transceiver, Channel, SolutionPapr);
             ratePapr(iCase, iSample) = SolutionPapr.rate; currentPapr(iCase, iSample) = SolutionPapr.current;
-            % invalid solution cannot be used for iterations
-            if isnan(ratePapr(iCase, iSample))
-                [SolutionPapr, ~] = initialize_algorithm(Transceiver, Channel);
-            end
         end
     end
 catch

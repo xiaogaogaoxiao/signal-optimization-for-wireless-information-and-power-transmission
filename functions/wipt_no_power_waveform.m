@@ -75,11 +75,8 @@ while (~isConverged) && (isSolvable)
         isConverged = (targetFun - current) < currentGainThr;
         current = targetFun;
         
-%         Solution.infoAmplitude = infoAmplitude;
-%         Solution.powerSplitRatio = powerSplitRatio;
-%         Solution.infoSplitRatio = infoSplitRatio;
-        Solution.current = current;
-        Solution.rate = rate;
+%         Solution = v2struct(infoAmplitude, powerSplitRatio, infoSplitRatio, current, rate);
+        Solution.current = current; Solution.rate = rate;
     else
         isSolvable = false;
 end

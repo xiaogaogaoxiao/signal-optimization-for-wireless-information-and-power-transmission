@@ -14,8 +14,8 @@ for iCase = 1: Variable.nRxCases
     [Transceiver{iCase}, Channel{iCase}] = preprocessing(Transceiver{iCase}, Channel{iCase});
 end
 plot_mimo_response;
-% save([pwd sprintf('/data/mimo_%s_channel.mat',Channel{1}.fadingType)], 'Channel', 'Transceiver');
-% load([pwd sprintf('/data/mimo_%s_channel.mat',Channel{1}.fadingType)], 'Channel', 'Transceiver');
+% save([pwd sprintf('/data/mimo_%s_channel.mat',Channel{iCase}.fadingType)], 'Channel', 'Transceiver');
+% load([pwd sprintf('/data/mimo_%s_channel.mat',Channel{iCase}.fadingType)], 'Channel', 'Transceiver');
 %% R-E region samples
 rateMimo = zeros(Variable.nRxCases, Variable.nSamples); currentMimo = zeros(Variable.nRxCases, Variable.nSamples);
 try
@@ -26,10 +26,6 @@ try
             Transceiver{iCase}.rateThr = Variable.rateThr(iSample);
             [SolutionMimo] = wipt_mimo(Transceiver{iCase}, Channel{iCase}, SolutionMimo);
             rateMimo(iCase, iSample) = SolutionMimo.rate; currentMimo(iCase, iSample) = SolutionMimo.current;
-            % invalid solution cannot be used for iterations
-            if isnan(rateMimo(iCase, iSample))
-                [SolutionMimo, ~] = initialize_algorithm(Transceiver{iCase}, Channel{iCase});
-            end
         end
     end
 catch
