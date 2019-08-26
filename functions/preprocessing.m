@@ -6,6 +6,7 @@ function [Transceiver, Channel] = preprocessing(Transceiver, Channel)
 % InputArg(s):
 %   - Transceiver.k2: diode k-parameters
 %   - Transceiver.tx: number of transmit antennas
+%   - Transceiver.rx: number of receive antennas
 %   - Channel.subband: number of subbands (subcarriers)
 %   - Channel.subbandGain: complex gain on each subband
 %
@@ -20,16 +21,16 @@ function [Transceiver, Channel] = preprocessing(Transceiver, Channel)
 % Author & Date: Yang (i@snowztail.com) - 02 Aug 19
 
 
-v2struct(Transceiver, {'fieldNames', 'k2', 'tx'});
+v2struct(Transceiver, {'fieldNames', 'k2', 'tx', 'rx'});
 v2struct(Channel, {'fieldNames', 'subband', 'subbandGain'});
 
 beamformPhase = zeros(subband, tx);
-mimoAmplitude = zeros(subband, 1);
+mimoAmplitude = zeros(subband, min(tx, rx));
 
 for iSubband = 1: subband
     [~, sigma, v] = svd(squeeze(subbandGain(iSubband, :, :)).');
     beamformPhase(iSubband, :) = angle(v(:, 1)).';
-    mimoAmplitude(iSubband) = max(diag(sigma));
+    mimoAmplitude(iSubband, :) = diag(sigma);
 end
 
 Channel.mimoAmplitude = mimoAmplitude;

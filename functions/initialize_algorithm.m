@@ -24,7 +24,8 @@ v2struct(Transceiver, {'fieldNames', 'tx', 'rx', 'txPower'});
 if rx == 1
     amplitude = Channel.subbandAmplitude;
 else
-    amplitude = repmat(Channel.mimoAmplitude, [1, tx]);
+    % initialize all tx to dominant eigenmode transmission
+    amplitude = repmat(Channel.mimoAmplitude(:, 1), [1, tx]);
 end
 
 % initialize results
