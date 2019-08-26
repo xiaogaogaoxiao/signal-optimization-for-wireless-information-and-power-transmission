@@ -9,8 +9,8 @@ subband = 16;
 % number of taps in the tapped-delay line model
 tap = 18;
 % channel fading type ("flat" or "selective")
-fadingType = "flat";
-% fadingType = "selective";
+% fadingType = "flat";
+fadingType = "selective";
 % gap frequency
 gapFrequency = bandwidth / subband;
 % sample frequency

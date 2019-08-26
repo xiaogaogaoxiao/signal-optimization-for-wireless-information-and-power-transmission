@@ -3,9 +3,9 @@ Push.pushNote(Push.Devices, 'MATLAB Assist', sprintf('''%s'' is running', mfilen
 %% Channel
 % generate the tap delay and gains based on HIPERLAN/2 model B
 [Channel] = hiperlan2_B(Transceiver, Channel);
-plot_response;
 % save([pwd sprintf('/data/siso_%s_channel.mat',Channel.fadingType)], 'Channel');
 % load([pwd sprintf('/data/siso_%s_channel.mat',Channel.fadingType)], 'Channel');
+plot_response;
 %% R-E region samples
 rateDecoupling = zeros(Variable.nSubbandCases, Variable.nSamples); currentDecoupling = zeros(Variable.nSubbandCases, Variable.nSamples);
 rateNoPowerWaveform = zeros(Variable.nSubbandCases, Variable.nSamples); currentNoPowerWaveform = zeros(Variable.nSubbandCases, Variable.nSamples);
@@ -25,16 +25,38 @@ try
             rateDecoupling(iCase, iSample) = SolutionDecoupling.rate; currentDecoupling(iCase, iSample) = SolutionDecoupling.current;
             rateNoPowerWaveform(iCase, iSample) = SolutionNoPowerWaveform.rate; currentNoPowerWaveform(iCase, iSample) = SolutionNoPowerWaveform.current;
         end
+        [maxRate(iCase)] = wit(Transceiver, Channel);
+        rateDecoupling(iCase, Variable.nSamples + 1) = maxRate(iCase); currentDecoupling(iCase, Variable.nSamples + 1) = 0;
+        rateNoPowerWaveform(iCase, Variable.nSamples + 1) = maxRate(iCase); currentNoPowerWaveform(iCase, Variable.nSamples + 1) = 0;
+        [rateDecoupling(iCase, :), indexDecoupling] = sort(rateDecoupling(iCase, :)); currentDecoupling(iCase, :) = currentDecoupling(iCase, indexDecoupling);
+        [rateNoPowerWaveform(iCase, :), indexNoPowerWaveform] = sort(rateNoPowerWaveform(iCase, :)); currentNoPowerWaveform(iCase, :) = currentNoPowerWaveform(iCase, indexNoPowerWaveform);
     end
 catch
     Push.pushNote(Push.Devices, 'MATLAB Assist', 'Houston, we have a problem');
 end
 %% R-E region plots
-legendStr = cell(Variable.nSubbandCases, 1);
-figure('Name', 'Superposed waveforms');
+legendStr = cell(3 * Variable.nSubbandCases, 1);
+figure('Name', 'Superposed waveform');
+% WIPT
 for iCase = 1: Variable.nSubbandCases
     plot(rateDecoupling(iCase, :), currentDecoupling(iCase, :) * 1e6);
-    legendStr{iCase} = sprintf('N = %d', Variable.subband(iCase));
+    legendStr{iCase} = sprintf('WIPT (PS): N = %d', Variable.subband(iCase));
+    hold on;
+end
+ax = gca;
+ax.ColorOrderIndex = 1;
+% WIT
+for iCase = 1: Variable.nSubbandCases
+    scatter(maxRate(iCase), 0);
+    legendStr{Variable.nSubbandCases + iCase} = sprintf('WIT: N = %d', Variable.subband(iCase));
+    hold on;
+end
+ax = gca;
+ax.ColorOrderIndex = 1;
+% time-sharing
+for iCase = 1: Variable.nSubbandCases
+    plot([rateDecoupling(iCase, 1), maxRate(iCase)], [currentDecoupling(iCase, 1) * 1e6, 0], '--');
+    legendStr{2 * Variable.nSubbandCases + iCase} = sprintf('WIPT (TS): N = %d', Variable.subband(iCase));
     hold on;
 end
 hold off;
@@ -46,6 +68,22 @@ ylabel('I_{DC} [\muA]');
 figure('Name', 'No power waveform');
 for iCase = 1: Variable.nSubbandCases
     plot(rateNoPowerWaveform(iCase, :), currentNoPowerWaveform(iCase, :) * 1e6);
+    hold on;
+end
+ax = gca;
+ax.ColorOrderIndex = 1;
+% WIT
+for iCase = 1: Variable.nSubbandCases
+    scatter(maxRate(iCase), 0);
+    legendStr{Variable.nSubbandCases + iCase} = sprintf('WIT: N = %d', Variable.subband(iCase));
+    hold on;
+end
+ax = gca;
+ax.ColorOrderIndex = 1;
+% time-sharing
+for iCase = 1: Variable.nSubbandCases
+    plot([rateNoPowerWaveform(iCase, 1), maxRate(iCase)], [currentNoPowerWaveform(iCase, 1) * 1e6, 0], '--');
+    legendStr{2 * Variable.nSubbandCases + iCase} = sprintf('WIPT (TS): N = %d', Variable.subband(iCase));
     hold on;
 end
 hold off;
