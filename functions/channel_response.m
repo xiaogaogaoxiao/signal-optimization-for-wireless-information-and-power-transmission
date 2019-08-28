@@ -11,6 +11,7 @@ function [Channel] = channel_response(Transceiver, Channel)
 %   - Channel.fadingType: choose from "flat" and "selective"
 %
 % OutputArg(s):
+%   - Channel.subbandGain: complex gain on each subband
 %   - Channel.subbandAmplitude: absolute multipath channel amplitude on the subbands
 %   - Channel.subbandPhase: multipath channel phase on the subbands
 %
@@ -43,6 +44,7 @@ elseif fadingType == "selective"
     end
 end
 
+Channel.subbandGain = subbandGain;
 Channel.subbandAmplitude = abs(subbandGain);
 Channel.subbandPhase = angle(subbandGain);
 

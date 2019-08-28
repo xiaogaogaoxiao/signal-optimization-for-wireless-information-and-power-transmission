@@ -1,0 +1,146 @@
+%% beamerthemeImperialPoster v1.0 2016/10/01
+%% Beamer poster theme created for Imperial College by LianTze Lim (Overleaf)
+%% LICENSE: LPPL 1.3
+\RequirePackage[utf8]{inputenc}
+\RequirePackage[T1]{fontenc}
+\RequirePackage{newtxtext,newtxsf}
+\RequirePackage[scaled=0.92]{inconsolata}
+\renewcommand{\familydefault}{\sfdefault}
+
+\RequirePackage{tikz}
+\RequirePackage[skins]{tcolorbox}
+\RequirePackage{graphicx}
+\RequirePackage{tabularx,booktabs}
+\RequirePackage{enumitem}
+\RequirePackage[normalem]{ulem}
+\RequirePackage{etoolbox}
+
+\normalsize
+
+\setbeamertemplate{itemize/enumerate body begin}{\vspace*{-1ex}}
+\setbeamertemplate{itemize/enumerate body end}{\vspace*{-0.5ex}}
+\setbeamertemplate{itemize/itemize body begin}{\vspace*{-1ex}}
+\setbeamertemplate{itemize/itemize body end}{\vspace*{-0.5ex}}
+\setitemize{label=\usebeamerfont*{itemize item}%
+  \usebeamercolor[fg]{itemize item}
+  \usebeamertemplate{itemize item}}
+\setenumerate{label=\usebeamerfont*{enumerate item}%
+  \usebeamercolor[fg]{enumerate item}
+  \usebeamertemplate{enumerate item}}
+\setlist{nosep,leftmargin=*}
+
+%\renewenvironment{figure}{%
+%  \refstepcounter{figure}%
+%  {\usebeamerfont{block title}\usebeamercolor[fg]{block title}\MakeUppercase{\figurename}~\thefigure}\par\vskip.75ex
+%  \renewcommand\caption[1]{\par\small\raggedright\usebeamercolor[fg]{caption}##1}
+%}{%
+%  \vspace*{\baselineskip}
+%}
+
+\renewenvironment{table}{%
+  \refstepcounter{table}%
+  {\usebeamerfont{block title}\usebeamercolor[fg]{block title}\MakeUppercase{\tablename}~\thefigure}\par\vskip1ex
+  \renewcommand\caption[1]{\par{\small\raggedright\usebeamercolor[fg]{caption}##1}}
+  \usebeamercolor[fg]{tabular}
+  \rowcolors{1}{tabular.bg}{tabular.bg}
+}{%
+  \vspace*{\baselineskip}
+}
+
+\renewcommand{\arraystretch}{1.75}
+\setlength{\aboverulesep}{0pt}
+\setlength{\belowrulesep}{0pt}
+
+
+\newenvironment{sidefigure}{%
+  \refstepcounter{figure}%
+  \usebeamercolor{caption}%
+  {\usebeamerfont{block title}\usebeamercolor[fg]{block title}\MakeUppercase{\figurename}~\thefigure}\par\vskip.75ex
+  \begin{tcolorbox}[%
+  sidebyside, sidebyside align=top seam, empty,
+  left=0pt, right=0pt, top=0pt, bottom=0pt, boxsep=0pt,
+  sidebyside gap=1em,
+  text width=\linewidth,
+  collower=caption.fg,
+  fontlower=\small\raggedright\setlength{\parskip}{1em}]
+  \renewcommand\caption[1]{\tcblower ##1}%
+}{%
+  \end{tcolorbox}\vspace*{\baselineskip}
+}
+
+\newcommand{\Tsup}[1]{%
+  \texorpdfstring{\textsuperscript{#1}}{}%
+}
+
+\def\logo{src/Imperial_1_Pantone_solid}
+
+\setbeamersize{text margin left=3em}
+\setbeamersize{text margin right=3em}
+\setbeamerfont{title}{series=\bfseries,size=\large,family=\sffamily}
+\setbeamerfont{author}{series=\bfseries,size=\normalsize,family=\sffamily}
+\setbeamerfont{institute}{series=\bfseries,size=\normalsize,family=\sffamily}
+\setbeamerfont{structure}{family=\sffamily}
+\setbeamerfont{block title}{series=\mdseries,size=\large}
+
+\newcommand{\mainauthor}[1]{\texorpdfstring{\uline{#1}}{#1}}
+
+\renewcommand{\maketitle}{%
+  \newlength{\logowidth}
+  \newlength{\titleindent}
+
+  \if@beamerposter@portrait
+    \setlength{\logowidth}{0.25\textwidth}
+    \setlength{\titleindent}{\dimexpr 0.5\logowidth+2em\relax}
+  \else
+    \setlength{\logowidth}{0.167\textwidth}
+    \setlength{\titleindent}{\dimexpr\logowidth+1em\relax}
+  \fi
+  \begingroup\raggedright
+  \null\begin{minipage}{\logowidth}
+  \includegraphics[width=\logowidth]{\logo}
+  \end{minipage}\hfill\par
+  \if@beamerposter@portrait\else\vspace*{-\baselineskip}\fi
+  \hfill\begin{minipage}{\dimexpr\textwidth-\titleindent\relax}
+%   \vskip\baselineskip%
+  \raggedright%
+  {\usebeamerfont{title}\usebeamercolor[fg]{title}\MakeUppercase{\inserttitle}\par}
+  \vskip1em
+  {\usebeamerfont{author}\usebeamercolor[fg]{author}\insertauthor\par}
+%   \vskip1em
+  {\usebeamerfont{institute}\usebeamercolor[fg]{institute}\insertinstitute\par}
+  \end{minipage}%
+\endgroup\vspace*{1.5\baselineskip}
+}
+
+\setbeamertemplate{itemize item}{$\blacktriangleright\,$}
+\setbeamertemplate{itemize subitem}{$\bullet$ }
+
+\setbeamertemplate{block begin}{%
+  \begin{beamercolorbox}[ht=2.5ex,dp=1ex]{block title}%
+    \usebeamerfont{block title}\MakeUppercase{\insertblocktitle}
+  \end{beamercolorbox}%
+  \usebeamerfont{block body}%
+  \begin{beamercolorbox}[vmode]{block body}%
+  \setlength{\parskip}{1em}%
+  \vspace*{-\parskip}%
+  }
+\setbeamertemplate{block end}{
+  \end{beamercolorbox}\vspace*{\baselineskip}
+}
+
+\setbeamertemplate{navigation symbols}{}
+
+\RequirePackage[backend=biber,style=authoryear,natbib=true]{biblatex}
+\renewcommand{\bibfont}{\small}
+
+\setbeamertemplate{bibliography item}{}
+\setbeamercolor{bibliography entry author}{fg=normal text.fg}
+\setbeamercolor{bibliography entry note}{fg=normal text.fg}
+\defbibheading{bibliography}[\refname]{%
+{\usebeamerfont{block title}\usebeamercolor[fg]{block title}\MakeUppercase{#1}}\par%
+}
+\setlength{\bibhang}{1.5em}
+\setlength{\biblabelsep}{0pt}
+
+\RequirePackage{silence}
+\WarningFilter{biblatex}{Patching footnotes}

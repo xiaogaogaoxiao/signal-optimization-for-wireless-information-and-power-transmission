@@ -1,0 +1,171 @@
+%% beamerthemeImperialPoster v1.0 2016/10/01
+%% Beamer poster theme created for Imperial College by LianTze Lim (Overleaf)
+%% LICENSE: LPPL 1.3
+%%
+%% This is the example poster demonstrating use
+%% of the Imperial College Beamer Poster Theme
+\documentclass[xcolor={table}]{beamer}
+%% Possible paper sizes: a0, a0b, a1, a2, a3, a4 (although Imperial College posters are usually A0 or A1).
+%% Possible orientations: portrait, landscape
+%% Font sizes can be changed using the scale option.
+\usepackage[size=a0,orientation=portrait,scale=1.55]{beamerposter}
+\usepackage{src/beamercolorthemeImperialWhite}
+%\usepackage{src/beamercolorthemeImperialBlack}
+%\usepackage{src/beamercolorthemeImperialDarkBlue}
+%\usepackage{src/beamercolorthemeImperialLightBlue}
+\usepackage{src/beamerthemeImperialPoster}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subfigure}
+\graphicspath{{images/}}
+
+\usepackage{siunitx}
+
+\title{Signal Optimization for Wireless Information and Power Transmission}
+
+\author{\textit{Author:} Yang Zhao (yang.zhao18@imperial.ac.uk) \\
+        \textit{Supervisor:} Dr Bruno Clerckx and Dr Morteza Varasteh}
+
+\addbibresource{library}
+
+
+\begin{document}
+\begin{frame}[fragile=singleslide,t]\centering
+
+\maketitle
+
+%\begin{block}{Motivation}
+%Energy-constrained wireless devices are conventionally powered by batteries. However, the development of large-scale networks as Internet-of-Things (IoT) is strictly restricted by its limited working time and frequent recharging or replacement. Although Wireless Power Transfer (WPT) via inductive coupling has enjoyed some success in real-world applications, it is impractical for most devices on the move since the operation range is very short. As a promising alternative, the Radio-Frequency (RF) wave is typically with lower power level (\si{\uW} to \si{W}) but larger coverage (up to hundreds of \si{m}) \citep{Ng2019}. Interestingly, it indeed carries both information and energy simultaneously, with the potential to power billions of mobile nodes wirelessly while keeping them connected. The recent revolution in harvester model and the significant power drop of electronics bring more possibility to the research on Wireless Information and Power Transfer (WIPT) via RF signals.
+%\end{block}
+
+\begin{block}{Motivation}
+Energy-constrained wireless networks are conventionally powered by batteries with limited operation time and inconvenient recharging. As a promising alternative, Radio-Frequency (RF) wave is typically with lower power level (\si{\uW} to \si{W}) and decent coverage (up to hundreds of meters) \citep{Ng2019}. Interestingly, it has been widely used in wireless communications and can be extended to Wireless Information and Power Transfer (WIPT). With the significant drop of power consumption in electronics, RF signal is expected to power billions of mobile devices wirelessly while keeping them connected to the network.
+\end{block}
+
+\begin{columns}[onlytextwidth,T]
+
+%%%% First Column
+\begin{column}{.47\textwidth}
+
+%\begin{block}{Architecture}
+%From the perspective of WPT, the end-to-end power transfer efficiency writes as:
+%
+%\begin{equation}\label{eqn:power_utilization_efficiency}
+%  e = \frac{{{P_{{\text{dc}},{\text{ST}}}}}}{{P_{{\text{dc}}}^t}} = \underbrace {\frac{{P_{{\text{rf}}}^t}}{{P_{{\text{dc}}}^t}}}_{{e_1}} \cdot \underbrace {\frac{{P_{{\text{rf}}}^r}}{{P_{{\text{rf}}}^t}}}_{{e_2}} \cdot \underbrace {\frac{{P_{{\text{dc}}}^r}}{{P_{{\text{rf}}}^r}}}_{{e_3}} \cdot \underbrace {\frac{{{P_{{\text{dc}},{\text{ST}}}}}}{{P_{{\text{dc}}}^r}}}_{{e_4}}
+%\end{equation}
+%
+%\begin{figure}
+%  \centering
+%    \includegraphics[width=\textwidth]{wpt_block_diagram}
+%  \caption{\textit{Block diagram of a conventional far-field WPT architecture \citep{Clerckx2018a}. We particularly focus on the rectenna behavior.}}
+%  \label{fig:wpt-block-diagram}
+%\end{figure}
+%
+%The RF-to-DC conversion efficiency ${e_3}$ is related to \textbf{rectenna model} and \textbf{waveform design}.
+%\end{block}
+
+\begin{block}{Rectenna Model}
+\begin{itemize}
+  \item Rectenna = antenna + rectifier
+\end{itemize}
+\begin{figure}
+  \centering
+    \includegraphics[width=\textwidth]{rectenna_model}
+  \caption{Single diode rectifier (left) and diode $I$ -- $V$ characteristics \citep{Clerckx2019}. The diode accounts for harvester nonlinearity. R1 and R2 correspond to the diode linear and nonlinear model. The diode behaves as a resistor in R3.}
+  \label{fig:rectenna_model}
+\end{figure}
+We approximate the diode characteristic equation by Taylor series and truncate the result to ${n_o}$-th order to obtain:
+  \begin{itemize}
+    \item \textbf{Diode linear model (${n_o} = 2$)}: assume the total harvested power equals the sum in each subband and is proportional to the rectifier input power. %It omits the rectifier nonlinearity and is typically suitable for a very low input power (below -30 dBm).
+    \item \textbf{Diode nonlinear model (${n_o} > 2$)}: capture the diode nonlinear behavior with the product terms that consist of contributions from different frequencies. %The model is accurate for the power regime between -30 and 0 dBm.
+  \end{itemize}
+\end{block}
+
+%\begin{sidefigure}
+%  \centering
+%  \includegraphics[width=\hsize]{receivers}
+%  \caption{(b) TS receiver (switching the signal to either ID or EH receiver); and (c) PS receiver (splitting a portion of the signal to ID receiver and the rest to EH receiver).}
+%\end{sidefigure}
+
+\begin{block}{Receiver Architectures}
+\begin{itemize}
+  \item \textbf{Time Switching (TS)}: divide the transmission block into orthogonal power and data slots, then optimize the signal individually.
+  \item \textbf{Power Splitting (PS)}: split a portion of the signal to information decoding (ID) receiver and the rest to energy harvesting (EH) receiver. The waveform is jointly optimized for WIPT.
+\end{itemize}
+\begin{figure}
+  \centering
+  \subfigure[Time Switching (TS)]{
+    \includegraphics[width=0.48\textwidth]{ts_receiver}}
+  \subfigure[Power Splitting (PS)]{
+    \includegraphics[width=0.48\textwidth]{ps_receiver}}
+  \caption{Receivers \citep{Clerckx2019}: (a) TS switches between energy harvester and information decoder; (b) PS splits the signal into separate portions.}\label{fig:receivers}
+\end{figure}
+\end{block}
+
+\begin{block}{Signal Design}
+\begin{itemize}
+  \item Superposed waveform = multi-carrier \textbf{multisine} + \textbf{modulated}
+  \item Multisine: deterministic, high PAPR, concentrated power
+\end{itemize}
+\begin{figure}
+  \centering
+  \subfigure[Frequency domain]{
+    \includegraphics[width=0.48\textwidth]{waveform_frequency_domain}}
+  \subfigure[Time domain]{
+    \includegraphics[width=0.48\textwidth]{waveform_time_domain}}
+  \caption{Comparison of 3-subcarrier multisine (POW) and single-sine (CW) \citep{Trotter2009}. The thick lines indicate the rectifier output voltage.}
+  \label{fig:waveform_comparison}
+\end{figure}
+\end{block}
+
+\end{column}
+
+
+%%%% Second Column
+\begin{column}{.47\textwidth}
+
+\begin{block}{Header}
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit. In nunc nisl, pharetra et, lacinia non, pellentesque sit amet, tellus. Sed tempus. In egestas. Maecenas aliquam libero vitae leo. Donec consectetuer. Pellentesque ultrices feugiat enim. Morbi tempus tortor non metus. Quisque vitae metus. Nulla justo. Pellentesque laoreet dui a felis bibendum blandit. Quisque commodo.
+Cras luctus vestibulum leo. Quisque varius mauris vel diam. Aenean quis erat. Vestibulum mauris. Suspendisse potenti. Vivamus consectetuer massa et nunc.
+\end{block}
+
+\begin{block}{Header}
+\begin{itemize}
+\item Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+\item In nunc nisl, pharetra et, lacinia non, pellentesque sit amet, tellus. Sed tempus. \citep{Cooper13}
+\item In egestas. \citep{Crank1975}
+\item Maecenas aliquam libero vitae leo. Donec consectetuer.
+\item Pellentesque ultrices feugiat enim. Morbi tempus tortor non metus.
+\item Nulla justo. Pellentesque laoreet dui a felis bibendum blandit. Quisque commodo.
+\end{itemize}
+\end{block}
+
+\begin{table}
+\begin{tabularx}{\linewidth}{  X  X  }
+\toprule
+\textbf{Table header (bold)} & \textbf{Table header (bold)} \\
+\midrule
+Table header (normal) & Table header (normal) \\
+\midrule
+Table header (normal) & Table header (normal) \\
+\midrule
+Table header (normal) & Table header (normal) \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{sidefigure}
+\includegraphics[width=\hsize]{example-image-golden-upright}
+\caption{Lorem ipsum dolor sit amet, consectetuer adipiscing elit. In nunc nisl, pharetra et, lacinia non, pellentesque sit amet, tellus. Sed tempus. In egestas. Maecenas aliquam libero vitae leo. Donec consectetuer. Pellentesque ultrices feugiat enim. Morbi tempus tortor non metus. Quisque vitae metus. Nulla justo. Pellentesque laoreet dui a felis bibendum blandit. Quisque commodo. Cras luctus vestibulum leo. Quisque varius mauris vel diam. Aenean quis erat. Vestibulum mauris. Suspendisse potenti. Vivamus consectetuer massa et nunc. Aliquam ornare risus eu risus. Suspendisse molestie urna vitae augue.
+
+Aliquam erat volutpat. Duis at sapien vestibulum mi sollicitudin rutrum.}
+\end{sidefigure}
+
+\printbibliography
+
+\end{column}
+\end{columns}
+
+
+\end{frame}
+\end{document} 
