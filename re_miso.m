@@ -1,5 +1,5 @@
 initialize; config;
-% Push.pushNote(Push.Devices, 'MATLAB Assist', sprintf('''%s'' is running', mfilename));
+Push.pushNote(Push.Devices, 'MATLAB Assist', sprintf('''%s'' is running', mfilename));
 %% Channel and R-E region samples
 Transceiver = num2cell(repmat(Transceiver, [Variable.nTxCases, 1]));
 Channel = num2cell(repmat(Channel, [Variable.nTxCases, Variable.nChannels]));
@@ -14,7 +14,6 @@ for iCase = 1: Variable.nTxCases
 end
 % save([pwd sprintf('/data/miso_%s_channel.mat',Channel{iCase, iCase}.fadingType)], 'Channel', 'Transceiver');
 % load([pwd sprintf('/data/miso_%s_channel.mat',Channel{iCase, iCase}.fadingType)], 'Channel', 'Transceiver');
-% plot_miso_response;
 %% R-E region samples
 rateMiso = zeros(Variable.nRxCases, Variable.nChannels, Variable.nSamples); currentMiso = zeros(Variable.nRxCases, Variable.nChannels, Variable.nSamples);
 maxRate = zeros(Variable.nRxCases, Variable.nChannels);
@@ -33,9 +32,9 @@ maxRate = zeros(Variable.nRxCases, Variable.nChannels);
             [rateMiso(iCase, iChannel, :), indexDecoupling] = sort(rateMiso(iCase, iChannel, :)); currentMiso(iCase, iChannel, :) = currentMiso(iCase, iChannel, indexDecoupling);
         end
     end
-% catch
-%     Push.pushNote(Push.Devices, 'MATLAB Assist', 'Houston, we have a problem');
-% end
+catch
+    Push.pushNote(Push.Devices, 'MATLAB Assist', 'Houston, we have a problem');
+end
 rateMisoAvg = squeeze(mean(rateMiso, 2)); currentMisoAvg = squeeze(mean(currentMiso, 2));
 maxRateAvg = mean(maxRate, 2);
 %% R-E region plots
