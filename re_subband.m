@@ -91,6 +91,7 @@ grid on; grid minor;
 legend(legendStr);
 xlabel('Rate [bps/Hz]');
 ylabel('I_{DC} [\muA]');
+ylim([0, 6]);
 
 save([pwd '/data/subband.mat']);
 Push.pushNote(Push.Devices, 'MATLAB Assist', 'Job''s done!');

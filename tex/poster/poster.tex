@@ -17,16 +17,15 @@
 \usepackage{graphicx}
 \usepackage{caption}
 \usepackage{subfigure}
+\usepackage{siunitx}
+\usepackage{biblatex}
 \graphicspath{{images/}}
 
-\usepackage{siunitx}
 
-\title{Signal Optimization for Wireless Information and Power Transmission}
+\title{Signal Design for Wireless Information and Power Transfer}
+\author{\textit{Author:} Yang Zhao (yang.zhao18@imperial.ac.uk) \quad \textit{Supervisor:} Dr Bruno Clerckx and Dr Morteza Varasteh}
 
-\author{\textit{Author:} Yang Zhao (yang.zhao18@imperial.ac.uk) \\
-        \textit{Supervisor:} Dr Bruno Clerckx and Dr Morteza Varasteh}
-
-\addbibresource{library}
+\addbibresource{library.bib}
 
 
 \begin{document}
@@ -39,7 +38,7 @@
 %\end{block}
 
 \begin{block}{Motivation}
-Energy-constrained wireless networks are conventionally powered by batteries with limited operation time and inconvenient recharging. As a promising alternative, Radio-Frequency (RF) wave is typically with lower power level (\si{\uW} to \si{W}) and decent coverage (up to hundreds of meters) \citep{Ng2019}. Interestingly, it has been widely used in wireless communications and can be extended to Wireless Information and Power Transfer (WIPT). With the significant drop of power consumption in electronics, RF signal is expected to power billions of mobile devices wirelessly while keeping them connected to the network.
+Energy-constrained wireless networks are conventionally powered by batteries that require frequent recharging or replacement. As a promising alternative, Radio-Frequency (RF) wave is with lower power level (\si{\uW} to \si{W}) and decent coverage (up to hundreds of meters) \citep{Ng2019}. It has been widely used in wireless communications and can be extended to Wireless Information and Power Transfer (WIPT). With the significant drop of power consumption in electronics, RF signal is anticipated to power billions of mobile devices wirelessly while keeping them online.
 \end{block}
 
 \begin{columns}[onlytextwidth,T]
@@ -76,8 +75,8 @@ Energy-constrained wireless networks are conventionally powered by batteries wit
 \end{figure}
 We approximate the diode characteristic equation by Taylor series and truncate the result to ${n_o}$-th order to obtain:
   \begin{itemize}
-    \item \textbf{Diode linear model (${n_o} = 2$)}: assume the total harvested power equals the sum in each subband and is proportional to the rectifier input power. %It omits the rectifier nonlinearity and is typically suitable for a very low input power (below -30 dBm).
-    \item \textbf{Diode nonlinear model (${n_o} > 2$)}: capture the diode nonlinear behavior with the product terms that consist of contributions from different frequencies. %The model is accurate for the power regime between -30 and 0 dBm.
+    \item \textbf{Diode linear model (${n_o} = 2$)}: the total power equals the sum of subband portions and is proportional to the rectifier input power. %It omits the rectifier nonlinearity and is typically suitable for a very low input power (below -30 dBm).
+    \item \textbf{Diode nonlinear model (${n_o} > 2$)}: capture the cross contribution of different frequencies on the harvested power. %The model is accurate for the power regime between -30 and 0 dBm.
   \end{itemize}
 \end{block}
 
@@ -89,7 +88,7 @@ We approximate the diode characteristic equation by Taylor series and truncate t
 
 \begin{block}{Receiver Architectures}
 \begin{itemize}
-  \item \textbf{Time Switching (TS)}: divide the transmission block into orthogonal power and data slots, then optimize the signal individually.
+  \item \textbf{Time Switching (TS)}: divide the transmission block into power and data slots, then optimize the signal individually.
   \item \textbf{Power Splitting (PS)}: split a portion of the signal to information decoding (ID) receiver and the rest to energy harvesting (EH) receiver. The waveform is jointly optimized for WIPT.
 \end{itemize}
 \begin{figure}
@@ -105,7 +104,7 @@ We approximate the diode characteristic equation by Taylor series and truncate t
 \begin{block}{Signal Design}
 \begin{itemize}
   \item Superposed waveform = multi-carrier \textbf{multisine} + \textbf{modulated}
-  \item Multisine: deterministic, high PAPR, concentrated power
+  \item Multisine: deterministic, high PAPR, with concentrated power
 \end{itemize}
 \begin{figure}
   \centering
@@ -124,48 +123,57 @@ We approximate the diode characteristic equation by Taylor series and truncate t
 %%%% Second Column
 \begin{column}{.47\textwidth}
 
-\begin{block}{Header}
-Lorem ipsum dolor sit amet, consectetuer adipiscing elit. In nunc nisl, pharetra et, lacinia non, pellentesque sit amet, tellus. Sed tempus. In egestas. Maecenas aliquam libero vitae leo. Donec consectetuer. Pellentesque ultrices feugiat enim. Morbi tempus tortor non metus. Quisque vitae metus. Nulla justo. Pellentesque laoreet dui a felis bibendum blandit. Quisque commodo.
-Cras luctus vestibulum leo. Quisque varius mauris vel diam. Aenean quis erat. Vestibulum mauris. Suspendisse potenti. Vivamus consectetuer massa et nunc.
-\end{block}
-
-\begin{block}{Header}
+\begin{block}{Rate-Energy Tradeoff}
+% subband
+\begin{figure}
+  \centering
+  \subfigure[Superposed waveform]{
+    \includegraphics[width=0.48\textwidth]{re_fs_subband_superposed_waveform}}
+  \subfigure[No power waveform]{
+    \includegraphics[width=0.48\textwidth]{re_fs_subband_no_power_waveform}}
+  \caption{[SISO-FS] R-E region vs \textbf{subband $N$} for $B = 1$ MHz and ${\text{SNR}} = 20$ dB}\label{fig:subband}
+\end{figure}
 \begin{itemize}
-\item Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-\item In nunc nisl, pharetra et, lacinia non, pellentesque sit amet, tellus. Sed tempus. \citep{Cooper13}
-\item In egestas. \citep{Crank1975}
-\item Maecenas aliquam libero vitae leo. Donec consectetuer.
-\item Pellentesque ultrices feugiat enim. Morbi tempus tortor non metus.
-\item Nulla justo. Pellentesque laoreet dui a felis bibendum blandit. Quisque commodo.
+  \item The superposed waveform enlarges the R-E region for subband sufficiently large ($N > 4$).
+  \item PS is preferred for small $N$ while TS is favored for large $N$. A combination is optimal for medium $N$.
 \end{itemize}
+% SNR
+\begin{figure}
+  \centering
+  \subfigure[${\text{SNR}} = 20$ dB]{
+    \includegraphics[width=0.48\textwidth]{re_fs_snr_20dB}}
+  \subfigure[${\text{SNR}} = 40$ dB]{
+    \includegraphics[width=0.48\textwidth]{re_fs_snr_40dB}}
+  \caption{[SISO-FS] R-E region vs \textbf{SNR} for $B = 1$ MHz and $N = 16$ }\label{fig:snr}
+\end{figure}
+\begin{itemize}
+  \item There is no rate loss as multisine creates no interference to the modulated waveform.
+  \item For a sufficiently large $N$, TS is favoured at low SNR and PS at high SNR.
+\end{itemize}
+% PAPR and MIMO
+\begin{figure}
+\centering
+\begin{minipage}[t]{0.48\textwidth}
+\centering
+\includegraphics[width=\textwidth]{re_ff_papr}
+\caption{[SISO-FF] R-E region vs \textbf{PAPR} for $N = 16$}\label{fig:papr}
+\end{minipage}
+\begin{minipage}[t]{0.48\textwidth}
+\centering
+\includegraphics[width=\textwidth]{re_ff_mimo_subband_2}
+\caption{[MIMO-FF] R-E region vs \textbf{Rx} for ${\text{Tx}} = 2$ and $N = 16$}\label{fig:mimo}
+\end{minipage}
+\begin{itemize}
+  \item High PAPR is required to enjoy the power benefit of multisine.
+  \item Geometric Programming (GP) approach is suboptimal for MIMO.
+\end{itemize}
+\end{figure}
 \end{block}
-
-\begin{table}
-\begin{tabularx}{\linewidth}{  X  X  }
-\toprule
-\textbf{Table header (bold)} & \textbf{Table header (bold)} \\
-\midrule
-Table header (normal) & Table header (normal) \\
-\midrule
-Table header (normal) & Table header (normal) \\
-\midrule
-Table header (normal) & Table header (normal) \\
-\bottomrule
-\end{tabularx}
-\end{table}
-
-\begin{sidefigure}
-\includegraphics[width=\hsize]{example-image-golden-upright}
-\caption{Lorem ipsum dolor sit amet, consectetuer adipiscing elit. In nunc nisl, pharetra et, lacinia non, pellentesque sit amet, tellus. Sed tempus. In egestas. Maecenas aliquam libero vitae leo. Donec consectetuer. Pellentesque ultrices feugiat enim. Morbi tempus tortor non metus. Quisque vitae metus. Nulla justo. Pellentesque laoreet dui a felis bibendum blandit. Quisque commodo. Cras luctus vestibulum leo. Quisque varius mauris vel diam. Aenean quis erat. Vestibulum mauris. Suspendisse potenti. Vivamus consectetuer massa et nunc. Aliquam ornare risus eu risus. Suspendisse molestie urna vitae augue.
-
-Aliquam erat volutpat. Duis at sapien vestibulum mi sollicitudin rutrum.}
-\end{sidefigure}
 
 \printbibliography
 
 \end{column}
 \end{columns}
-
 
 \end{frame}
 \end{document} 
