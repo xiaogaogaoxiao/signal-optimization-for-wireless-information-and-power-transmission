@@ -5,7 +5,7 @@ centerFrequency = 5.18e9;
 % bandwidth
 bandwidth = 1e6;
 % number of frequency bands
-subband = 16;
+subband = 4;
 % number of taps in the tapped-delay line model
 tap = 18;
 % channel fading type ("flat" or "selective")
@@ -82,17 +82,23 @@ noisePowerDbm = rxPowerDbm - snrDb; noisePower = dbm2pow(noisePowerDbm);
 paprDb = [4 8 12]; papr = db2mag(paprDb);
 % number of PAPR cases
 nPaprCases = length(paprDb);
+% different transmit antenna cases
+tx = [2 3];
+% number of transmit antenna cases
+nTxCases = length(tx);
 % different rectenna cases
 rx = [2 3];
 % number of rectenna cases
 nRxCases = length(rx);
+% number of channels to generate
+nChannels = 2;
 % weight on rectennas
 weight = cell(nRxCases, 1);
 for iCase = 1: nRxCases
     weight{iCase} = ones(1, rx(iCase));
 end
 
-Variable = v2struct(rateThr, nSamples, subband, nSubbandCases, gapFrequency, sampleFrequency, snrDb, nSnrCases, noisePower, papr, nPaprCases, rx, nRxCases, weight);
+Variable = v2struct(rateThr, nSamples, subband, nSubbandCases, gapFrequency, sampleFrequency, snrDb, nSnrCases, noisePower, papr, nPaprCases, tx, rx, nTxCases, nRxCases, nChannels, weight);
 %% Pushbullet APIs
 apiKey = "o.vhgHHTD2ZC2umYIGF7sPcYz4lo6L3cNc";
 
