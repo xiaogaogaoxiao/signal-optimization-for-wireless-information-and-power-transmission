@@ -64,6 +64,7 @@ grid on; grid minor;
 legend(legendStr);
 xlabel('Rate [bps/Hz]');
 ylabel('I_{DC} [\muA]');
+ylim([0, 6]);
 
 figure('Name', 'No power waveform');
 for iCase = 1: Variable.nSubbandCases

@@ -67,3 +67,39 @@ end
 %% PAPR
 currentPapr(3, :) = max(currentPapr);
 currentPapr(2, :) = max(currentPapr(1:2, :));
+%% Optimal stragegy for medium N
+legendStr = cell(3, 1);
+figure('Name', 'Superposed waveform');
+% WIPT
+for iCase = 4
+    plot(rateDecoupling(iCase, :), currentDecoupling(iCase, :) * 1e6, 'r');
+    legendStr{1} = sprintf('WIPT (PS + TS): N = %d', Variable.subband(iCase));
+    hold on;
+end
+% WIPT
+for iCase = 4
+    plot(rateDecoupling(iCase, 1:14), currentDecoupling(iCase, 1:14) * 1e6, 'k');
+    legendStr{2} = sprintf('WIPT (PS): N = %d', Variable.subband(iCase));
+    hold on;
+end
+% WIT
+for iCase = 4
+    scatter(maxRate(iCase), 0, 'k');
+    legendStr{3} = sprintf('WIT: N = %d', Variable.subband(iCase));
+    hold on;
+end
+% time-sharing
+for iCase = 4
+    plot([rateDecoupling(iCase, 1), maxRate(iCase)], [currentDecoupling(iCase, 1) * 1e6, 0], 'k--');
+    legendStr{4} = sprintf('WIPT (TS): N = %d', Variable.subband(iCase));
+    hold on;
+end
+% plot([rateDecoupling(iCase, 1), maxRate(iCase)], [currentDecoupling(iCase, 1) * 1e6, 0], 'r')
+plot([rateDecoupling(iCase, 1), rateDecoupling(iCase, 14)], [currentDecoupling(iCase, 1), currentDecoupling(iCase, 14)] * 1e6, 'r');
+hold off;
+grid on; grid minor;
+legend(legendStr);
+xlabel('Rate [bps/Hz]');
+ylabel('I_{DC} [\muA]');
+ylim([0, 6]);
+
