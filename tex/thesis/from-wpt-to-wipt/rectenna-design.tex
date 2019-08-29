@@ -8,25 +8,35 @@ Besides the rectenna model, the shape of the received signal also influences the
   {V_{{\text{multisine}}}}(t) = \sum\limits_{n = 0}^{N - 1} {\frac{1}{{\sqrt N }}} \sin \left( {2\pi \left( {{f_{\text{0}}} + n\Delta f} \right)t} \right)
 \end{equation}
 
-where ${{f_{\text{0}}}}$ is the minimum frequency and ${\Delta f}$ is the spacing. Figure \ref{fig:waveform_comparison} \cite{Trotter2009} illustrates the three-subcarrier case for both signals in time and frequency domains. It can be observed that multisine waveform provides a higher PAPR equals to ${\sqrt N }$ and occupies a bandwidth of $(N - 1) \Delta f$ with the same average power as CW, which is equally distributed to its components.
+where ${{f_{\text{0}}}}$ is the minimum frequency and ${\Delta f}$ is the spacing. Figure \ref{fig:waveform_comparison} \cite{Trotter2009} illustrates the three-subcarrier case for both signals in time and frequency domains. It can be observed that multisine waveform provides a higher PAPR equals to ${\sqrt N }$ and occupies a bandwidth of $(N - 1) \Delta f$ with the same average power as CW, which is equally distributed to its components. The thick lines indicate examples of rectifier output voltage.
+
+%\begin{figure}
+%  \centering
+%
+%  \begin{subfigure}{.45\textwidth}
+%    \centering
+%      \includegraphics[width=\textwidth]{waveform_frequency_domain}
+%    \caption{Frequency domain}
+%    \label{fig:waveform_frequency_domain}
+%  \end{subfigure}
+%  \begin{subfigure}{.45\textwidth}
+%    \centering
+%      \includegraphics[width=\textwidth]{waveform_time_domain}
+%    \caption{Time domain}
+%    \label{fig:waveform_time_domain}
+%  \end{subfigure}
+%
+%  \caption{Comparison of a typical 3-subcarrier multisine and CW in time and frequency domains (modified from \cite{Trotter2009}). The thick lines are examples of rectifier output voltage.}
+%  \label{fig:waveform_comparison}
+%\end{figure}
 
 \begin{figure}
   \centering
-
-  \begin{subfigure}{.45\textwidth}
-    \centering
-      \includegraphics[width=\textwidth]{waveform_frequency_domain}
-    \caption{Frequency domain}
-    \label{fig:waveform_frequency_domain}
-  \end{subfigure}
-  \begin{subfigure}{.45\textwidth}
-    \centering
-      \includegraphics[width=\textwidth]{waveform_time_domain}
-    \caption{Time domain}
-    \label{fig:waveform_time_domain}
-  \end{subfigure}
-
-  \caption{Comparison of a typical 3-subcarrier multisine and CW in time and frequency domains (modified from \cite{Trotter2009}). The thick lines are examples of rectifier output voltage.}
+  \subfigure[Frequency domain]{
+    \includegraphics[width=0.48\textwidth]{waveform_frequency_domain}}\label{fig:waveform_frequency_domain}
+  \subfigure[Time domain]{
+    \includegraphics[width=0.48\textwidth]{waveform_time_domain}}\label{fig:waveform_time_domain}
+  \caption{Comparison of a typical 3-subcarrier multisine and CW in time and frequency domains (modified from \cite{Trotter2009})}
   \label{fig:waveform_comparison}
 \end{figure}
 
@@ -40,22 +50,32 @@ It can be hard to derive an accurate expression of the RF-to-DC efficiency ${e_3
 
 As illustrated by Figure \ref{fig:single_diode_rectifier}, the rectifier consists of a single diode as the source of nonlinearity and a low-pass filter to store energy.
 
+%\begin{figure}
+%  \centering
+%
+%  \begin{subfigure}{.45\textwidth}
+%    \centering
+%      \includegraphics[width=\textwidth]{antenna_equivalent_circuit}
+%    \caption{Antenna equivalent circuit}
+%    \label{fig:antenna_equivalent_circuit}
+%  \end{subfigure}
+%  \begin{subfigure}{.45\textwidth}
+%    \centering
+%      \includegraphics[width=\textwidth]{single_diode_rectifier}
+%    \caption{A single diode rectifier}
+%    \label{fig:single_diode_rectifier}
+%  \end{subfigure}
+%
+%  \caption{Rectenna architecture}
+%  \label{fig:rectenna_architecture}
+%\end{figure}
+
 \begin{figure}
   \centering
-
-  \begin{subfigure}{.45\textwidth}
-    \centering
-      \includegraphics[width=\textwidth]{antenna_equivalent_circuit}
-    \caption{Antenna equivalent circuit}
-    \label{fig:antenna_equivalent_circuit}
-  \end{subfigure}
-  \begin{subfigure}{.45\textwidth}
-    \centering
-      \includegraphics[width=\textwidth]{single_diode_rectifier}
-    \caption{A single diode rectifier}
-    \label{fig:single_diode_rectifier}
-  \end{subfigure}
-
+  \subfigure[Antenna equivalent circuit]{
+    \includegraphics[width=0.48\textwidth]{antenna_equivalent_circuit}}\label{fig:antenna_equivalent_circuit}
+  \subfigure[A single diode rectifier]{
+    \includegraphics[width=0.48\textwidth]{single_diode_rectifier}}\label{fig:single_diode_rectifier}
   \caption{Rectenna architecture}
   \label{fig:rectenna_architecture}
 \end{figure}

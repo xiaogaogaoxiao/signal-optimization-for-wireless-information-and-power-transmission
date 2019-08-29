@@ -1,10 +1,9 @@
 In this section, we evaluate the performance of superposed waveform by applying the proposed algorithms to diode nonlinear model. A WiFi-like open space environment with multipath channel is assumed and simulated with HiperLAN/2 model B \cite{Medbo1998}, where the 18 taps are modelled as i.i.d. CSCG variables with normalized total average power. Table \ summarizes the parameters employed as reference in the simulation.
 
-\begin{table}\label{tab:reference_parameters}
-\caption{Reference Parameters in Simulation}
-\begin{tabular}{l|ll}
+\begin{table}[h!]\label{tab:reference_parameters}
+\begin{tabular}{lll}
                               & Parameter                          & Value                                \\ \hline
-\multirow{10}{*}{Transceiver} & Truncation order                   & ${n_o} = 4$                          \\
+\multirow{11}{*}{Transceiver} & Truncation order                   & ${n_o} = 4$                          \\
                               & Diode k-parameters                 & ${k_2} = 0.0034;{k_4} = 0.3829$      \\
                               & Antenna resistance                 & ${R_{{\text{ant}}}} = \SI{50}{\ohm}$ \\
                               & Transmit antenna                   & $M = 1$                              \\
@@ -13,8 +12,9 @@ In this section, we evaluate the performance of superposed waveform by applying 
                               & Average receive power              & $P_{{\text{rf}}}^r =  - 20$ dBm      \\
                               & Average Noise power                & $\sigma _n^2 =  - 40$ dBm            \\
                               & Effective isotropic radiated power & $\text{EIRP} = 36$ dBm               \\
-                              & Receive antenna gain               & ${G_r} = 2$ dBi                      \\ \hline
-\multirow{7}{*}{Channel}      & Center frequency                   & ${f_0} = 5.18$ GHz                   \\
+                              & Receive antenna gain               & ${G_r} = 2$ dBi                      \\
+                              & Minimum current gain per iteration & $\varepsilon  = \SI{0.05}{\uA}$      \\ \hline
+Channel                       & Center frequency                   & ${f_0} = 5.18$ GHz                   \\
                               & Path loss                          & $PL = 58$ dB                         \\
                               & Tap                                & $L = 18$                             \\
                               & Bandwidth                          & $B = 1$ MHz                          \\
