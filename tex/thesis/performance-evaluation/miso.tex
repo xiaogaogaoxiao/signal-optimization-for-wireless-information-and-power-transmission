@@ -1,0 +1,13 @@
+Next, we switch to the MISO case and investigate the influence of transmit antenna (Tx) on the R-E region. The same multipath channel model is assumed in the simulation and the plots are based on the average result of 300 FF channels with $N = 4$.
+
+\begin{figure}[ht]
+  \centering
+  \subfigure[FF: $M = 2$]{
+    \includegraphics[width=0.48\textwidth]{simo_re_ff_tx_2}\label{fig:re-ff-tx-2}}
+  \subfigure[FF: $M = 3$]{
+    \includegraphics[width=0.48\textwidth]{siso_re_ff_tx_3}\label{fig:re-ff-tx-3}}
+  \caption{R-E region vs $M$ for MISO FF channels}
+  \label{fig:re-miso}
+\end{figure}
+
+Thanks to the decoupling approach, the computational complexity is irrelevant to $M$ and the strategy is optimal for MISO. It can be observed that the R-E region is convex in both cases. Although increasing $M$ essentially produces more available subbands, the impact is different from increasing $N$ and the rectifier 
