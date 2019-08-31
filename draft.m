@@ -102,4 +102,89 @@ legend(legendStr);
 xlabel('Rate [bps/Hz]');
 ylabel('I_{DC} [\muA]');
 ylim([0, 6]);
-
+%% Optimum strategy for MIMO (N = 2)
+legendStr = cell(4 * Variable.nRxCases, 1);
+figure('Name', sprintf('MIMO: subband = %d', Channel{iCase}.subband));
+% WIPT
+for iCase = 1: Variable.nRxCases
+    plot(rateMimo(iCase, :), currentMimo(iCase, :) * 1e6);
+    legendStr{iCase} = sprintf('WIPT (PS): Rx = %d', Variable.rx(iCase));
+    hold on;
+end
+% WIT
+ax = gca;
+ax.ColorOrderIndex = 1;
+for iCase = 1: Variable.nRxCases
+    scatter(maxRate(iCase), 0);
+    legendStr{iCase + Variable.nRxCases} = sprintf('WIT: Rx = %d', Variable.rx(iCase));
+    hold on;
+end
+% time-sharing
+ax = gca;
+ax.ColorOrderIndex = 1;
+for iCase = 1: Variable.nRxCases
+    plot([rateMimo(iCase, 1), maxRate(iCase)], [currentMimo(iCase, 1) * 1e6, 0], '--');
+    legendStr{iCase + 2 * Variable.nRxCases} = sprintf('WIPT (TS): Rx = %d', Variable.rx(iCase));
+    hold on;
+end
+% optimal
+ax = gca;
+ax.ColorOrderIndex = 1;
+for iCase = 1: Variable.nRxCases
+    plot([rateMimo(iCase, 9), maxRate(iCase)], [currentMimo(iCase, 9) * 1e6, 0], '-.');
+    legendStr{iCase + 3 * Variable.nRxCases} = sprintf('WIPT + WIT: Rx = %d', Variable.rx(iCase));
+    hold on;
+end
+hold off;
+grid on; grid minor;
+legend(legendStr);
+xlabel('Rate [bps/Hz]');
+ylabel('I_{DC} [\muA]');
+xticks(0: 1: 15);
+%% Optimum strategy for MIMO (N = 4)
+legendStr = cell(4 * Variable.nRxCases, 1);
+figure('Name', sprintf('MIMO: subband = %d', Channel{iCase}.subband));
+% WIPT
+for iCase = 1: Variable.nRxCases
+    plot(rateMimo(iCase, :), currentMimo(iCase, :) * 1e6);
+    legendStr{iCase} = sprintf('WIPT (PS): Rx = %d', Variable.rx(iCase));
+    hold on;
+end
+% WIT
+ax = gca;
+ax.ColorOrderIndex = 1;
+for iCase = 1: Variable.nRxCases
+    scatter(maxRate(iCase), 0);
+    legendStr{iCase + Variable.nRxCases} = sprintf('WIT: Rx = %d', Variable.rx(iCase));
+    hold on;
+end
+% time-sharing
+ax = gca;
+ax.ColorOrderIndex = 1;
+for iCase = 1: Variable.nRxCases
+    plot([rateMimo(iCase, 1), maxRate(iCase)], [currentMimo(iCase, 1) * 1e6, 0], '--');
+    legendStr{iCase + 2 * Variable.nRxCases} = sprintf('WIPT (TS): Rx = %d', Variable.rx(iCase));
+    hold on;
+end
+% optimal
+ax = gca;
+ax.ColorOrderIndex = 1;
+index = 6;
+for iCase = 1: Variable.nRxCases
+    index = index + 1;
+    plot([rateMimo(iCase, index), maxRate(iCase)], [currentMimo(iCase, index) * 1e6, 0], '-.');
+    legendStr{iCase + 3 * Variable.nRxCases} = sprintf('Optimal: Rx = %d', Variable.rx(iCase));
+    hold on;
+end
+ax = gca;
+ax.ColorOrderIndex = 1;
+for iCase = 1: Variable.nRxCases
+    plot([rateMimo(iCase, 1), rateMimo(iCase, 4)], [currentMimo(iCase, 1), currentMimo(iCase, 4)] * 1e6, '-.');
+    hold on;
+end
+hold off;
+grid on; grid minor;
+legend(legendStr);
+xlabel('Rate [bps/Hz]');
+ylabel('I_{DC} [\muA]');
+xticks(0: 1: 15);

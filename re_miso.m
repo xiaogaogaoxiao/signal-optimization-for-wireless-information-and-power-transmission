@@ -38,28 +38,28 @@ end
 rateMisoAvg = squeeze(mean(rateMiso, 2)); currentMisoAvg = squeeze(mean(currentMiso, 2));
 maxRateAvg = mean(maxRate, 2);
 %% R-E region plots
-legendStr = cell(3 * Variable.nRxCases, 1);
+legendStr = cell(3 * Variable.nTxCases, 1);
 figure('Name', sprintf('MISO: subband = %d', Channel{iCase, iChannel}.subband));
 % WIPT
-for iCase = 1: Variable.nRxCases
+for iCase = 1: Variable.nTxCases
     plot(rateMisoAvg(iCase, :), currentMisoAvg(iCase, :) * 1e6);
-    legendStr{iCase} = sprintf('WIPT (PS): Rx = %d', Variable.rx(iCase));
+    legendStr{iCase} = sprintf('WIPT (PS): Rx = %d', Variable.tx(iCase));
     hold on;
 end
 % WIT
 ax = gca;
 ax.ColorOrderIndex = 1;
-for iCase = 1: Variable.nRxCases
+for iCase = 1: Variable.nTxCases
     scatter(maxRateAvg(iCase), 0);
-    legendStr{iCase + Variable.nRxCases} = sprintf('WIT: Rx = %d', Variable.rx(iCase));
+    legendStr{iCase + Variable.nTxCases} = sprintf('WIT: Rx = %d', Variable.tx(iCase));
     hold on;
 end
 % time-sharing
 ax = gca;
 ax.ColorOrderIndex = 1;
-for iCase = 1: Variable.nRxCases
+for iCase = 1: Variable.nTxCases
     plot([rateMisoAvg(iCase, 1), maxRateAvg(iCase)], [currentMisoAvg(iCase, 1) * 1e6, 0], '--');
-    legendStr{iCase + 2 * Variable.nRxCases} = sprintf('WIPT (TS): Rx = %d', Variable.rx(iCase));
+    legendStr{iCase + 2 * Variable.nTxCases} = sprintf('WIPT (TS): Rx = %d', Variable.tx(iCase));
 end
 hold off;
 grid on; grid minor;
@@ -67,5 +67,5 @@ legend(legendStr);
 xlabel('Rate [bps/Hz]');
 ylabel('I_{DC} [\muA]');
 xticks(0: 1: 15);
-save([pwd '/data/mimo.mat']);
+save([pwd '/data/miso.mat']);
 Push.pushNote(Push.Devices, 'MATLAB Assist', 'Job''s done!');
