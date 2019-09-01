@@ -20,6 +20,8 @@ A contrast of R-E plots on FF and FS channels also indicates the benefit of freq
 
 Another finding is that without power waveform, the R-E region appears convex such that PS dominates for all $N$. On the other hand, the R-E region with the superposed waveform by PS is convex for $N = 2,4$ but concave-convex for $N = 8,16$. Therefore, the optimal strategy is PS for small $N$, TS for large $N$, and a combination of PS and TS for medium $N$. As illustrated in Figure \ref{fig:siso-subband-optimal}, the best curve for medium $N$ consists of two parts. The straight part is achieved by TS between WPT (multisine only and $\rho  = 1$) that corresponds to the leftmost point and WIPT (superposed waveform with $0 < \rho  < 1$) that corresponds to the tangent point, while the convex part is the contribution of WIPT only. The characteristics of the optimal R-E region comes from the rectifier nonlinearity.
 
+Moreover, the plots over the FS channel suggests that for single-carrier transmission, the modulated waveform outperforms the superposed waveform for WPT. At a zero-approaching rate, the modulated waveform produces a DC current of \SI{2.69}{uA} while the superposed waveform only delivers \SI{2.64}{uA}. The actual current gap is even larger since the former still guarantees a slightly higher rate. On the contrary, the superposed waveform leads to a larger harvested current for $N \geqslant 2$. It demonstrates that modulation is beneficial in single-carrier transmission but can be detrimental in multi-carrier transmission.
+
 \begin{figure}[ht]
   \centering
   \subfigure[Optimal strategy for $N = 8$]{
