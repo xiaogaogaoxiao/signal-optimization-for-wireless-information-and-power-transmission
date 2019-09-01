@@ -39,7 +39,7 @@ noisePowerDbm = rxPowerDbm - snrDb; noisePower = dbm2pow(noisePowerDbm);
 % iteration threshold for current gain
 currentGainThr = 5e-8;
 % oversampling factor
-oversampleFactor = 1;
+oversampleFactor = 16;
 % peak-to-average power ratio
 paprDb = 10; papr = db2mag(paprDb);
 
