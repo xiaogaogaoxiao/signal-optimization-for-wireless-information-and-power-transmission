@@ -5,12 +5,12 @@ centerFrequency = 5.18e9;
 % bandwidth
 bandwidth = 1e6;
 % number of frequency bands
-subband = 4;
+subband = 8;
 % number of taps in the tapped-delay line model
 tap = 18;
 % channel fading type ("flat" or "selective")
-% fadingType = "flat";
-fadingType = "selective";
+fadingType = "flat";
+% fadingType = "selective";
 % gap frequency
 gapFrequency = bandwidth / subband;
 % sample frequency
@@ -55,7 +55,8 @@ validIndex = find(basebandFrequency >= -bandwidth / 2 & basebandFrequency <= ban
 Response = v2struct(centerFrequency, bandwidth, subband, tap, fadingType, sampleFrequency, basebandFrequency, validIndex);
 %% Variables
 % rate constraint per subband
-rateThr = 0: 0.5: 15;
+rateThr = 0: 0.5: 10;
+% rateThr = 0: 0.5: 15;
 % rateThr = 1: -0.2: 0;
 % rateThr = 0: 0.2: 1;
 % rateThr = 5: 5: 25;
@@ -79,7 +80,7 @@ nSnrCases = length(snrDb);
 % average noise power
 noisePowerDbm = rxPowerDbm - snrDb; noisePower = dbm2pow(noisePowerDbm);
 % different PAPR cases
-paprDb = [4 8 12]; papr = db2mag(paprDb);
+paprDb = [10 20 30]; papr = db2mag(paprDb);
 % number of PAPR cases
 nPaprCases = length(paprDb);
 % different transmit antenna cases
@@ -91,7 +92,7 @@ rx = [2 3];
 % number of rectenna cases
 nRxCases = length(rx);
 % number of channels to generate
-nChannels = 2;
+nChannels = 1e2;
 % weight on rectennas
 weight = cell(nRxCases, 1);
 for iCase = 1: nRxCases
