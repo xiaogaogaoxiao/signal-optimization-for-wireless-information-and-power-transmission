@@ -218,7 +218,7 @@ end
 rateMisoAvg = squeeze(nanmean(rateMiso, 2));
 currentMisoAvg = squeeze(mean(currentMiso, 2));
 maxRateAvg = mean(maxRate, 2);
-%% Optimum MISO instance
+%% Optimum MISO instance: N = 4
 legendStr = cell(4 * Variable.nTxCases, 1);
 figure('Name', sprintf('MISO: subband = %d', Channel{iCase, iChannel}.subband));
 % WIPT
@@ -250,6 +250,47 @@ ax.ColorOrderIndex = 1;
 for iCase = 1: Variable.nRxCases
     plot([rateMiso(iCase, iChannel, 1), rateMiso(iCase, iChannel, 5)], [currentMiso(iCase, iChannel, 1), currentMiso(iCase, iChannel, 5)] * 1e6, '-.');
     legendStr{iCase + 3 * Variable.nTxCases} = sprintf('Optimum: Tx = %d', Variable.tx(iCase));
+    hold on;
+end
+hold off;
+grid on; grid minor;
+legend(legendStr);
+xlabel('Rate [bps/Hz]');
+ylabel('I_{DC} [\muA]');
+xticks(0: 1: 15);
+%% Optimum MISO instance: N = 8
+legendStr = cell(3 * Variable.nTxCases, 1);
+figure('Name', sprintf('MISO instance: subband = %d', Channel{iCase}.subband));
+% WIPT
+for iCase = 1: Variable.nTxCases
+    plot(rateMiso(iCase, :), currentMiso(iCase, :) * 1e6);
+    legendStr{iCase} = sprintf('WIPT (PS): Tx = %d', Variable.tx(iCase));
+    hold on;
+end
+% WIT
+ax = gca;
+ax.ColorOrderIndex = 1;
+for iCase = 1: Variable.nTxCases
+    scatter(maxRate(iCase), 0);
+    legendStr{iCase + Variable.nTxCases} = sprintf('WIT: Tx = %d', Variable.tx(iCase));
+    hold on;
+end
+% time-sharing
+ax = gca;
+ax.ColorOrderIndex = 1;
+for iCase = 1: Variable.nTxCases
+    plot([rateMiso(iCase, 1), maxRate(iCase)], [currentMiso(iCase, 1) * 1e6, 0], '--');
+    legendStr{iCase + 2 * Variable.nTxCases} = sprintf('WIPT (TS): Tx = %d', Variable.tx(iCase));
+    hold on;
+end
+% optimal
+ax = gca;
+ax.ColorOrderIndex = 1;
+idx = 11;
+for iCase = 1: Variable.nRxCases
+    plot([rateMiso(iCase, 1), rateMiso(iCase, idx)], [currentMiso(iCase, 1), currentMiso(iCase, idx)] * 1e6, '-.');
+    legendStr{iCase + 3 * Variable.nTxCases} = sprintf('Optimum: Tx = %d', Variable.tx(iCase));
+    idx = idx + 2;
     hold on;
 end
 hold off;
