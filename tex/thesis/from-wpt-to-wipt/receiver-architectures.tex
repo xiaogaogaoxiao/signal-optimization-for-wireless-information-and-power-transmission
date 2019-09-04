@@ -1,25 +1,25 @@
-We investigated two practical architectures for the co-located integrated information and energy receiver. Both designs are equipped with individual ID and EH receivers. The former is a conventional baseband demodulator while the latter can be realized with the proposed rectifier structure in Section \ref{sec:rectenna-design}.
+We investigated two practical architectures for the co-located integrated information and energy receiver. Both designs are equipped with individual ID and EH receivers. The former is a conventional baseband demodulator while the latter can be implemented with the proposed rectifier structure in Section \ref{sec:rectenna-design}.
 
 
 
 \subsection{Time Switching}\label{sec:time-switching}
-A \textit{Time Switching (TS)} receiver (Figure \ref{fig:ts-receiver}) operates as either an information decoder or an energy harvester at a certain time. In the design, the transmitter divides the transmission block into orthogonal power and data slots with length ratio $\alpha $ and $1 - \alpha $ respectively, then optimizes the waveform for WPT or WIT individually. Also, the receiver periodically switches between ID and EH receivers in the corresponding slots. We assume perfect synchronization between transmitter and receiver for mode control. It can achieve different rate-energy tradeoffs by adjusting the slot length ratio $\alpha $ jointly with the transmit signals. As the input power range for information and power receivers are typically different, TS can be combined with a "near-far" scheduling \cite{Zhang2013} to benefit the system efficiency.
+A \textit{Time Switching} (TS) receiver (Fig. \ref{fig:ts-receiver}) operates as either an information decoder or an energy harvester at a fixed time. In the design, the transmitter divides the transmission block into orthogonal power and data slots with length ratios $\alpha $ and $1 - \alpha $ respectively. It then optimizes the waveform for WPT or WIT individually. On the other hand, the receiver periodically switches between ID and EH receivers in the corresponding slots. Perfect synchronization between transmitter and receiver is required for precise mode control. It can achieve different rate-energy tradeoffs by adjusting the slot length ratio $\alpha $ jointly with the transmit signals. Since the information decoder and energy harvester may work in different power ranges, TS can be combined with a "near-far" scheduling \cite{Zhang2013} to benefit the system efficiency.
 
-\begin{figure}
+\begin{figure}[ht]
   \centering
     \includegraphics[width=\textwidth]{ts_receiver}
-  \caption{Structure of time switching receiver \cite{Clerckx2019}}
+  \caption{Structure of TS receiver \cite{Clerckx2019}}
   \label{fig:ts-receiver}
 \end{figure}
 
 
 
 \subsection{Power Splitting}\label{sec:power-splitting}
-In a \textit{Power Splitting (PS)} receiver (Figure \ref{fig:ps-receiver}), we introduce a PS ratio $\rho $ to split the received signal into separate power stream (with proportion $\rho $) and information stream (with proportion $1 - \rho $). At the transmitter, the signal is jointly optimized for information and power transmission according to CSIT. With the assumption of perfect matching, the EH and ID receivers are with input voltage signals $\sqrt {\rho {R_{{\text{ant}}}}} y(t)$ and $\sqrt {(1 - \rho ){R_{{\text{ant}}}}} y(t)$ respectively. Varying the PS ratio $\rho $ and the transmit signals leads to different rate-energy points. It is argued in \cite{Zhang2013} that the PS scheme is optimal for ideal RF-to-baseband signal conversion with negligible processing noise, but the condition is hard to meet in practice.
+In \textit{Power Splitting} (PS) receiver (Fig. \ref{fig:ps-receiver}), we introduce a PS ratio $\rho $ to split the received signal into individual power stream (with proportion $\rho $) and information stream (with proportion $1 - \rho $). At the transmitter, the signal is jointly optimized for information and power transmission according to CSIT. When perfectly matched, the EH and ID receivers are with input voltage $\sqrt {\rho {R_{{\text{ant}}}}} y(t)$ and $\sqrt {(1 - \rho ){R_{{\text{ant}}}}} y(t)$ respectively. Different rate-energy pairs can be obtained by varying the PS ratio $\rho $. It is argued in \cite{Zhang2013} that PS is the best strategy for linear harvester model with negligible RF-to-baseband noise, but \cite{Clerckx2016} demonstrated that the PS-only transmission is suboptimal when considering rectifier nonlinearity.
 
-\begin{figure}
+\begin{figure}[ht]
   \centering
-    \includegraphics[width=\textwidth]{ps_receiver}
-  \caption{Structure of power splitting receiver \cite{Clerckx2019}}
+    \includegraphics[width=0.8\textwidth]{ps_receiver}
+  \caption{Structure of PS receiver \cite{Clerckx2019}}
   \label{fig:ps-receiver}
 \end{figure} 

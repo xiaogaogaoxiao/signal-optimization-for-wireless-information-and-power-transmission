@@ -1,27 +1,27 @@
-Consider a point-to-point MISO WIPT system in multipath environment. The $M$-antenna transmitter delivers information and power simultaneously to the single-antenna receiver through $N$ orthogonal subbands. It is assumed the carrier frequencies are with even spacing $\Delta f$ and equal bandwidth ${B_{\text{s}}}$. The $n$-th subband has carrier frequency ${f_n} = {f_0} + n\Delta f$ for $n = 0, \ldots ,N - 1$. To maximize the rate-energy tradeoff, we employ a superposed signal consists of a multi-carrier deterministic multisine waveform and a multi-carrier random modulated waveform for WIPT. Both components are transmitted on the same frequency bands.
+Consider a point-to-point MISO WIPT system in a multipath environment. The $M$-antenna transmitter delivers information and power simultaneously to the single-antenna receiver through $N$ orthogonal subbands. It is assumed the carrier frequencies are with even spacing $\Delta f$ and equal bandwidth ${B_{\text{s}}}$. The $n$-th subband has carrier frequency ${f_n} = {f_0} + n\Delta f$ for $n = 0, \ldots ,N - 1$. To maximize the rate-energy tradeoff, we employ a superposed signal consists of a multi-carrier deterministic multisine waveform and a multi-carrier modulated waveform for WIPT. Both components are transmitted on the same frequency bands.
 
 
 
 \subsection{Transmitted Information Waveform}\label{sec:transmitted-information-waveform}
-Denote the information symbol carried by the modulated waveform on subband $n$ as ${{\tilde x}_n}$, we assume the input symbol is with the capacity-achieving i.i.d. Circular Symmetric Complex Gaussian (CSCG) distribution with zero mean and unit variance \cite{Varasteh2017a}:
+Denoting the information symbol carried by the modulated waveform on subband $n$ as ${{\tilde x}_n}$, we assume the input symbol is with the capacity-achieving i.i.d. Circular Symmetric Complex Gaussian (CSCG) distribution with zero mean and unit variance \cite{Varasteh2017a}:
 
 \begin{equation}\label{eqn:unmodulated_symbol}
   {{\tilde x}_n} = \left| {{{\tilde x}_n}} \right|{e^{j{\phi _{{{\tilde x}_n}}}}}\sim\mathcal{C}\mathcal{N}(0,1)
 \end{equation}
 
-Hence, the modulated waveform on antenna $m = 1, \ldots ,M$, subband $n$ writes as
+Hence, the modulated waveform on antenna $m = 1, \ldots ,M$, subband $n = 1, \ldots ,N$ writes as
 
 \begin{equation}\label{eqn:modulated_symbol}
   {x_{n,m}} = {w_{I,n,m}}{{\tilde x}_n}
 \end{equation}
 
-where ${w_{I,n,m}}$ is the corresponding information weight and is a constant for a certain channel state:
+where ${w_{I,n,m}}$ is the corresponding information weight and is a constant for a certain channel realization:
 
 \begin{equation}\label{eqn:weight_information}
   {w_{I,n,m}} = \left| {{w_{I,n,m}}} \right|{e^{j{\phi _{I,n,m}}}} = {s_{I,n,m}}{e^{j{\phi _{I,n,m}}}}
 \end{equation}
 
-Note the amplitude and phase are separated in resource allocation. Define matrices ${{\mathbf{S}}_I}$ and ${{\mathbf{\Phi }}_I}$ of size $N \times M$ such that the $(n,m)$ entries hold ${s_{I,n,m}}$ and ${\phi _{I,n,m}}$ respectively, the design of information waveform is converted into an optimization problem on both matrices, with the average WIT transmit power ${P_I} = \frac{1}{2}\left\| {{{\mathbf{S}}_I}} \right\|_F^2$. The modulated symbol of equation \ref{eqn:modulated_symbol} can be further expressed as
+Note the amplitude and phase are separated in the optimization. Define matrices ${{\mathbf{S}}_I}$ and ${{\mathbf{\Phi }}_I}$ of size $N \times M$ such that the $(n,m)$ entries hold ${s_{I,n,m}}$ and ${\phi _{I,n,m}}$ respectively. In this way, the design of information waveform is converted into an optimization problem on both matrices, with the average WIT transmit power ${P_I} = \frac{1}{2}\left\| {{{\mathbf{S}}_I}} \right\|_F^2$. The modulated symbol \eqref{eqn:modulated_symbol} can be further expressed as
 
 \begin{equation}\label{eqn:modulated_symbol_further}
   {x_{n,m}} = {s_{I,n,m}}{e^{j{\phi _{I,n,m}}}} \cdot \left| {{{\tilde x}_n}} \right|{e^{j{\phi _{{{\tilde x}_n}}}}} = {{\tilde s}_{I,n,m}}{e^{j{{\tilde \phi }_{I,n,m}}}}
@@ -54,14 +54,14 @@ Comparing with the information component, the multisine power component is unmod
   {w_{P,n,m}} = {s_{P,n,m}}{e^{j{\phi _{P,n,m}}}}
 \end{equation}
 
-where ${s_{P,n,m}}$ and ${{\phi _{P,n,m}}}$ are the amplitude and phase of the multisine signal. Collect them into the $(n,m)$ entries of matrices ${{\mathbf{S}}_P}$ and ${{\mathbf{\Phi }}_P}$, the average power of the WPT waveform is $\frac{1}{2}\left\|\mathbf{S}_{P}\right\|_{F}^{2}$. Similarly, the power waveform ${x_{P,m}}(t)$ on antenna $m$ at time $t$ is
+where ${s_{P,n,m}}$ and ${{\phi _{P,n,m}}}$ are the amplitude and phase of the multisine signal. Collecting them into the $(n,m)$ entries of matrices ${{\mathbf{S}}_P}$ and ${{\mathbf{\Phi }}_P}$, the average power of the WPT waveform equals $\frac{1}{2}\left\|\mathbf{S}_{P}\right\|_{F}^{2}$. Similarly, the power waveform ${x_{P,m}}(t)$ on antenna $m$ at time $t$ is
 
 \begin{align}\label{eqn:power_waveform}
   {x_{P,m}}(t) &= \sum\limits_{n = 0}^{N - 1} {{s_{P,n,m}}\cos \left( {2\pi {f_n}t + {\phi _{P,n,m}}} \right)}  \hfill \\
    &= \Re \left\{ {\sum\limits_{n = 0}^{N - 1} {{w_{P,n,m}}{e^{j2\pi {f_n}t}}} } \right\} \hfill
 \end{align}
 
-Combine the power signals on all $M$ antennas, the WPT signal vector writes as
+Combining the power signals on all $M$ antennas, the WPT signal vector writes as
 
 \begin{equation}\label{eqn:wpt_vector}
   {{\mathbf{x}}_P}(t) = \Re \left\{ {\sum\limits_{n = 0}^{N - 1} {{{\mathbf{w}}_{P,n}}} {e^{j2\pi {f_n}t}}} \right\}
@@ -71,7 +71,7 @@ with ${{\mathbf{w}}_{P,n}} = {\left[ {{w_{P,n,1}} \cdots {w_{P,n,M}}} \right]^T}
 
 
 
-\subsection{Multipath Channel and Received Signal}\label{sec:multipath-and-received-signal}
+\subsection{Channel and Received Waveform}\label{sec:multipath-and-received-signal}
 Consider a multipath channel with $L$ paths. For the $l$-th path ($l = 1, \ldots ,L$), denote the phase shift between the receive antenna and transmit antenna $m$ of subband $n$ as ${\zeta _{n,m,l}}$. Let ${\tau _l}$ and ${\alpha _l}$ be the delay and magnitude gain, and indicate the transmit signal on subband $n$ of antenna $m$ as
 
 \begin{equation}\label{eqn:superposed_waveform}
@@ -92,11 +92,93 @@ To ensure $v_{n, m}(t)$ and $\tilde{x}_{n}(t)$ being narrowband signals, we assu
    &\approx \Re \left\{ {\sum\limits_{n = 0}^{N - 1} {{h_{n,m}}} {v_{n,m}}(t){e^{j2\pi {f_n}t}}} \right\} \hfill
 \end{align}
 
-Hence, the total received signal can be obtained by stacking up equation \ref{eqn:received_signal_component} over all transmit signals
+Hence, the total received signal can be obtained by stacking up \eqref{eqn:received_signal_component} over all transmit signals
 
 \begin{align}\label{eqn:received_signal}
   y(t) &= {y_P}(t) + {y_I}(t) \hfill \\
    &= \Re \left\{ {\sum\limits_{n = 0}^{N - 1} {{{\mathbf{h}}_n}} \left( {{{\mathbf{w}}_{P,n}} + {{\mathbf{w}}_{I,n}}{{\tilde x}_n}} \right){e^{j2\pi {f_n}t}}} \right\} \hfill
 \end{align}
 
-where the channel vector is defined as ${{\mathbf{h}}_n} = \left[ {{h_{n,1}} \ldots {h_{n,M}}} \right]$. 
+where the channel vector is defined as ${{\mathbf{h}}_n} = \left[ {{h_{n,1}} \ldots {h_{n,M}}} \right]$.
+
+
+
+\subsection{Information Decoder}\label{sec:information-decoder}
+In the superposed transmit signal ${x_m}(t)$, the modulated component ${x_{I,m}}(t)$ carries all the information while the multisine component ${x_{P,m}}(t)$ completely serves the power. Since the latter is deterministic, it creates no interference and has zero contribution to the different entropy of ${x_m}(t)$ in terms of translation. Therefore, the achievable rate is equal to
+
+\begin{equation}\label{eqn:mutual_information}
+  I\left( {{{\mathbf{S}}_I},{{\mathbf{\Phi }}_I},\rho } \right) = \sum\limits_{n = 0}^{N - 1} {{{\log }_2}} \left( {1 + \frac{{(1 - \rho ){{\left| {{{\mathbf{h}}_n}{{\mathbf{w}}_{I,n}}} \right|}^2}}}{{\sigma _n^2}}} \right)
+\end{equation}
+
+where ${\sigma _n^2}$ is the total variance of the Gaussian noise at the RF-band and the noise introduced during the RF-to-baseband conversion (assumed Gaussian) on tone $n$. It reaches the maximum rate $I\left( {{\mathbf{S}}_I^ \star ,{\mathbf{\Phi }}_I^ \star ,0} \right)$ and boils down to WIT by setting $\rho  = 0$ then performing Maximum Ratio Transmission (MRT) and Water-Filling (WF) power allocation on subbands.
+
+A significant conclusion in \cite{Clerckx2018} is that the rate \eqref{eqn:mutual_information} is achievable with and without waveform cancellation. Since the multisine is deterministic, it can either be subtracted from the baseband signal or be used to construct the translated codebook. Conventional demodulation can be performed then.
+
+
+
+\subsection{Energy Harvester}\label{sec:energy-harvester}
+To investigate the impact of the proposed waveform on the harvested power, we apply the received signal expression \eqref{eqn:received_signal_component} to the diode current equation \eqref{eqn:output_current_function}.
+
+First, we consider the multi-carrier multisine waveform ${y_P}(t)$. The approximated harvester DC current with multisine excitation writes as
+
+\begin{equation}\label{eqn:current_power}
+  {i_{\text{out}}} \approx k_0^\prime  + \sum\limits_{i{\text{ even }},i \geqslant 2}^{{n_o}} {k_i^\prime } {\rho ^{i/2}}R_{\text{ant}}^{i/2}\mathbb{E}\left[ {{y_P}{{(t)}^i}} \right]
+\end{equation}
+
+The expectations of the received power waveform to the second and fourth orders were derived in \cite{Clerckx2016} as
+
+\begin{align}\label{eqn:power_waveform_second_order}
+  \mathbb{E}\left[ {{y_P}{{(t)}^2}} \right] &= \frac{1}{2}\sum\limits_{n = 0}^{N - 1} {{{\left| {{{\mathbf{h}}_n}{{\mathbf{w}}_{P,n}}} \right|}^2}} \\
+   &= \frac{1}{2}\sum\limits_{n = 0}^{N - 1} {\sum\limits_{{m_0},{m_1}} {{s_{P,n,{m_0}}}{s_{P,n,{m_1}}}{A_{n,{m_0}}}{A_{n,{m_1}}}\cos \left( {{\psi _{P,n,{m_0}}} - {\psi _{P,n,{m_1}}}} \right)} }
+\end{align}
+
+\begin{align}\label{eqn:power_waveform_fourth_order}
+  \mathbb{E}\left[ {{y_P}{{(t)}^4}} \right] &= \frac{3}{8}\Re \left\{ {\sum\limits_{\substack{{n_0},{n_1},{n_2},{n_3} \\ {n_0} + {n_1} = {n_2} + {n_3}}} {{{\mathbf{h}}_{{n_0}}}{{\mathbf{w}}_{P,{n_0}}}{{\mathbf{h}}_{{n_1}}}{{\mathbf{w}}_{P,{n_1}}}{{\left( {{{\mathbf{h}}_{{n_2}}}{{\mathbf{w}}_{P,{n_2}}}} \right)}^*}{{\left( {{{\mathbf{h}}_{{n_3}}}{{\mathbf{w}}_{P,{n_3}}}} \right)}^*}} } \right\} \\
+   &= \frac{3}{8}\sum\limits_{\substack{{n_0},{n_1},{n_2},{n_3} \\ {n_0} + {n_1} = {n_2} + {n_3}}} {\sum\limits_{{m_0},{m_1},{m_2},{m_3}} {\left[ {\prod\limits_{j = 0}^3 {{s_{{P},{n_j},{m_j}}}} {A_{{n_j},{m_j}}}} \right] }} \nonumber \\
+   &\quad \cos \left( {{\psi _{{P},{n_0},{m_0}}} + {\psi _{{P},{n_1},{m_1}}} - {\psi _{{P},{n_2},{m_2}}} - {\psi _{{P},{n_3},{m_3}}}} \right)
+\end{align}
+
+We then turn to the multi-carrier modulated waveform ${y_I}(t)$. It can be treated as a multisine waveform for the input symbols $\{ {{\tilde x}_n}\} $ that vary randomly with symbol rate $1/{B_{\text{s}}}$. Similarly, the approximated DC current provided by the rectifier is given by
+
+\begin{equation}\label{eqn:current_information}
+  {i_{\text{out}}} \approx k_0^\prime  + \sum\limits_{i{\text{ even }},i \geqslant 2}^{{n_o}} {k_i^\prime } {\rho ^{i/2}}R_{\text{ant}}^{i/2}{\mathbb{E}_{\{ {{\tilde x}_n}\} }}\left[ {{y_I}{{(t)}^i}} \right]
+\end{equation}
+
+To obtain the expectation, we first extract the DC currents corresponding to a given set of amplitudes $\{ {{\tilde s}_{I,n,m}}\} $ and phases $\{ {{\tilde \phi }_{I,n,m}}\} $, then take the expectation over the distribution of the input symbol ${{\tilde x}_n}$. As an i.i.d. CSCG distribution ${{\tilde x}_n}\sim\mathcal{C}\mathcal{N}(0,1)$ is assumed, the amplitude square ${\left| {{{\tilde x}_n}} \right|^2}$ is exponentially distributed with $\mathbb{E}\left[ {{{\left| {{{\tilde x}_n}} \right|}^2}} \right] = 1$. Using the moment generating function, we also have $\mathbb{E}\left[ {{{\left| {{{\tilde x}_n}} \right|}^4}} \right] = \mathbb{E}\left[ {{{\left( {{{\left| {{{\tilde x}_n}} \right|}^2}} \right)}^2}} \right] = 2$. Note this gain applies to the output current, which measures the contribution of modulation and does not exist for multisine waveform. Following \cite{Clerckx2018}, we can obtain the expectation of the received information waveform to the second and fourth orders
+
+\begin{align}\label{eqn:information_waveform_second_order}
+  \mathbb{E}\left[ {{y_I}{{(t)}^2}} \right] &= \frac{1}{2}\sum\limits_{n = 0}^{N - 1} {\sum\limits_{{m_0},{m_1}} {{s_{I,n,{m_0}}}} } {s_{I,n,{m_1}}}{A_{n,{m_0}}}{A_{n,{m_1}}}\cos \left( {{\psi _{I,n,{m_0}}} - {\psi _{I,n,{m_1}}}} \right) \\
+   &= \frac{1}{2}\sum\limits_{n = 0}^{N - 1} {{{\left| {{{\mathbf{h}}_n}{{\mathbf{w}}_{I,n}}} \right|}^2}}
+\end{align}
+
+\begin{align}\label{eqn:information_waveform_fourth_order}
+  \mathbb{E}\left[ {{y_I}{{(t)}^4}} \right] &= \frac{6}{8}\sum\limits_{{n_0},{n_1}} {\sum\limits_{{m_0},{m_1},{m_2},{m_3}} {\left[ {\prod\limits_{j = 0,2} {{s_{I,{n_0},{m_j}}}{A_{{n_0},{m_j}}}} } \right]\left[ {\prod\limits_{j = 1,3} {{s_{I,{n_1},{m_j}}}{A_{{n_1},{m_j}}}} } \right]} } \nonumber \\
+   &\quad \cos \left( {{\psi _{I,{n_0},{m_0}}} + {\psi _{I,{n_1},{m_1}}} - {\psi _{I,{n_0},{m_2}}} - {\psi _{I,{n_1},{m_3}}}} \right) \\
+   &= \frac{6}{8}{\left[ {\sum\limits_{n = 0}^{N - 1} {{{\left| {{{\mathbf{h}}_n}{{\mathbf{w}}_{I,n}}} \right|}^2}} } \right]^2} \label{eqn:waveform_end}
+\end{align}
+
+It is worth noting that the truncation order ${n_o}$ in \eqref{eqn:current_information} determines the relationship between the received signal and the harvested power. On top of it, \cite{Clerckx2016} proposed two diode models:
+
+\begin{itemize}
+  \item \textit{diode linear model} (${n_o} = 2$) is the conventional perspective that assumes the total output power is the sum of the subband power. It omits the rectifier nonlinearity and is typically suitable for very low input power (below -30 dBm).
+  \item \textit{diode nonlinear model} (${n_o} > 2$) considers the contributions of higher-order terms to the harvested power. It captures the nonlinear behavior of the diode with the product terms
+      modeling the cross contribution of different frequencies (as indicated by ${{n_0},{n_1}}$ in \eqref{eqn:information_waveform_fourth_order} and \eqref{eqn:power_waveform_fourth_order}). The model is complicated but accurate, which especially fits the low power regime between -30 dBm and 0 dBm.
+\end{itemize}
+
+In the diode linear model corresponding to \eqref{eqn:power_waveform_second_order} and \eqref{eqn:information_waveform_second_order}, the output current is only a function of $\sum\limits_{n = 0}^{N - 1} {{{\left| {{{\mathbf{h}}_n}{{\mathbf{w}}_{P/I,n}}} \right|}^2}} $. Hence, it appears that multi-carrier multisine and modulated waveforms are equally suitable for WPT. On the other hand, the diode nonlinear model highlights a clear difference between the power delivered by both waveforms. For the modulated component, the second and fourth order terms in \eqref{eqn:information_waveform_second_order} and \eqref{eqn:information_waveform_fourth_order} share same dependencies on ${\sum\limits_{n = 0}^{N - 1} {{{\left| {{{\mathbf{h}}_n}{{\mathbf{w}}_{I,n}}} \right|}^2}} }$. It implies that for a modulated waveform with CSCG inputs, the higher order terms behave similarly to the second order term, and there is no essential difference between both models. In comparison, for the multisine waveform, the parts \eqref{eqn:power_waveform_second_order} and \eqref{eqn:power_waveform_fourth_order} are decomposed as the product of contributions from different subbands. Also, the second order term is linear as a sum over each frequency while the nonlinear fourth order term shows some cross correlation between different subbands.
+
+In this paper, we set ${n_o} = 4$ to explore the fundamental nonlinear behaviour of the diode and its impact on the harvested current. Therefore, the approximated output DC current \eqref{eqn:output_current_function} reduces to
+
+\begin{align}\label{eqn:output_current_truncated}
+  {i_{\text{out}}} &\approx k_0^\prime  + k_2^\prime \rho {R_{{\text{ant}}}}\mathbb{E}\left[ {{y_P}{{(t)}^2}} \right] + k_4^\prime {\rho ^2}R_{ant}^2\mathbb{E}\left[ {{y_P}{{(t)}^4}} \right] \nonumber \\
+   &\quad + k_2^\prime \rho {R_{{\text{ant}}}}\mathbb{E}\left[ {{y_I}{{(t)}^2}} \right] + k_4^\prime {\rho ^2}R_{ant}^2\mathbb{E}\left[ {{y_I}{{(t)}^4}} \right] \nonumber \\
+   &\quad + 6k_4^\prime {\rho ^2}R_{{\text{ant}}}^2\mathbb{E}\left[ {{y_P}{{(t)}^2}} \right]\mathbb{E}\left[ {{y_I}{{(t)}^2}} \right]
+\end{align}
+
+whose corresponding target function is
+
+\begin{align}\label{eqn:target_function_truncated}
+  {z_{\text{DC}}} &\approx k_0  + k_2 \rho {R_{{\text{ant}}}}\mathbb{E}\left[ {{y_P}{{(t)}^2}} \right] + k_4 {\rho ^2}R_{ant}^2\mathbb{E}\left[ {{y_P}{{(t)}^4}} \right] \nonumber \\
+   &\quad + k_2 \rho {R_{{\text{ant}}}}\mathbb{E}\left[ {{y_I}{{(t)}^2}} \right] + k_4 {\rho ^2}R_{ant}^2\mathbb{E}\left[ {{y_I}{{(t)}^4}} \right] \nonumber \\
+   &\quad + 6k_4 {\rho ^2}R_{{\text{ant}}}^2\mathbb{E}\left[ {{y_P}{{(t)}^2}} \right]\mathbb{E}\left[ {{y_I}{{(t)}^2}} \right]
+\end{align} 

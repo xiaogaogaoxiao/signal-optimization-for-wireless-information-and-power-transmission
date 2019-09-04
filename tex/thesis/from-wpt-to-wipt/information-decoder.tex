@@ -1,9 +1,0 @@
-In the superposed transmit signal ${x_m}(t)$, the modulated component ${x_{I,m}}(t)$ carries all the information while the multisine component ${x_{P,m}}(t)$ completely serves the power. Since the latter is deterministic, it creates no interference and has zero contribution to the different entropy of ${x_m}(t)$ in terms of translation. Therefore, the achievable rate is equal to
-
-\begin{equation}\label{eqn:mutual_information}
-  I\left( {{{\mathbf{S}}_I},{{\mathbf{\Phi }}_I},\rho } \right) = \sum\limits_{n = 0}^{N - 1} {{{\log }_2}} \left( {1 + \frac{{(1 - \rho ){{\left| {{{\mathbf{h}}_n}{{\mathbf{w}}_{I,n}}} \right|}^2}}}{{\sigma _n^2}}} \right)
-\end{equation}
-
-where ${\sigma _n^2}$ is the total variance of the Gaussian noise at the RF-band and the noise introduced during the RF-to-baseband conversion (assumed Gaussian) on tone $n$. It reaches the maximum rate $I\left( {{\mathbf{S}}_I^ \star ,{\mathbf{\Phi }}_I^ \star ,0} \right)$ and boils down to WIT by setting $\rho  = 0$ then performing Maximum Ratio Transmission (MRT) and Water-Filling (WF) power allocation on subbands.
-
-An significant conclusion in \cite{Clerckx2018} is that the rate \ref{eqn:mutual_information} is always achievable with and without waveform cancellation. As the multisine is deterministic, it can either be subtracted from the baseband signal or used to construct the translated codebook. Conventional demodulation can be performed then. 
