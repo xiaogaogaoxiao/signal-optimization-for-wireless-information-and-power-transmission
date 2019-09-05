@@ -190,12 +190,12 @@ Algorithm \ref{alg:lower-bound} shows the basic idea to obtain the lower-bound o
       \State $z_{DC}^{(i)} \leftarrow {z_{DC}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},\rho } \right)$
     \Until{$\left| {z_{DC}^{(i)} - z_{DC}^{(i - 1)}} \right| < $ or $i = {i_{\max }}$}
   \end{algorithmic}
-\end{algorithm}  
+\end{algorithm}
 
 
 
 \subsection{PAPR Constraints}\label{sec:papr-constraints}
-Another practical constraint at the transmitter is PAPR. We assume the modulated information waveform is with unit PAPR (by PSK or FSK) so that the limitation only influence the design of multisine power waveform. Following \ref{eqn:power_waveform}, the PAPR constraint on antenna $m$ writes as
+Another practical constraint at the transmitter is PAPR. We assume the modulated information waveform is with unit PAPR (by PSK or FSK) so that the limitation only influence the design of multisine power waveform. Following \eqref{eqn:power_waveform}, the PAPR constraint on antenna $m$ writes as
 
 \begin{equation}\label{eqn:papr_power_waveform}
   {\text{PAPR}_m} = \frac{{\mathop {\max }\limits_t {{\left| {{x_{P,m}}(t)} \right|}^2}}}{{\mathbb{E}\left[ {{{\left| {{x_{P,m}}(t)} \right|}^2}} \right]}} = \frac{{\mathop {\max }\limits_t {{\left| {{x_{P,m}}(t)} \right|}^2}}}{{\frac{1}{2}{{\left\| {{{\mathbf{s}}_{P,m}}} \right\|}^2}}} \leqslant \eta
@@ -207,7 +207,7 @@ We assume the optimum phases ${\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \st
   {\left| {{x_{P,m}}\left( {{t_q}} \right)} \right|^2} \leqslant \frac{1}{2}\eta {\left\| {{{\mathbf{s}}_{P,m}}} \right\|^2}
 \end{equation}
 
-where the l.h.s. obtained from equation \ref{eqn:power_waveform} is
+where the l.h.s. obtained from equation \eqref{eqn:power_waveform} is
 
 \begin{equation}\label{eqn:papr_average_sample}
   {\left| {{x_{P,m}}\left( {{t_q}} \right)} \right|^2} = \sum\limits_{{n_0},{n_1}} {{s_{P,{n_0},m}}{s_{P,{n_1},m}}\cos \left( {{w_{{n_0}}}{t_q} + \phi _{P,{n_0},m}^ \star } \right)\cos \left( {{w_{{n_1}}}{t_q} + \phi _{P,{n_1},m}^ \star } \right)}
@@ -259,18 +259,18 @@ Algorithm \ref{alg:papr} shows the gist of the optimization procedure. For the s
       \State $i \leftarrow i + 1,\mathop {{{\mathbf{S}}_P}}\limits^{..}  \leftarrow {{\mathbf{S}}_P},\mathop {{{\mathbf{S}}_I}}\limits^{..}  \leftarrow {{\mathbf{S}}_I},\ddot \rho  \leftarrow \rho ,\ddot{\bar{\rho}}  \leftarrow \bar \rho $
       \State ${\gamma _k} \leftarrow {g_k}\left( {\mathop {{{\mathbf{S}}_P}}\limits^{..} ,\mathop {{{\mathbf{S}}_I}}\limits^{..} ,{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\ddot \rho } \right)/{z_{DC}}\left( {\mathop {{{\mathbf{S}}_P}}\limits^{..} ,\mathop {{{\mathbf{S}}_I}}\limits^{..} ,{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\ddot \rho } \right),k = 1, \ldots ,K$
       \State ${\gamma _{nk}} \leftarrow {g_{nk}}\left( {\mathop {{{\mathbf{S}}_I}}\limits^{..} ,\ddot{\bar{\rho}}} \right)/\left( {1 + \frac{{\ddot{\bar{\rho}}}}{{\sigma _n^2}}{C_n}\left( {\mathop {{{\mathbf{S}}_I}}\limits^{..} } \right)} \right),n = 0, \ldots ,N - 1,k = 1, \ldots ,{K_n}$
-      \State ${\gamma _{mq2k}} \leftarrow {g_{mq2k}}\left( {\mathop {{{\mathbf{S}}_P}}\limits^{..} ,{\mathbf{\Phi }}_P^ \star } \right)/\left( {\frac{1}{2}\eta {{\left\| {\mathop {{{\mathbf{s}}_{P,m}}}\limits^{..} } \right\|}^2} + {f_{mq2}}\left( {\mathop {{{\mathbf{S}}_P}}\limits^{..} ,{\mathbf{\Phi }}_P^ \star } \right)} \right),$ 
+      \State ${\gamma _{mq2k}} \leftarrow {g_{mq2k}}\left( {\mathop {{{\mathbf{S}}_P}}\limits^{..} ,{\mathbf{\Phi }}_P^ \star } \right)/\left( {\frac{1}{2}\eta {{\left\| {\mathop {{{\mathbf{s}}_{P,m}}}\limits^{..} } \right\|}^2} + {f_{mq2}}\left( {\mathop {{{\mathbf{S}}_P}}\limits^{..} ,{\mathbf{\Phi }}_P^ \star } \right)} \right),$
       \Statex $m = 1, \ldots ,M,q = 0, \ldots ,N{O_s} - 1,k = 1, \ldots ,{K_{mq2}}$
       \State ${{\mathbf{S}}_P},{{\mathbf{S}}_I},\rho ,\bar \rho  \leftarrow \arg \min $ \eqref{eqn:papr_target} -- \eqref{eqn:papr_ratio_constraint}
       \State $z_{DC}^{(i)} \leftarrow {z_{DC}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\rho } \right)$
     \Until{$\left| {z_{DC}^{(i)} - z_{DC}^{(i - 1)}} \right| < $ or $i = {i_{\max }}$}
   \end{algorithmic}
-\end{algorithm} 
+\end{algorithm}
 
 
 
 \subsection{Multiple Rectennas}\label{sec:multiple-rectennas}
-The R-E region is expected to be enlarged by using multiple rectennas. In this part, we extend the general MISO strategy in \cite{Clerckx2018} to $U$ rectennas, which can either serve a single user in a point-to-point MIMO or spread across multiple users in a MU-MISO. Note that there exists a tradeoff between the energy harvested in different rectennas, since they have different preference on the transmitted waveform. The fairness issue can be solved by introducing weight ${v_u}$ for rectenna $u = 1, \ldots ,U$ and considering the weighted sum of DC components as a new target function
+The R-E region is expected to be enlarged by using multiple rectennas. In this part, we extend the general MISO strategy in \cite{Clerckx2018} to $U$ rectennas, which can either serve a single user in a point-to-point MIMO or spread across multiple users in an MU-MISO. Note that there exists a tradeoff between the energy harvested in different rectennas since they have different preference on the transmitted waveform. The fairness issue can be solved by introducing weight ${v_u}$ for rectenna $u = 1, \ldots ,U$ and considering the weighted sum of DC components as a new target function
 
 \begin{equation}\label{eqn:weighted_target}
   {Z_{DC}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{{\mathbf{\Phi }}_P},{{\mathbf{\Phi }}_I},\rho } \right) = \sum\limits_{u = 1}^U {{v_u}{z_{DC,u}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{{\mathbf{\Phi }}_P},{{\mathbf{\Phi }}_I},\rho } \right)}

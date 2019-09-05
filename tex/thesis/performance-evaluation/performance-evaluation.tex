@@ -1,5 +1,5 @@
 \chapter{Performance Evaluation}
-In this section, we evaluate the performance of the proposed design by applying the proposed algorithms to optimize the transmitted waveform and the power splitter based on the diode nonlinear model. A WiFi-like open space environment with multipath channel is assumed and simulated with HiperLAN/2 model B \cite{Medbo1998}, where the 18 taps are modelled as i.i.d. CSCG variables with normalized total average power. Table \ref{tab:reference_parameters} summarizes the reference parameters in the simulation. In the following sections, the settings will be employed unless otherwise stated.
+In this section, we simulate the target systems with MATLAB and perform the optimizations using CVX. We also characterize and compare the R-E regions based on different configurations. The multipath channel is implemented with HiperLAN/2 model B \cite{Medbo1998}, where the 18 taps are modeled as i.i.d. CSCG variables with normalized average power. Table \ref{tab:reference_parameters} summarizes the reference parameters in the simulation. In the following sections, the settings will be employed unless otherwise stated.
 
 \begin{table}[h!]
 \caption{Reference parameters used in the simulation}
@@ -25,7 +25,7 @@ In this section, we evaluate the performance of the proposed design by applying 
                               & SNR                                & $\text{SNR} = 20$ dB
 \end{tabular}
 \label{tab:reference_parameters}
-\end{table} 
+\end{table}
 
 \section{SISO}\label{sec:siso}
   \input{performance-evaluation/siso.tex}

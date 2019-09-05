@@ -144,7 +144,13 @@ We then turn to the multi-carrier modulated waveform ${y_I}(t)$. It can be treat
   {i_{\text{out}}} \approx k_0^\prime  + \sum\limits_{i{\text{ even }},i \geqslant 2}^{{n_o}} {k_i^\prime } {\rho ^{i/2}}R_{\text{ant}}^{i/2}{\mathbb{E}_{\{ {{\tilde x}_n}\} }}\left[ {{y_I}{{(t)}^i}} \right]
 \end{equation}
 
-To obtain the expectation, we first extract the DC currents corresponding to a given set of amplitudes $\{ {{\tilde s}_{I,n,m}}\} $ and phases $\{ {{\tilde \phi }_{I,n,m}}\} $, then take the expectation over the distribution of the input symbol ${{\tilde x}_n}$. As an i.i.d. CSCG distribution ${{\tilde x}_n}\sim\mathcal{C}\mathcal{N}(0,1)$ is assumed, the amplitude square ${\left| {{{\tilde x}_n}} \right|^2}$ is exponentially distributed with $\mathbb{E}\left[ {{{\left| {{{\tilde x}_n}} \right|}^2}} \right] = 1$. Using the moment generating function, we also have $\mathbb{E}\left[ {{{\left| {{{\tilde x}_n}} \right|}^4}} \right] = \mathbb{E}\left[ {{{\left( {{{\left| {{{\tilde x}_n}} \right|}^2}} \right)}^2}} \right] = 2$. Note this gain applies to the output current, which measures the contribution of modulation and does not exist for multisine waveform. Following \cite{Clerckx2018}, we can obtain the expectation of the received information waveform to the second and fourth orders
+To obtain the expectation, we first extract the DC currents corresponding to a given set of amplitudes $\{ {{\tilde s}_{I,n,m}}\} $ and phases $\{ {{\tilde \phi }_{I,n,m}}\} $, then take the expectation over the distribution of the input symbol ${{\tilde x}_n}$. As an i.i.d. CSCG distribution ${{\tilde x}_n}\sim\mathcal{C}\mathcal{N}(0,1)$ is assumed, the amplitude square ${\left| {{{\tilde x}_n}} \right|^2}$ is exponentially distributed with $\mathbb{E}\left[ {{{\left| {{{\tilde x}_n}} \right|}^2}} \right] = 1$. Using the moment generating function, we also have 
+
+\begin{equation}\label{eqn:modulation_gain}
+  \mathbb{E}\left[ {{{\left| {{{\tilde x}_n}} \right|}^4}} \right] = \mathbb{E}\left[ {{{\left( {{{\left| {{{\tilde x}_n}} \right|}^2}} \right)}^2}} \right] = 2
+\end{equation}
+
+Note this modulation gain applies to the output current, which measures the contribution of modulation and does not exist for multisine waveform. Following \cite{Clerckx2018}, we can obtain the expectation of the received information waveform to the second and fourth orders
 
 \begin{align}\label{eqn:information_waveform_second_order}
   \mathbb{E}\left[ {{y_I}{{(t)}^2}} \right] &= \frac{1}{2}\sum\limits_{n = 0}^{N - 1} {\sum\limits_{{m_0},{m_1}} {{s_{I,n,{m_0}}}} } {s_{I,n,{m_1}}}{A_{n,{m_0}}}{A_{n,{m_1}}}\cos \left( {{\psi _{I,n,{m_0}}} - {\psi _{I,n,{m_1}}}} \right) \\
