@@ -1,0 +1,389 @@
+\subsection{General Approach}\label{sec:general-approach}
+Although the problem \eqref{eqn:original_target} -- \eqref{eqn:original_rate_constraint} is not a standard GP, we can transform it to a Reversed GP by introducing an auxiliary variable ${t_0}$ \cite{Chiang2005}
+
+\begin{eqnarray}
+  {\mathop {\min }\limits_{{{\mathbf{S}}_P},{{\mathbf{S}}_I},\rho ,{t_0}} }&{1/{t_0}} \label{eqn:transformed_target} \\
+  {{\text{ subject to }}}&{\frac{1}{2}\left[ {\left\| {{{\mathbf{S}}_I}} \right\|_F^2 + \left\| {{{\mathbf{S}}_P}} \right\|_F^2} \right] \leqslant P} \label{eqn:transformed_power_constraint} \\
+  {}&{{t_0}/{z_{DC}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\rho } \right) \leqslant 1} \label{eqn:transformed_current_constraint} \\
+  {}&{{2^{\bar R}}/\left[ {\prod\limits_{n = 0}^{N - 1} {\left( {1 + \frac{{(1 - \rho )}}{{\sigma _n^2}}{C_n}} \right)} } \right] \leqslant 1} \label{eqn:transformed_rate_constraint}
+\end{eqnarray}
+
+We cannot apply GP tools to the new problem yet, as $1/{z_{DC}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\rho } \right)$ and $1/\left[ {\prod\nolimits_{n = 0}^{N - 1} {\left( {1 + \frac{{(1 - \rho )}}{{\sigma _n^2}}{C_n}} \right)} } \right]$ are not posynomials. To solve this, \cite{Clerckx2018} suggested a conservative approach to approximate the terms with posynomials in the denominator by new posynomials, based on the Arithmetic Mean-Geometric Mean (AM-GM) inequality.
+
+Consider constraint \eqref{eqn:transformed_current_constraint} first. The posynomial at the denominator can be decomposed as the sum of monomials
+
+\begin{equation}\label{eqn:transformed_current_posynomial_decomposition}
+  {z_{DC}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\rho } \right) = \sum\limits_{k = 1}^K {{g_k}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\rho } \right)}
+\end{equation}
+
+Since monomial $\left\{ {{g_k}} \right\}$ is nonnegative for all $k$, the AM-GM inequality suggests a posynomial upper bound for the previous non-posynomial term
+
+\begin{equation}\label{eqn:transformed_current_am_gm}
+  \frac{1}{{\sum\limits_{k = 1}^K {{g_k}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\rho } \right)} }} \leqslant \prod\limits_{k = 1}^K {{{\left( {\frac{{{g_k}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\rho } \right)}}{{{\gamma _k}}}} \right)}^{ - {\gamma _k}}}}
+\end{equation}
+
+The nonnegative coefficients $\left\{ {{\gamma _k}} \right\}$ are chosen to satisfy $\sum\nolimits_{k = 1}^K {{\gamma _k}}  = 1$. Similarly, define $\bar \rho  = 1 - \rho $ and let $\left\{ {{g_{nk}}\left( {{{\mathbf{S}}_I},\bar \rho } \right)} \right\}$ be the monomials of the posynomial $1 + \frac{{\bar \rho }}{{\sigma _n^2}}{C_n}$, we have
+
+\begin{equation}\label{eqn:transformed_rate_posynomial_decomposition}
+  1 + \frac{{\bar \rho }}{{\sigma _n^2}}{C_n} = \sum\limits_{k = 1}^{{K_n}} {{g_{nk}}} \left( {{{\mathbf{S}}_I},\bar \rho } \right)
+\end{equation}
+
+Apply the AM-GM inequality to \eqref{eqn:transformed_rate_posynomial_decomposition}, we have
+
+\begin{equation}\label{eqn:transformed_rate_am_gm}
+  \frac{1}{{1 + \frac{{\bar \rho }}{{\sigma _n^2}}{C_n}}} \leqslant \prod\limits_{k = 1}^{{K_n}} {{{\left( {\frac{{{g_{nk}}\left( {{{\mathbf{S}}_I},\bar \rho } \right)}}{{{\gamma _{nk}}}}} \right)}^{ - {\gamma _{nk}}}}}
+\end{equation}
+
+with ${\gamma _{nk}} \geqslant 0$ and $\sum\nolimits_{k = 1}^{{K_n}} {{\gamma _{nk}}}  = 1$. In this way, we transformed the problem into a standard GP
+
+\begin{eqnarray}
+  {\mathop {\min }\limits_{{{\mathbf{S}}_P},{{\mathbf{S}}_I},\rho ,\bar \rho ,{t_0}} }&{1/{t_0}} \label{eqn:general_target} \\
+  {{\text{ subject to }}}&{\frac{1}{2}\left[ {\left\| {{{\mathbf{S}}_I}} \right\|_F^2 + \left\| {{{\mathbf{S}}_P}} \right\|_F^2} \right] \leqslant P} \label{eqn:general_power_constraint} \\
+  {}&{{t_0}\prod\limits_{k = 1}^K {{{\left( {\frac{{{g_k}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\rho } \right)}}{{{\gamma _k}}}} \right)}^{ - {\gamma _k}}}}  \leqslant 1} \label{eqn:general_current_constraint} \\
+  {}&{2^{\bar R}}\prod\limits_{n = 0}^{N - 1} {\prod\limits_{k = 1}^{{K_n}} {{{\left( {\frac{{{g_{nk}}\left( {{{\mathbf{S}}_I},\bar \rho } \right)}}{{{\gamma _{nk}}}}} \right)}^{ - {\gamma _{nk}}}}} }  \leqslant 1 \label{eqn:general_rate_constraint} \\
+  {}&{\rho  + \bar \rho  \leqslant 1} \label{eqn:general_ratio_constraint}
+\end{eqnarray}
+
+It is worth noting that the tightness of the AM-GM inequality depends on the choice of $\left\{ {{\gamma _k},{\gamma _{nk}}} \right\}$. In this paper, we employ the iterative method proposed in \cite{Clerckx2018} that updates the coefficient sets at iteration $i$ with the previous solution ${{\mathbf{S}}_P^{(i - 1)},{\mathbf{S}}_I^{(i - 1)},{\rho ^{(i - 1)}}}$ by
+
+\begin{eqnarray}
+  {{\gamma _k} = \frac{{{g_k}\left( {{\mathbf{S}}_P^{(i - 1)},{\mathbf{S}}_I^{(i - 1)},{\rho ^{(i - 1)}}} \right)}}{{{z_{DC}}\left( {{\mathbf{S}}_P^{(i - 1)},{\mathbf{S}}_I^{(i - 1)},{\rho ^{(i - 1)}}} \right)}},}&{k = 1, \ldots ,K} \\
+  {{\gamma _{nk}} = \frac{{{g_{nk}}\left( {{\mathbf{S}}_I^{(i - 1)},{{\bar \rho }^{(i - 1)}}} \right)}}{{1 + \frac{{{{\bar \rho }^{(i - 1)}}}}{{\sigma _n^2}}{C_n}\left( {{\mathbf{S}}_I^{(i - 1)}} \right)}},}&\begin{gathered}
+  n = 0, \ldots ,N - 1 \hfill \\
+  k = 1, \ldots ,{K_n} \hfill \\
+\end{gathered}
+\end{eqnarray}
+
+Once $\left\{ {{\gamma _k},{\gamma _{nk}}} \right\}$ are obtained, we solve \eqref{eqn:general_target} -- \eqref{eqn:general_ratio_constraint} to obtain ${\mathbf{S}}_P^{(i)},{\mathbf{S}}_I^{(i)},{\rho ^{(i)}}$. The iteration is repeated until it converges. Algorithm \ref{alg:general} summarizes the procedures involved in the optimization. The successive approximation approach is also known as inner approximation method \cite{Marks1978}, which cannot guarantee a global optimal solution but the result point satisfies the Karush–Kuhn–Tucker (KKT) conditions.
+
+\begin{algorithm}
+  \caption{General Waveform Design}
+  \label{alg:general}
+  \begin{algorithmic}[1]
+    \State \textbf{Initialize:} $i \leftarrow 0$, ${\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star $ in \eqref{eqn:optimal_phases}, ${{{\mathbf{S}}_P},{{\mathbf{S}}_I}}$ in \eqref{eqn:initial_amplitude}, $\rho ,\bar \rho  = 1 - \rho ,\bar R,z_{DC}^{(0)} = 0$
+    \Repeat
+      \State $i \leftarrow i + 1,\mathop {{{\mathbf{S}}_P}}\limits^{..}  \leftarrow {{\mathbf{S}}_P},\mathop {{{\mathbf{S}}_I}}\limits^{..}  \leftarrow {{\mathbf{S}}_I},\ddot \rho  \leftarrow \rho ,\ddot{\bar{\rho}}  \leftarrow \bar \rho $
+      \State ${\gamma _k} \leftarrow {g_k}\left( {\mathop {{{\mathbf{S}}_P}}\limits^{..} ,\mathop {{{\mathbf{S}}_I}}\limits^{..} ,{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\ddot \rho } \right)/{z_{DC}}\left( {\mathop {{{\mathbf{S}}_P}}\limits^{..} ,\mathop {{{\mathbf{S}}_I}}\limits^{..} ,{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\ddot \rho } \right),k = 1, \ldots ,K$
+      \State ${\gamma _{nk}} \leftarrow {g_{nk}}\left( {\mathop {{{\mathbf{S}}_I}}\limits^{..} ,\ddot{\bar{\rho}} } \right)/\left( {1 + \frac{{\ddot{\bar{\rho}}}}{{\sigma _n^2}}{C_n}\left( {\mathop {{{\mathbf{S}}_I}}\limits^{..} } \right)} \right),n = 0, \ldots ,N - 1,k = 1, \ldots ,{K_n}$
+      \State ${{\mathbf{S}}_P},{{\mathbf{S}}_I},\rho ,\bar \rho  \leftarrow \arg \min $ \eqref{eqn:general_target} -- \eqref{eqn:general_ratio_constraint}
+      \State $z_{DC}^{(i)} \leftarrow {z_{DC}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\rho } \right)$
+    \Until{$\left| {z_{DC}^{(i)} - z_{DC}^{(i - 1)}} \right| < $ or $i = {i_{\max }}$}
+  \end{algorithmic}
+\end{algorithm}
+
+
+
+\subsection{Decoupled Design}\label{sec:decoupled-design}
+For the transmitter with multiple antennas ($M > 1$), the previous method is involved with weight design across space and frequency. In this part, we will investigate an approach proposed in \cite{Clerckx2018} that decouples the optimization in spatial and frequency domains without impacting performance. As suggested by \eqref{eqn:mutual_information} and \eqref{eqn:power_waveform_second_order} -- \eqref{eqn:waveform_end}, the optimum weight vectors ${{\mathbf{w}}_{P,n}}$ and ${{\mathbf{w}}_{I,n}}$ that maximize the rate and energy correspond to the MRT beamformers, which are given by
+
+\begin{align}\label{eqn:mrt_weights}
+  {{\mathbf{w}}_{P,n}} &= {s_{P,n}}{\mathbf{h}}_n^H/\left\| {{{\mathbf{h}}_n}} \right\| \\
+  {{\mathbf{w}}_{I,n}} &= {s_{I,n}}{\mathbf{h}}_n^H/\left\| {{{\mathbf{h}}_n}} \right\|
+\end{align}
+
+Therefore, the received power and information signals \eqref{eqn:received_signal} rewrites as
+
+\begin{align}\label{eqn:mrt_received_components}
+  {y_P}(t) &= \sum\limits_{n = 0}^{N - 1} {\left\| {{{\mathbf{h}}_n}} \right\|} {s_{P,n}}\cos \left( {{w_n}t} \right) = \Re \left\{ {\sum\limits_{n = 0}^{N - 1} {\left\| {{{\mathbf{h}}_n}} \right\|} {s_{P,n}}{e^{j{w_n}t}}} \right\} \\
+  {y_I}(t) &= \sum\limits_{n = 0}^{N - 1} {\left\| {{{\mathbf{h}}_n}} \right\|} {s_{I,n}}{{\tilde x}_n}\cos \left( {{w_n}t} \right) = \Re \left\{ {\sum\limits_{n = 0}^{N - 1} {\left\| {{{\mathbf{h}}_n}} \right\|} {s_{I,n}}{{\tilde x}_n}{e^{j{w_n}t}}} \right\}
+\end{align}
+
+In this way, the weight optimization on multiple transmit antennas is converted into an equivalent problem on a single antenna. For the $n$-th subband, the equivalent channel gain is $\left\| {{{\mathbf{h}}_n}} \right\|$ with the power allocated to multisine and modulated waveform denoted by $s_{P,n}^2$ and $s_{I,n}^2$ ($\frac{1}{2}\sum\nolimits_{n = 0}^{N - 1} {\left( {s_{P,n}^2 + s_{I,n}^2} \right)}  \leqslant P$). The problem can be solved using Algorithm \ref{alg:general}, with the second and fourth order terms reduced to
+
+\begin{align}\label{eqn:decoupled_terms}
+  \mathbb{E}\left[ {{y_P}{{(t)}^2}} \right] &= \frac{1}{2}\sum\limits_{n = 0}^{N - 1} {{{\left\| {{{\mathbf{h}}_n}} \right\|}^2}} s_{P,n}^2 \\
+  \mathbb{E}\left[ {{y_P}{{(t)}^4}} \right] &= \frac{3}{8}\sum\limits_{\substack{ {n_0},{n_1},{n_2},{n_3} \\ {n_0} + {n_1} = {n_2} + {n_3} }}  {\left[ {\prod\limits_{j = 0}^3 {{s_{P,{n_j}}}} \left\| {{{\mathbf{h}}_{{n_j}}}} \right\|} \right]}  \\
+  \mathbb{E}\left[ {{y_I}{{(t)}^2}} \right] &= \frac{1}{2}\sum\limits_{n = 0}^{N - 1} {{{\left\| {{{\mathbf{h}}_n}} \right\|}^2}} s_{I,n}^2 \\
+  \mathbb{E}\left[ {{y_I}{{(t)}^4}} \right] &= \frac{6}{8}{\left[ {\sum\limits_{n = 0}^{N - 1} {{{\left\| {{{\mathbf{h}}_n}} \right\|}^2}} s_{I,n}^2} \right]^2}
+\end{align}
+
+Hence, the target function ${z_{DC}}$ is only a function of two $N$-dimensional vectors ${{\mathbf{s}}_{P/I}} = \left[ {{s_{P/I,0}}, \ldots ,{s_{P/I,N - 1}}} \right]$, and the mutual information $I$ can be simplified as
+
+\begin{equation}\label{eqn:decoupled_mutual_information}
+  I\left( {{{\mathbf{s}}_I},\rho } \right) = {\log _2}\left( {\prod\limits_{n = 0}^{N - 1} {\left( {1 + \frac{{(1 - \rho )}}{{\sigma _n^2}}s_{I,n}^2{{\left\| {{{\mathbf{h}}_n}} \right\|}^2}} \right)} } \right)
+\end{equation}
+
+Similarly, we decompose the posynomials ${z_{DC}}\left( {{{\mathbf{s}}_P},{{\mathbf{s}}_I},\rho } \right) = \sum\limits_{k = 1}^K {{g_k}} \left( {{{\mathbf{s}}_P},{{\mathbf{s}}_I},\rho } \right)$ and $1 + \frac{{\bar \rho }}{{\sigma _n^2}}{C_n} = \sum\limits_{k = 1}^{{K_n}} {{g_{nk}}} \left( {{{\mathbf{s}}_I},\bar \rho } \right)$ with ${C_n} = s_{I,n}^2{\left\| {{{\mathbf{h}}_n}} \right\|^2}$, then apply the AM-GM inequality to the constraints with posynomials in the denominator. The equivalent GP problem write as
+
+\begin{eqnarray}
+  {\mathop {\min }\limits_{{{\mathbf{s}}_P},{{\mathbf{s}}_I},\rho ,\bar \rho ,{t_0}} }&{1/{t_0}} \label{eqn:decoupled_target} \\
+  {{\text{ subject to }}}&{\frac{1}{2}\left[ {\left\| {{{\mathbf{s}}_I}} \right\|^2 + \left\| {{{\mathbf{s}}_P}} \right\|^2} \right] \leqslant P} \label{eqn:decoupled_power_constraint} \\
+  {}&{{t_0}\prod\limits_{k = 1}^K {{{\left( {\frac{{{g_k}\left( {{{\mathbf{s}}_P},{{\mathbf{s}}_I},\rho } \right)}}{{{\gamma _k}}}} \right)}^{ - {\gamma _k}}}}  \leqslant 1} \label{eqn:decoupled_current_constraint} \\
+  {}&{2^{\bar R}}\prod\limits_{n = 0}^{N - 1} {\prod\limits_{k = 1}^{{K_n}} {{{\left( {\frac{{{g_{nk}}\left( {{{\mathbf{s}}_I},\bar \rho } \right)}}{{{\gamma _{nk}}}}} \right)}^{ - {\gamma _{nk}}}}} }  \leqslant 1 \label{eqn:decoupled_rate_constraint} \\
+  {}&{\rho  + \bar \rho  \leqslant 1} \label{eqn:decoupled_ratio_constraint}
+\end{eqnarray}
+
+Following \eqref{eqn:initial_amplitude}, the amplitudes of power and information waveform can be initialized to
+
+\begin{equation}\label{eqn:initial_amplitude_decoupled}
+  {s_{P,n}} = {s_{I,n}} = c\left\| {{{\mathbf{h}}_n}} \right\|
+\end{equation}
+
+Compared with the general approach, the decoupled design guarantees the same performance by a joint space-frequency design with a lower computational complexity, which converts the original $N \times M$ matrices ${{{\mathbf{S}}_P},{{\mathbf{S}}_I}}$ to $N$-dimensional vectors ${{{\mathbf{s}}_P},{{\mathbf{s}}_I}}$ via MRT beamformers. Algorithm \ref{alg:decoupled} summarizes the optimization process of the decoupling strategy.
+
+\begin{algorithm}
+  \caption{Decoupled Waveform Design}
+  \label{alg:decoupled}
+  \begin{algorithmic}[1]
+    \State \textbf{Initialize:} $i \leftarrow 0$, ${\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star $ in \eqref{eqn:optimal_phases}, ${{{\mathbf{s}}_P},{{\mathbf{s}}_I}}$ in \eqref{eqn:initial_amplitude_decoupled}, $\rho ,\bar \rho  = 1 - \rho ,\bar R,z_{DC}^{(0)} = 0$
+    \Repeat
+      \State $i \leftarrow i + 1,\mathop {{{\mathbf{s}}_P}}\limits^{..}  \leftarrow {{\mathbf{s}}_P},\mathop {{{\mathbf{s}}_P}}\limits^{..}  \leftarrow {{\mathbf{s}}_I},\ddot \rho  \leftarrow \rho ,\ddot{\bar{\rho}}  \leftarrow \bar \rho $
+      \State ${\gamma _k} \leftarrow {g_k}\left( {{{\mathop {\mathbf{s}}\limits^{..} }_P},{{\mathop {\mathbf{s}}\limits^{..} }_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\ddot \rho } \right)/{z_{DC}}\left( {{{\mathop {\mathbf{s}}\limits^{..} }_P},{{\mathop {\mathbf{s}}\limits^{..} }_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\ddot \rho } \right),k = 1, \ldots ,K$
+      \State ${\gamma _{nk}} \leftarrow {g_{nk}}\left( {{{\mathop {\mathbf{s}}\limits^{..} }_I},\ddot{\bar{\rho}} } \right)/\left( {1 + \frac{{\ddot{\bar{\rho}} }}{{\sigma _n^2}}{C_n}\left( {{{\mathop {\mathbf{s}}\limits^{..} }_I}} \right)} \right),n = 0, \ldots ,N - 1,k = 1, \ldots ,{K_n}$
+      \State ${{\mathbf{s}}_P},{{\mathbf{s}}_I},\rho ,\bar \rho  \leftarrow \arg \min $ \eqref{eqn:decoupled_target} -- \eqref{eqn:decoupled_ratio_constraint}
+      \State $z_{DC}^{(i)} \leftarrow {z_{DC}}\left( {{{\mathbf{s}}_P},{{\mathbf{s}}_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\rho } \right)$
+    \Until{$\left| {z_{DC}^{(i)} - z_{DC}^{(i - 1)}} \right| < $ or $i = {i_{\max }}$}
+  \end{algorithmic}
+\end{algorithm}
+
+
+
+\subsection{Lower Bound}\label{sec:lower-bound}
+The deterministic multisine waveform not only boosts the harvested energy but also avoids interference to the modulated waveform. To highlight its benefit on rate and energy, we compare the performance of superposed waveform to two baselines. In the first case, there is no multisine component. Only modulated waveform is used for WIPT (i.e. ${{\mathbf{S}}_P} = 0,\frac{1}{2}\left\| {{{\mathbf{S}}_I}} \right\|_F^2 = P$) and the twofold benefit disappears. In the second baseline, it is assumed that the power waveform behaves as a deterministic multisine from WPT perspective but as CSCG distributed from WIT perspective. Therefore, the energy benefit of the multisine is maintained but the rate benefit is lost. The power waveform creates an interference term $\sqrt {1 - \rho } {{\mathbf{h}}_n}{{\mathbf{w}}_{P,n}}$ to the information waveform, and the lower bound of the mutual information writes as
+
+\begin{equation}\label{eqn:mutual_information_lower_bound}
+  {I_{LB}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{{\mathbf{\Phi }}_P},{{\mathbf{\Phi }}_I},\rho } \right) = \sum\limits_{n = 0}^{N - 1} {{{\log }_2}} \left( {1 + \frac{{(1 - \rho ){{\left| {{{\mathbf{h}}_n}{{\mathbf{w}}_{I,n}}} \right|}^2}}}{{\sigma _n^2 + (1 - \rho ){{\left| {{{\mathbf{h}}_n}{{\mathbf{w}}_{P,n}}} \right|}^2}}}} \right)
+\end{equation}
+
+It leads to a smaller rate-energy region than the ideal case. Also, the MRT beamformers ${{\mathbf{w}}_{P,n}},{{\mathbf{w}}_{I,n}}$ in \eqref{eqn:mrt_weights} are suboptimal due to the interference, and the corresponding phases ${\mathbf{\Phi }}_P^ \star, {\mathbf{\Phi }}_I^ \star $ in \eqref{eqn:optimal_phases} are not the best solution for $M > 1$. Minimum Mean Squared Error (MMSE) combiner can be further exploited for a better joint design over space and frequency domains.
+
+Consider the suboptimal phases ${\mathbf{\Phi }}_P^ \star $ and ${\mathbf{\Phi }}_I^ \star $ in \eqref{eqn:optimal_phases} for simplicity. In such cases, the target function is still as \eqref{eqn:target_function_truncated} while the lower bound of the achievable rate is now
+
+\begin{equation}\label{mutual_information_lower_bound_rewritten}
+  {I_{LB}}\left( {{{\mathbf{S}}_I},{\mathbf{\Phi }}_I^ \star ,\rho } \right) = {\log _2}\left( {\prod\limits_{n = 0}^{N - 1} {\left( {1 + \frac{{(1 - \rho ){C_n}}}{{\sigma _n^2 + (1 - \rho ){D_n}}}} \right)} } \right)
+\end{equation}
+
+with ${C_n} = \sum\nolimits_{{m_0},{m_1}} {\prod\nolimits_{j = 0}^1 {{s_{I,n,{m_j}}}{A_{n,{m_j}}}} } $ and ${D_n} = \sum\nolimits_{{m_0},{m_1}} {\prod\nolimits_{j = 0}^1 {{s_{P,n,{m_j}}}{A_{n,{m_j}}}} } $. Thus, the previous rate constraint \eqref{eqn:transformed_rate_constraint} is replaced by
+
+\begin{equation}\label{eqn:transformed_rate_constraint_lower_bound}
+  {2^{\bar R}}\frac{{\prod\limits_{n = 0}^{N - 1} {\left( {1 + \frac{{\bar \rho }}{{\sigma _n^2}}{D_n}} \right)} }}{{\prod\limits_{n = 0}^{N - 1} {\left( {1 + \frac{{\bar \rho }}{{\sigma _n^2}}\left( {{D_n} + {C_n}} \right)} \right)} }} \leqslant 1
+\end{equation}
+
+Decompose the posynomials in the denominators as
+
+\begin{equation}\label{eqn:posynomial_lower_bound}
+  1 + \frac{{\bar \rho }}{{\sigma _n^2}}\left( {{D_n} + {C_n}} \right) = \sum\limits_{j = 1}^{{J_n}} {{f_{nj}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},\rho } \right)}
+\end{equation}
+
+where $\left\{ {{f_{nj}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},\rho } \right)} \right\}$ is the monomial terms. With a proper choice of nonnegative $\left\{ {{\gamma _{nj}}} \right\}$ satisfying $\sum\nolimits_{j = 1}^{{J_n}} {{\gamma _{nj}}}  = 1$, the standard GP can be written as
+
+\begin{eqnarray}
+  {\mathop {\min }\limits_{{{\mathbf{S}}_P},{{\mathbf{S}}_I},\rho ,\bar \rho ,{t_0}} }&{1/{t_0}} \label{eqn:lower_bound_target} \\
+  {{\text{subject to}}}&{\frac{1}{2}\left[ {\left\| {{{\mathbf{S}}_I}} \right\|_F^2 + \left\| {{{\mathbf{S}}_P}} \right\|_F^2} \right] \leqslant P} \label{eqn:lower_bound_power_constraint} \\
+  {}&{{t_0}\prod\limits_{k = 1}^K {{{\left( {\frac{{{g_k}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\rho } \right)}}{{{\gamma _k}}}} \right)}^{ - {\gamma _k}}}}  \leqslant 1} \label{eqn:lower_bound_current_constraint} \\
+  {}&{{2^{\bar R}}\prod\limits_{n = 0}^{N - 1} {\left( {1 + \frac{{\bar \rho }}{{\sigma _n^2}}{D_n}\left( {{{\mathbf{S}}_P}} \right)} \right)} \prod\limits_{j = 1}^{{J_n}} {{{\left( {\frac{{{f_{nj}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},\rho } \right)}}{{{\gamma _{nj}}}}} \right)}^{ - {\gamma _{nj}}}}}  \leqslant 1} \label{eqn:lower_bound_rate_constraint} \\
+  {}&{\rho  + \bar \rho  \leqslant 1 \label{eqn:lower_bound_ratio_constraint}}
+\end{eqnarray}
+
+Algorithm \ref{alg:lower-bound} shows the basic idea to obtain the lower-bound of R-E region. It boils down to Algorithm \ref{alg:general} when the interference posynomial ${D_n} = 0$ for all $n$.
+
+\begin{algorithm}
+  \caption{Lower-Bound of R-E Region}
+  \label{alg:lower-bound}
+  \begin{algorithmic}[1]
+    \State \textbf{Initialize:} $i \leftarrow 0$, ${{\mathbf{w}}_{P,n}},{{\mathbf{w}}_{I,n}}$ in \eqref{eqn:mrt_weights}, ${{{\mathbf{S}}_P},{{\mathbf{S}}_I}}$ in \eqref{eqn:initial_amplitude}, $\rho ,\bar \rho  = 1 - \rho ,\bar R,z_{DC}^{(0)} = 0$
+    \Repeat
+      \State $i \leftarrow i + 1,\mathop {{{\mathbf{S}}_P}}\limits^{..}  \leftarrow {{\mathbf{S}}_P},\mathop {{{\mathbf{S}}_I}}\limits^{..}  \leftarrow {{\mathbf{S}}_I},\ddot \rho  \leftarrow \rho ,\ddot{\bar{\rho}}  \leftarrow \bar \rho $
+      \State ${\gamma _k} \leftarrow {g_k}\left( {\mathop {{{\mathbf{S}}_P}}\limits^{..} ,\mathop {{{\mathbf{S}}_I}}\limits^{..} ,\ddot \rho } \right)/{z_{DC}}\left( {\mathop {{{\mathbf{S}}_P}}\limits^{..} ,\mathop {{{\mathbf{S}}_I}}\limits^{..} ,\ddot \rho } \right),k = 1, \ldots ,K$
+      \State ${\gamma _{nj}} \leftarrow {f_{nj}}\left( {\mathop {{{\mathbf{S}}_P}}\limits^{..} ,\mathop {{{\mathbf{S}}_I}}\limits^{..} ,\ddot \rho } \right)/\left( {1 + \frac{{\ddot{\bar{\rho}}}}{{\sigma _n^2}}\left( {{D_n}\left( {\mathop {{{\mathbf{S}}_P}}\limits^{..} } \right) + {C_n}\left( {\mathop {{{\mathbf{S}}_I}}\limits^{..} } \right)} \right)} \right)$
+      \State ${{\mathbf{S}}_P},{{\mathbf{S}}_I},\rho ,\bar \rho  \leftarrow \arg \min $ \eqref{eqn:lower_bound_target} -- \eqref{eqn:lower_bound_ratio_constraint}
+      \State $z_{DC}^{(i)} \leftarrow {z_{DC}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},\rho } \right)$
+    \Until{$\left| {z_{DC}^{(i)} - z_{DC}^{(i - 1)}} \right| < $ or $i = {i_{\max }}$}
+  \end{algorithmic}
+\end{algorithm}  
+
+
+
+\subsection{PAPR Constraints}\label{sec:papr-constraints}
+Another practical constraint at the transmitter is PAPR. We assume the modulated information waveform is with unit PAPR (by PSK or FSK) so that the limitation only influence the design of multisine power waveform. Following \ref{eqn:power_waveform}, the PAPR constraint on antenna $m$ writes as
+
+\begin{equation}\label{eqn:papr_power_waveform}
+  {\text{PAPR}_m} = \frac{{\mathop {\max }\limits_t {{\left| {{x_{P,m}}(t)} \right|}^2}}}{{\mathbb{E}\left[ {{{\left| {{x_{P,m}}(t)} \right|}^2}} \right]}} = \frac{{\mathop {\max }\limits_t {{\left| {{x_{P,m}}(t)} \right|}^2}}}{{\frac{1}{2}{{\left\| {{{\mathbf{s}}_{P,m}}} \right\|}^2}}} \leqslant \eta
+\end{equation}
+
+We assume the optimum phases ${\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star $ in \eqref{eqn:optimal_phases} are used in the optimization of ${{\mathbf{S}}_I},{{\mathbf{S}}_P}$. To handle the PAPR constraint \eqref{eqn:papr_power_waveform}, we introduce an oversampling factor ${O_s}$ to sample the power waveform at ${t_q} = qT/N{O_s}$ for $q = 0, \ldots ,N{O_s} - 1$ with $T = 1/\Delta f$. For a sufficiently large ${O_s}$, the PAPR constraint can be expressed as
+
+\begin{equation}\label{eqn:papr_sample}
+  {\left| {{x_{P,m}}\left( {{t_q}} \right)} \right|^2} \leqslant \frac{1}{2}\eta {\left\| {{{\mathbf{s}}_{P,m}}} \right\|^2}
+\end{equation}
+
+where the l.h.s. obtained from equation \ref{eqn:power_waveform} is
+
+\begin{equation}\label{eqn:papr_average_sample}
+  {\left| {{x_{P,m}}\left( {{t_q}} \right)} \right|^2} = \sum\limits_{{n_0},{n_1}} {{s_{P,{n_0},m}}{s_{P,{n_1},m}}\cos \left( {{w_{{n_0}}}{t_q} + \phi _{P,{n_0},m}^ \star } \right)\cos \left( {{w_{{n_1}}}{t_q} + \phi _{P,{n_1},m}^ \star } \right)}
+\end{equation}
+
+However, ${\left| {{x_{P,m}}\left( {{t_q}} \right)} \right|^2}$ is no longer a posynomial as some coefficients can be negative with time-varying arguments. It is named signomial \cite{Boyd2007} and can be decomposed either as the sum of monomials or as the difference of two posynomials
+
+\begin{equation}\label{eqn:papr_signomial}
+  {\left| {{x_{P,m}}\left( {{t_q}} \right)} \right|^2} = {f_{mq}}\left( {{{\mathbf{S}}_P},{\mathbf{\Phi }}_P^ \star } \right) = {f_{mq1}}\left( {{{\mathbf{S}}_P},{\mathbf{\Phi }}_P^ \star } \right) - {f_{mq2}}\left( {{{\mathbf{S}}_P},{\mathbf{\Phi }}_P^ \star } \right)
+\end{equation}
+
+Therefore, the PAPR constraint rewrites as
+
+\begin{equation}\label{eqn:papr_standard}
+  \frac{{{f_{mq1}}\left( {{{\mathbf{S}}_P},{\mathbf{\Phi }}_P^ \star } \right)}}{{\frac{1}{2}\eta {{\left\| {{{\mathbf{s}}_{P,m}}} \right\|}^2} + {f_{mq2}}\left( {{{\mathbf{S}}_P},{\mathbf{\Phi }}_P^ \star } \right)}} \leqslant 1
+\end{equation}
+
+Similarly, denote the posynomial at the denominator as
+
+\begin{equation}\label{eqn:papr_denominator}
+  \frac{1}{2}\eta {\left\| {{{\mathbf{s}}_{P,m}}} \right\|^2} + {f_{mq2}}\left( {{{\mathbf{S}}_P},{\mathbf{\Phi }}_P^ \star } \right) = \sum\limits_{k = 1}^{{K_{mq2}}} {{g_{mq2k}}} \left( {{{\mathbf{S}}_P},{\mathbf{\Phi }}_P^ \star } \right)
+\end{equation}
+
+With a proper choice of nonnegative $\left\{ {{\gamma _{mq2k}}} \right\}$ satisfying $\sum\nolimits_{k = 1}^{{K_{mq2}}} {{\gamma _{mq2k}}}  = 1$, we apply AM-GM inequality to \eqref{eqn:papr_standard} and obtain the new constraint
+
+\begin{equation}\label{eqn:papr_equivalent_inequality}
+  {f_{mq1}}\left( {{{\mathbf{S}}_P},{\mathbf{\Phi }}_P^ \star } \right)\prod\limits_{k = 1}^{{K_{mq2}}} {{{\left( {\frac{{{g_{mq2k}}\left( {{{\mathbf{S}}_P},{\mathbf{\Phi }}_P^ \star } \right)}}{{{\gamma _{mq2k}}}}} \right)}^{ - {\gamma _{mq2k}}}}}  \leqslant 1
+\end{equation}
+
+In this way, the optimization problem \eqref{eqn:general_target} -- \eqref{eqn:general_ratio_constraint} with an extra PAPR constraint \eqref{eqn:papr_power_waveform} is replaced by a standard GP
+
+\begin{eqnarray}
+  {\mathop {\min }\limits_{{{\mathbf{S}}_P},{{\mathbf{S}}_I},\rho ,\bar \rho ,{t_0}} }&{1/{t_0}} \label{eqn:papr_target} \\
+  {{\text{ subject to }}}&{\frac{1}{2}\left[ {\left\| {{{\mathbf{S}}_I}} \right\|_F^2 + \left\| {{{\mathbf{S}}_P}} \right\|_F^2} \right] \leqslant P} \label{eqn:papr_power_constraint} \\
+  {}&{{t_0}\prod\limits_{k = 1}^K {{{\left( {\frac{{{g_k}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\rho } \right)}}{{{\gamma _k}}}} \right)}^{ - {\gamma _k}}}}  \leqslant 1} \label{eqn:papr_current_constraint} \\
+  {}&{{2^{\bar R}}\prod\limits_{n = 0}^{N - 1} {\prod\limits_{k = 1}^{{K_n}} {{{\left( {\frac{{{g_{nk}}\left( {{{\mathbf{S}}_I},\bar \rho } \right)}}{{{\gamma _{nk}}}}} \right)}^{ - {\gamma _{nk}}}}} }  \leqslant 1} \label{eqn:papr_rate_constraint} \\
+  {}&{{f_{mq1}}\left( {{{\mathbf{S}}_P},{\mathbf{\Phi }}_P^ \star } \right)\prod\limits_{k = 1}^{{K_{mq2}}} {{{\left( {\frac{{{g_{mq2k}}\left( {{{\mathbf{S}}_P},{\mathbf{\Phi }}_P^ \star } \right)}}{{{\gamma _{mq2k}}}}} \right)}^{ - {\gamma _{mq2k}}}}}  \leqslant 1} \label{eqn:papr_papr_constraint} \\
+  {}&{\rho  + \bar \rho  \leqslant 1} \label{eqn:papr_ratio_constraint}
+\end{eqnarray}
+
+Algorithm \ref{alg:papr} shows the gist of the optimization procedure. For the system with multiple transmit antenna and valid PAPR constraints, the decoupling strategy is suboptimal since the arguments of cosines are indeed frequency-dependent. Also, the multisine waveform is oversampled to satisfy the PAPR constraint, which further increases the overall computational complexity.
+
+\begin{algorithm}
+  \caption{Waveform Design with PAPR Constraints}
+  \label{alg:papr}
+  \begin{algorithmic}[1]
+    \State \textbf{Initialize:} $i \leftarrow 0$, ${\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star $ in \eqref{eqn:optimal_phases}, ${{{\mathbf{S}}_P},{{\mathbf{S}}_I}}$ in \eqref{eqn:initial_amplitude}, $\rho ,\bar \rho  = 1 - \rho ,\bar R,z_{DC}^{(0)} = 0$
+    \Repeat
+      \State $i \leftarrow i + 1,\mathop {{{\mathbf{S}}_P}}\limits^{..}  \leftarrow {{\mathbf{S}}_P},\mathop {{{\mathbf{S}}_I}}\limits^{..}  \leftarrow {{\mathbf{S}}_I},\ddot \rho  \leftarrow \rho ,\ddot{\bar{\rho}}  \leftarrow \bar \rho $
+      \State ${\gamma _k} \leftarrow {g_k}\left( {\mathop {{{\mathbf{S}}_P}}\limits^{..} ,\mathop {{{\mathbf{S}}_I}}\limits^{..} ,{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\ddot \rho } \right)/{z_{DC}}\left( {\mathop {{{\mathbf{S}}_P}}\limits^{..} ,\mathop {{{\mathbf{S}}_I}}\limits^{..} ,{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\ddot \rho } \right),k = 1, \ldots ,K$
+      \State ${\gamma _{nk}} \leftarrow {g_{nk}}\left( {\mathop {{{\mathbf{S}}_I}}\limits^{..} ,\ddot{\bar{\rho}}} \right)/\left( {1 + \frac{{\ddot{\bar{\rho}}}}{{\sigma _n^2}}{C_n}\left( {\mathop {{{\mathbf{S}}_I}}\limits^{..} } \right)} \right),n = 0, \ldots ,N - 1,k = 1, \ldots ,{K_n}$
+      \State ${\gamma _{mq2k}} \leftarrow {g_{mq2k}}\left( {\mathop {{{\mathbf{S}}_P}}\limits^{..} ,{\mathbf{\Phi }}_P^ \star } \right)/\left( {\frac{1}{2}\eta {{\left\| {\mathop {{{\mathbf{s}}_{P,m}}}\limits^{..} } \right\|}^2} + {f_{mq2}}\left( {\mathop {{{\mathbf{S}}_P}}\limits^{..} ,{\mathbf{\Phi }}_P^ \star } \right)} \right),$ 
+      \Statex $m = 1, \ldots ,M,q = 0, \ldots ,N{O_s} - 1,k = 1, \ldots ,{K_{mq2}}$
+      \State ${{\mathbf{S}}_P},{{\mathbf{S}}_I},\rho ,\bar \rho  \leftarrow \arg \min $ \eqref{eqn:papr_target} -- \eqref{eqn:papr_ratio_constraint}
+      \State $z_{DC}^{(i)} \leftarrow {z_{DC}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\rho } \right)$
+    \Until{$\left| {z_{DC}^{(i)} - z_{DC}^{(i - 1)}} \right| < $ or $i = {i_{\max }}$}
+  \end{algorithmic}
+\end{algorithm} 
+
+
+
+\subsection{Multiple Rectennas}\label{sec:multiple-rectennas}
+The R-E region is expected to be enlarged by using multiple rectennas. In this part, we extend the general MISO strategy in \cite{Clerckx2018} to $U$ rectennas, which can either serve a single user in a point-to-point MIMO or spread across multiple users in a MU-MISO. Note that there exists a tradeoff between the energy harvested in different rectennas, since they have different preference on the transmitted waveform. The fairness issue can be solved by introducing weight ${v_u}$ for rectenna $u = 1, \ldots ,U$ and considering the weighted sum of DC components as a new target function
+
+\begin{equation}\label{eqn:weighted_target}
+  {Z_{DC}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{{\mathbf{\Phi }}_P},{{\mathbf{\Phi }}_I},\rho } \right) = \sum\limits_{u = 1}^U {{v_u}{z_{DC,u}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{{\mathbf{\Phi }}_P},{{\mathbf{\Phi }}_I},\rho } \right)}
+\end{equation}
+
+With multiple rectennas, the frequency response is extended to
+
+\begin{equation}\label{eqn:mo_channel}
+  {h_{n,m,u}} = {A_{n,m,u}}{e^{j{{\bar \psi }_{n,m,u}}}}
+\end{equation}
+
+Therefore, the phase of the received signal on rectenna $u$ in subband $n$ transmitted by antenna $m$ equals
+
+\begin{equation}\label{eqn:received_phase}
+  {\psi _{n,m,u}} = {\phi _{n,m}} + {{\bar \psi }_{n,m,u}}
+\end{equation}
+
+where ${\phi _{n,m}}$ is the beamforming phase. In such cases, it is impossible to ensure ${\psi _{n,m,u}} = 0$ for all rectennas as there are three constraints $n,m,u$ but only two variables $n,m$. With a specific phase design, the arguments of cosines in \eqref{eqn:power_waveform_second_order} -- \eqref{eqn:waveform_end} are not guaranteed to be zero such that the target function ${Z_{DC}}$ is indeed a signomial.
+
+Denoting ${\widetilde {\mathbf{h}}_{n,u}} = \sqrt {{k_2}{v_u}} {{\mathbf{h}}_{n,u}}$, the channel matrix for subband $n$ can be constructed as
+
+\begin{equation}\label{eqn:mo_channel_matrox}
+  {\widetilde {\mathbf{H}}_n} = {\left[ {\widetilde {\mathbf{h}}_{n,1}^T \ldots \widetilde {\mathbf{h}}_{n,U}^T} \right]^T}
+\end{equation}
+
+It is mentioned in \cite{Clerckx2016} that a possible phase choice ${\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime $ is to set the $\left( {n,m} \right)$ entries as
+
+\begin{equation}\label{eqn:mo_phases}
+  \phi _{P,n,m}^\prime  = \phi _{I,n,m}^\prime  = \angle {v_{{\text{max}},n,m}}
+\end{equation}
+
+where ${v_{{\text{max}},n,m}}$ is the $m$-th term of the dominant right singular vector ${{\mathbf{v}}_{{\text{max}},n}}$ that can be obtained by singular value decomposition of ${\widetilde {\mathbf{H}}_n}$. Also, the subband amplitudes can be initialized using the maximum eigenvalue ${\lambda _n}$
+
+\begin{equation}\label{eqn:mo_initial_amplitude}
+  {s_{P,n,m}} = {s_{I,n,m}} = c{\lambda _n}
+\end{equation}
+
+where $c$ is the coefficient to guarantee the transmit power constraint. Note that the initialization is irrelevant to $m$.
+
+To convert the problem into a standard GP, we introduce an auxiliary variable ${t_0}$ and rewrite the signomial as the difference of two posynomials
+
+\begin{equation}\label{eqn:mo_current_signomial}
+  {Z_{DC}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right) = {f_1}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right) - {f_2}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right) \geqslant {t_0}
+\end{equation}
+
+Furthermore, we can decompose the first posynomial as
+
+\begin{equation}\label{eqn:mo_current_posynomial}
+  {f_1}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right) = \sum\limits_{k = 1}^{{K_1}} {{g_{1k}}} \left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right)
+\end{equation}
+
+With a proper choice of nonnegative $\left\{ {{\gamma _{1k}}} \right\}$ satisfying $\sum\nolimits_{k = 1}^{{K_1}} {{\gamma _{1k}}}  = 1$, \eqref{eqn:mo_current_signomial} rewrites as
+
+\begin{align}\label{eqn:mo_current_signomial_rewritten}
+  \frac{{{t_0} + {f_2}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right)}}{{{f_1}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right)}} &= \left( {{t_0} + {f_2}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right)} \right) \nonumber \\
+  &\quad \prod\limits_{k = 1}^{{K_1}} {{{\left( {\frac{{{g_{1k}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right)}}{{{\gamma _{1k}}}}} \right)}^{ - {\gamma _{1k}}}}} \\
+  &\leqslant 1
+\end{align}
+
+Similarly, the denominator of rate constraint \eqref{eqn:transformed_rate_constraint} is indeed a product of signomials, with each factor expressed as
+
+\begin{equation}\label{eqn:mo_rate_signomial}
+  1 + \frac{{(1 - \rho )}}{{\sigma _n^2}}{C_n} = {f_{1nk}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right) - {f_{2nk}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right)
+\end{equation}
+
+Therefore, we can rewrite the rate constraint \eqref{eqn:transformed_rate_constraint} as
+
+\begin{align}\label{eqn:mo_rate_constraint_original}
+  \prod\limits_{n = 0}^{N - 1} {\left( {1 + \frac{{(1 - \rho )}}{{\sigma _n^2}}{C_n}} \right)}  &= \prod\limits_{n = 0}^{N - 1} {\left( {{f_{1nk}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right) - {f_{2nk}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right)} \right)}  \\
+  &\geqslant {2^{\bar R}} \label{eqn:mo_rate_constraint_original_end}
+\end{align}
+
+One possible approach is to unwrap the result of signomial multiplication as a new signomial. In this way, \eqref{eqn:mo_rate_constraint_original_end} is reduced to
+
+\begin{equation}\label{eqn:mo_rate_constraint_unwrapped}
+  f_1^\prime \left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right) - f_2^\prime \left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right) \geqslant {2^{\bar R}}
+\end{equation}
+
+which is equivalent to
+
+\begin{equation}\label{eqn:mo_rate_constraint_rewritten}
+  \frac{{{2^{\bar R}} + f_2^\prime \left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right)}}{{f_1^\prime \left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right)}} \leqslant 1
+\end{equation}
+
+By decomposing $f_1^\prime \left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right) = \sum\nolimits_{j = 1}^{{J_1}} {g_{1j}^\prime \left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right)} $ and introducing another nonnegative coefficient set $\left\{ {\gamma _{1j}^\prime } \right\}$ with $\sum\nolimits_{j = 1}^{{J_1}} {\gamma _{1j}^\prime }  = 1$ for AM-GM inequality, it can be converted to
+
+\begin{equation}\label{eqn:mo_rate_constraint_standard}
+  \left( {{2^{\bar R}} + f_2^\prime \left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right)} \right)\prod\limits_{j = 1}^{{J_1}} {{{\left( {\frac{{g_{1j}^\prime \left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right)}}{{\gamma _{1j}^\prime }}} \right)}^{ - \gamma _{1j}^\prime }}}  \leqslant 1
+\end{equation}
+
+Hence, the problem is transformed into a standard GP
+
+\begin{eqnarray}
+  {\mathop {\min }\limits_{{{\mathbf{S}}_P},{{\mathbf{S}}_I},\rho ,\bar \rho ,{t_0}} }&{1/{t_0}} \label{eqn:mo_target} \\
+  {{\text{ subject to }}}&{\frac{1}{2}\left[ {\left\| {{{\mathbf{S}}_I}} \right\|_F^2 + \left\| {{{\mathbf{S}}_P}} \right\|_F^2} \right] \leqslant P} \label{eqn:mo_power_constraint} \\
+  {}&{\left( {{t_0} + {f_2}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right)} \right)\prod\limits_{k = 1}^{{K_1}} {{{\left( {\frac{{{g_{1k}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right)}}{{{\gamma _{1k}}}}} \right)}^{ - {\gamma _{1k}}}}}  \leqslant 1} \label{eqn:mo_current_constraint} \\
+  {}&{\left( {{2^{\bar R}} + f_2^\prime \left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right)} \right)\prod\limits_{j = 1}^{{J_1}} {{{\left( {\frac{{g_{1j}^\prime \left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right)}}{{\gamma _{1j}^\prime }}} \right)}^{ - \gamma _{1j}^\prime }}}  \leqslant 1} \label{eqn:mo_rate_constraint} \\
+  {}&{\rho  + \bar \rho  \leqslant 1 \label{eqn:mo_ratio_constraint}}
+\end{eqnarray}
+
+It is worth noting that the GP method is not the best optimization approach due to the predetermined suboptimal beamforming phases ${\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime $. Also, the unwrap process from \eqref{eqn:mo_rate_constraint_original} to \eqref{eqn:mo_rate_constraint_unwrapped} significantly increases the computational complexity and is more suitable for small $n$ and $m$. The procedure is concluded in Algorithm \ref{alg:mo}.
+
+\begin{algorithm}
+  \caption{Waveform Design for Multiple Rectennas}
+  \label{alg:mo}
+  \begin{algorithmic}[1]
+    \State \textbf{Initialize:} $i \leftarrow 0$, ${{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime }$ in \eqref{eqn:mo_phases}, ${{{\mathbf{S}}_P},{{\mathbf{S}}_I}}$ in \eqref{eqn:mo_initial_amplitude}, $\rho ,\bar \rho  = 1 - \rho ,\bar R,Z_{DC}^{(0)} = 0$
+    \Repeat
+      \State $i \leftarrow i + 1,\mathop {{{\mathbf{S}}_P}}\limits^{..}  \leftarrow {{\mathbf{S}}_P},\mathop {{{\mathbf{S}}_I}}\limits^{..}  \leftarrow {{\mathbf{S}}_I},\ddot \rho  \leftarrow \rho ,\ddot{\bar{\rho}}  \leftarrow \bar \rho $
+      \State ${\gamma _{1k}} \leftarrow {g_{1k}}\left( {\mathop {{{\mathbf{S}}_P}}\limits^{..} ,\mathop {{{\mathbf{S}}_I}}\limits^{..} ,{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\ddot \rho } \right)/{f_1}\left( {\mathop {{{\mathbf{S}}_P}}\limits^{..} ,\mathop {{{\mathbf{S}}_I}}\limits^{..} ,{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\ddot \rho } \right),k = 1, \ldots ,{K_1}$
+      \State $\gamma _{1j}^\prime  \leftarrow g_{1j}^\prime \left( {\mathop {{{\mathbf{S}}_P}}\limits^{..} ,\mathop {{{\mathbf{S}}_I}}\limits^{..} ,{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\ddot \rho } \right)/f_1^\prime \left( {\mathop {{{\mathbf{S}}_P}}\limits^{..} ,\mathop {{{\mathbf{S}}_I}}\limits^{..} ,{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\ddot \rho } \right),j = 1, \ldots ,{J_1}$
+      \State ${{\mathbf{S}}_P},{{\mathbf{S}}_I},\rho ,\bar \rho  \leftarrow \arg \min $ \eqref{eqn:mo_target} -- \eqref{eqn:mo_ratio_constraint}
+      \State $Z_{DC}^{(i)} \leftarrow {Z_{DC}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^\prime ,{\mathbf{\Phi }}_I^\prime ,\rho } \right)$
+    \Until{$\left| {Z_{DC}^{(i)} - Z_{DC}^{(i - 1)}} \right| < $ or $i = {i_{\max }}$}
+  \end{algorithmic}
+\end{algorithm} 

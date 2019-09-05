@@ -1,0 +1,13 @@
+The achievable R-E region is defined as
+
+\begin{equation}\label{eqn:rate_energy_region}
+  {C_{R - {I_{DC}}}}(P) \triangleq \left\{ {\left( {R,{I_{DC}}} \right):R \leqslant I,{I_{DC}} \leqslant {i_{{\text{out}}}},\frac{1}{2}\left[ {\left\| {{{\mathbf{S}}_P}} \right\|_F^2 + \left\| {{{\mathbf{S}}_I}} \right\|_F^2} \right] \leqslant P} \right\}
+\end{equation}
+
+where ${\left( {R,{I_{DC}}} \right)}$ is the rate-energy pair, $P$ is the average transmit power budget, $I$ is the mutual information, ${{I_{DC}}}$ is the harvested DC current, ${{i_{{\text{out}}}}}$ is the rectifier output current, and ${{{\mathbf{S}}_P}}$, ${{{\mathbf{S}}_I}}$ hold the amplitudes of power and information signals respectively. Using the target function ${{z_{DC}}}$ in \eqref{eqn:target_function_truncated}, we redefine the R-E region as
+
+\begin{equation}\label{eqn:rate_energy_region_redefined}
+  {C_{R - {I_{DC}}}}(P) \triangleq \left\{ {\left( {R,{I_{DC}}} \right):R \leqslant I,{I_{DC}} \leqslant {z_{DC}},\frac{1}{2}\left[ {\left\| {{{\mathbf{S}}_P}} \right\|_F^2 + \left\| {{{\mathbf{S}}_I}} \right\|_F^2} \right] \leqslant P} \right\}
+\end{equation}
+
+The best R-E tradeoff can be achieved with the optimal amplitudes ${\mathbf{S}}_P^ \star ,{\mathbf{S}}_I^ \star $ and phases ${\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star $ at the transmitter, together with the optimal power splitting ratio ${\rho ^ \star }$ at the receiver. It is assumed in the optimization that perfect CSI is available at the transmitter (in the form of channel frequency response ${h_{n,m}}$), and perfect synchronization is established between the transmitter and the receiver.

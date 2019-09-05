@@ -1,10 +1,10 @@
-For the MISO case, the optimal phase from rate and energy perspectives can be derived from the mutual information in \ref{eqn:mutual_information}, the target function in \ref{eqn:target_function_truncated}, and the waveform expressions in \ref{eqn:power_waveform_second_order} -- \ref{eqn:waveform_end}. The solutions correspond to the matched filters w.r.t. the phases of the channel
+For the MISO case, the optimal phases to maximize the target function \eqref{eqn:target_function_truncated} and the mutual information \eqref{eqn:mutual_information} correspond to the phases of the matched filters
 
 \begin{equation}\label{eqn:optimal_phases}
-  \phi _{I,n,m}^ \star  = \phi _{P,n,m}^ \star  =  - {{\bar \psi }_{n,m}}
+  \phi _{P,n,m}^ \star  = \phi _{I,n,m}^ \star  =  - {{\bar \psi }_{n,m}}
 \end{equation}
 
-Such phase decisions can guarantee all the cosine terms in \ref{eqn:power_waveform_second_order} -- \ref{eqn:waveform_end} are maximized by setting the arguments to 0. ${\mathbf{\Phi }}_I^ \star $ and ${\mathbf{\Phi }}_P^ \star $ can be constructed by collecting $\phi _{I,n,m}^ \star $ and $\phi _{P,n,m}^ \star $ to the $(n,m)$ entries respectively. On top of that, the target function ${z_{DC}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\rho } \right)$ can be further written as
+Such a decision can maximize all cosine terms in \eqref{eqn:power_waveform_second_order} -- \eqref{eqn:waveform_end} by setting the arguments to 0. ${\mathbf{\Phi }}_P^ \star $ and ${\mathbf{\Phi }}_I^ \star $ can be constructed by collecting $\phi _{P,n,m}^ \star $ and $\phi _{I,n,m}^ \star $ to the $(n,m)$ entries respectively. On top of it, the target function ${z_{DC}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\rho } \right)$ can be further written as
 
 \begin{align}\label{eqn:target_posynomial}
   {z_{DC}} &= \frac{{{k_2}\rho }}{2}{R_{{\text{ant}}}}\sum\limits_{n = 0}^{N - 1} {\sum\limits_{{m_0},{m_1}} {\left[ {\prod\limits_{j = 0}^1 {{s_{P,n,{m_j}}}} {A_{n,{m_j}}}} \right]} } \nonumber \\
@@ -14,23 +14,23 @@ Such phase decisions can guarantee all the cosine terms in \ref{eqn:power_wavefo
    &\quad + \frac{{3{k_4}{\rho ^2}}}{2}R_{\text{ant}}^2\left[ {\sum\limits_{n = 0}^{N - 1} {\sum\limits_{{m_0},{m_1}} {\left[ {\prod\limits_{j = 0}^1 {{s_{P,n,{m_j}}}} {A_{n,{m_j}}}} \right]} } } \right]\left[ {\sum\limits_{n = 0}^{N - 1} {\sum\limits_{{m_0},{m_1}} {\left[ {\prod\limits_{j = 0}^1 {{s_{I,n,{m_j}}}} {A_{n,{m_j}}}} \right]} } } \right]
 \end{align}
 
-Also, \cite{Clerckx2017} demonstrated that using matched filter for amplitude design leads to a performance close to the optimal one. Therefore, it can be employed as a feasible initialization for the optimization. On antenna $m$ and subband $n$, the amplitudes of power and information waveform are initialized to
-
-\begin{equation}\label{eqn:initial_amplitude}
-  {s_{P,n,m}} = {s_{I,n,m}} = c{A_{n,m}}
-\end{equation}
-
-where $c$ is the constant to guarantee the transmit power constraint.
-
-On the other hand, the mutual information is given by
+Also, with the optimum phases ${\mathbf{\Phi }}_I^ \star $, the mutual information $I$ can be rewritten as
 
 \begin{equation}\label{eqn:mutual_information_posynomial}
   I\left( {{{\mathbf{S}}_I},{\mathbf{\Phi }}_I^ \star ,\rho } \right) = {\log _2}\left( {\prod\limits_{n = 0}^{N - 1} {\left( {1 + \frac{{(1 - \rho )}}{{\sigma _n^2}}{C_n}} \right)} } \right)
 \end{equation}
 
-where ${C_n} = \sum\nolimits_{{m_0},{m_1}} {\prod\nolimits_{j = 0}^1 {{s_{I,n,{m_j}}}{A_{n,{m_j}}}} } $.
+with ${C_n} = \sum\nolimits_{{m_0},{m_1}} {\prod\nolimits_{j = 0}^1 {{s_{I,n,{m_j}}}{A_{n,{m_j}}}} } $.
 
-Note both the target function and mutual information are posynomials \cite{Boyd2007}. Therefore, one possible approach to characterize the rate-energy region is to transform the optimization into an energy maximization problem with average transmit power budget $P$ and rate constraint ${\bar R}$
+It is also demonstrated in \cite{Clerckx2017} that using a matched filter for power allocation can lead to a suboptimal performance with much lower complexity. Therefore, it is employed to initialize the iterative algorithms for fast convergence. On antenna $m$ and subband $n$, the amplitudes of power and information waveform are initialized to
+
+\begin{equation}\label{eqn:initial_amplitude}
+  {s_{P,n,m}} = {s_{I,n,m}} = c{A_{n,m}}
+\end{equation}
+
+where $c$ is the coefficient to guarantee the transmit power constraint.
+
+With the optimum phases ${\mathbf{\Phi }}_P^ \star $ and ${\mathbf{\Phi }}_I^ \star $, both the target function \eqref{eqn:target_posynomial} and mutual information \eqref{eqn:mutual_information_posynomial} are posynomials \cite{Boyd2007}. Therefore, we can convert the characterization of R-E region into an energy maximization problem with average transmit power budget $P$ and rate constraint ${\bar R}$
 
 \begin{eqnarray}
   {\mathop {\max }\limits_{{{\mathbf{S}}_P},{{\mathbf{S}}_I},\rho } }&{{z_{DC}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\rho } \right)} \label{eqn:original_target}\\
@@ -38,74 +38,4 @@ Note both the target function and mutual information are posynomials \cite{Boyd2
   {}&{I\left( {{{\mathbf{S}}_I},{\mathbf{\Phi }}_I^ \star ,\rho } \right) \geqslant \bar R} \label{eqn:original_rate_constraint}
 \end{eqnarray}
 
-Although the problem is not a standard Geometric Programming (GP), we can transform it to a Reversed GP by introducing an auxiliary variable ${t_0}$ \cite{Chiang2005}
-
-\begin{eqnarray}
-  {\mathop {\min }\limits_{{{\mathbf{S}}_P},{{\mathbf{S}}_I},\rho ,{t_0}} }&{1/{t_0}} \label{eqn:transformed_target} \\
-  {{\text{ subject to }}}&{\frac{1}{2}\left[ {\left\| {{{\mathbf{S}}_I}} \right\|_F^2 + \left\| {{{\mathbf{S}}_P}} \right\|_F^2} \right] \leqslant P} \label{eqn:transformed_power_constraint} \\
-  {}&{{t_0}/{z_{DC}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\rho } \right) \leqslant 1} \label{eqn:transformed_current_constraint} \\
-  {}&{{2^{\bar R}}/\left[ {\prod\limits_{n = 0}^{N - 1} {\left( {1 + \frac{{(1 - \rho )}}{{\sigma _n^2}}{C_n}} \right)} } \right] \leqslant 1} \label{eqn:transformed_rate_constraint}
-\end{eqnarray}
-
-The new problem so far is not a standard GP as $1/{z_{DC}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\rho } \right)$ and $1/\left[ {\prod\nolimits_{n = 0}^{N - 1} {\left( {1 + \frac{{(1 - \rho )}}{{\sigma _n^2}}{C_n}} \right)} } \right]$ are not posynomials. To solve this, \cite{Clerckx2018} suggested a conservative approach to approximate the terms with posynomials in the denominator by new posynomials, based on the Arithmetic Mean-Geometric Mean (AM-GM) inequality.
-
-Consider constraint \ref{eqn:transformed_current_constraint} first. The posynomial at the denominator can be decomposed as sum of monomials
-
-\begin{equation}\label{eqn:transformed_current_posynomial_decomposition}
-  {z_{DC}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\rho } \right) = \sum\limits_{k = 1}^K {{g_k}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\rho } \right)}
-\end{equation}
-
-Since monomial $\left\{ {{g_k}} \right\}$ is nonnegative for all $k$, the AM-GM inequality suggests a posynomial upper bound for the previous non-posynomial term
-
-\begin{equation}\label{eqn:transformed_current_am_gm}
-  \frac{1}{{\sum\limits_{k = 1}^K {{g_k}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\rho } \right)} }} \leqslant \prod\limits_{k = 1}^K {{{\left( {\frac{{{g_k}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\rho } \right)}}{{{\gamma _k}}}} \right)}^{ - {\gamma _k}}}}
-\end{equation}
-
-The nonnegative coefficients $\left\{ {{\gamma _k}} \right\}$ are chosen to satisfy $\sum\nolimits_{k = 1}^K {{\gamma _k}}  = 1$. Similarly, define $\bar \rho  = 1 - \rho $ and let $\left\{ {{g_{nk}}\left( {{{\mathbf{S}}_I},\bar \rho } \right)} \right\}$ be the monomials of the posynomial $1 + \frac{{\bar \rho }}{{\sigma _n^2}}{C_n}$
-
-\begin{equation}\label{eqn:transformed_rate_posynomial_decomposition}
-  1 + \frac{{\bar \rho }}{{\sigma _n^2}}{C_n} = \sum\limits_{k = 1}^{{K_n}} {{g_{nk}}} \left( {{{\mathbf{S}}_I},\bar \rho } \right)
-\end{equation}
-
-Apply the AM-GM inequality to \ref{eqn:transformed_rate_posynomial_decomposition}, we have
-
-\begin{equation}\label{eqn:transformed_rate_am_gm}
-  \frac{1}{{1 + \frac{{\bar \rho }}{{\sigma _n^2}}{C_n}}} \leqslant \prod\limits_{k = 1}^{{K_n}} {{{\left( {\frac{{{g_{nk}}\left( {{{\mathbf{S}}_I},\bar \rho } \right)}}{{{\gamma _{nk}}}}} \right)}^{ - {\gamma _{nk}}}}}
-\end{equation}
-
-with ${\gamma _{nk}} \geqslant 0$ and $\sum\nolimits_{k = 1}^{{K_n}} {{\gamma _{nk}}}  = 1$. In this way, we transformed the problem into a standard GP
-
-\begin{eqnarray}
-  {\mathop {\min }\limits_{{{\mathbf{S}}_P},{{\mathbf{S}}_I},\rho ,\bar \rho ,{t_0}} }&{1/{t_0}} \label{eqn:general_target} \\
-  {{\text{ subject to }}}&{\frac{1}{2}\left[ {\left\| {{{\mathbf{S}}_I}} \right\|_F^2 + \left\| {{{\mathbf{S}}_P}} \right\|_F^2} \right] \leqslant P} \label{eqn:general_power_constraint} \\
-  {}&{{t_0}\prod\limits_{k = 1}^K {{{\left( {\frac{{{g_k}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\rho } \right)}}{{{\gamma _k}}}} \right)}^{ - {\gamma _k}}}}  \leqslant 1} \label{eqn:general_current_constraint} \\
-  {}&{2^{\bar R}}\prod\limits_{n = 0}^{N - 1} {\prod\limits_{k = 1}^{{K_n}} {{{\left( {\frac{{{g_{nk}}\left( {{{\mathbf{S}}_I},\bar \rho } \right)}}{{{\gamma _{nk}}}}} \right)}^{ - {\gamma _{nk}}}}} }  \leqslant 1 \label{eqn:general_rate_constraint} \\
-  {}&{\rho  + \bar \rho  \leqslant 1} \label{eqn:general_ratio_constraint}
-\end{eqnarray}
-
-It is worth noting that the tightness of the AM-GM inequality depends on the choice of $\left\{ {{\gamma _k},{\gamma _{nk}}} \right\}$. In this paper, we employ the iterative method proposed in \cite{Clerckx2018} that updates the coefficient sets at iteration $i$ with the previous solution ${{\mathbf{S}}_P^{(i - 1)},{\mathbf{S}}_I^{(i - 1)},{\rho ^{(i - 1)}}}$
-
-\begin{eqnarray}
-  {{\gamma _k} = \frac{{{g_k}\left( {{\mathbf{S}}_P^{(i - 1)},{\mathbf{S}}_I^{(i - 1)},{\rho ^{(i - 1)}}} \right)}}{{{z_{DC}}\left( {{\mathbf{S}}_P^{(i - 1)},{\mathbf{S}}_I^{(i - 1)},{\rho ^{(i - 1)}}} \right)}},}&{k = 1, \ldots ,K} \\
-  {{\gamma _{nk}} = \frac{{{g_{nk}}\left( {{\mathbf{S}}_I^{(i - 1)},{{\bar \rho }^{(i - 1)}}} \right)}}{{1 + \frac{{{{\bar \rho }^{(i - 1)}}}}{{\sigma _n^2}}{C_n}\left( {{\mathbf{S}}_I^{(i - 1)}} \right)}},}&\begin{gathered}
-  n = 0, \ldots ,N - 1 \hfill \\
-  k = 1, \ldots ,{K_n} \hfill \\
-\end{gathered}
-\end{eqnarray}
-
-Once $\left\{ {{\gamma _k},{\gamma _{nk}}} \right\}$ are obtained, we solve problem \ref{eqn:general_target} -- \ref{eqn:general_ratio_constraint} to obtain ${\mathbf{S}}_P^{(i)},{\mathbf{S}}_I^{(i)},{\rho ^{(i)}}$. The iterations are repeated until convergence. Algorithm \ref{alg:general} summarizes all the procedures involved in the optimization. The successive approximation approach is also known as inner approximation method \cite{Marks1978}, which cannot guarantee a global optimal solution but the converged point satisfies the KKT conditions. 
-
-\begin{algorithm}
-  \caption{General Waveform Design}
-  \label{alg:general}
-  \begin{algorithmic}[1]
-    \State \textbf{Initialize:} $i \leftarrow 0$, ${\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star $ in \ref{eqn:optimal_phases}, ${{{\mathbf{S}}_P},{{\mathbf{S}}_I}}$ in \ref{eqn:initial_amplitude}, $\rho ,\bar \rho  = 1 - \rho ,\bar R,z_{DC}^{(0)} = 0$
-    \Repeat
-      \State $i \leftarrow i + 1,\mathop {{{\mathbf{S}}_P}}\limits^{..}  \leftarrow {{\mathbf{S}}_P},\mathop {{{\mathbf{S}}_P}}\limits^{..}  \leftarrow {{\mathbf{S}}_I},\ddot \rho  \leftarrow \rho ,\ddot \bar \rho  \leftarrow \bar \rho $
-      \State ${\gamma _k} \leftarrow {g_k}\left( {\mathop {{{\mathbf{S}}_P}}\limits^{..} ,\mathop {{{\mathbf{S}}_I}}\limits^{..} ,{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\ddot \rho } \right)/{z_{DC}}\left( {\mathop {{{\mathbf{S}}_P}}\limits^{..} ,\mathop {{{\mathbf{S}}_I}}\limits^{..} ,{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\ddot \rho } \right),k = 1, \ldots ,K$
-      \State ${\gamma _{nk}} \leftarrow {g_{nk}}\left( {\mathop {{{\mathbf{S}}_I}}\limits^{..} ,\ddot \bar \rho } \right)/\left( {1 + \frac{{\ddot \bar \rho }}{{\sigma _n^2}}{C_n}\left( {\mathop {{{\mathbf{S}}_I}}\limits^{..} } \right)} \right),n = 0, \ldots ,N - 1,k = 1, \ldots ,{K_n}$
-      \State ${{\mathbf{S}}_P},{{\mathbf{S}}_I},\rho ,\bar \rho  \leftarrow \arg \min $ \ref{eqn:general_target} -- \ref{eqn:general_ratio_constraint}
-      \State $z_{DC}^{(i)} \leftarrow {z_{DC}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\rho } \right)$
-    \Until{$\left| {z_{DC}^{(i)} - z_{DC}^{(i - 1)}} \right| < $ or $i = {i_{\max }}$}
-  \end{algorithmic}
-\end{algorithm} 
+In the following section, we transform the optimization into standard Geometric Programming (GP) problems and consider different settings and constraints. 

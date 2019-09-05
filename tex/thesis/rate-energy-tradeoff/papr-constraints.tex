@@ -1,22 +1,22 @@
-Another practical constraint for the transmitter is PAPR. As illustrated by figure \ref{fig:waveform_time_domain}, the modulated information waveform is a single sine with unit PAPR. Hence, the limitation on PAPR only influence the design of multisine power waveform. Following \ref{eqn:power_waveform}, the PAPR constraint on antenna $m$ writes as
+Another practical constraint at the transmitter is PAPR. We assume the modulated information waveform is with unit PAPR (by PSK or FSK) so that the limitation only influence the design of multisine power waveform. Following \eqref{eqn:power_waveform}, the PAPR constraint on antenna $m$ writes as
 
 \begin{equation}\label{eqn:papr_power_waveform}
-  {PAPR_m} = \frac{{\mathop {\max }\limits_t {{\left| {{x_{P,m}}(t)} \right|}^2}}}{{\mathbb{E}\left[ {{{\left| {{x_{P,m}}(t)} \right|}^2}} \right]}} = \frac{{\mathop {\max }\limits_t {{\left| {{x_{P,m}}(t)} \right|}^2}}}{{\frac{1}{2}{{\left\| {{{\mathbf{s}}_{P,m}}} \right\|}^2}}} \leqslant \eta 
+  {\text{PAPR}_m} = \frac{{\mathop {\max }\limits_t {{\left| {{x_{P,m}}(t)} \right|}^2}}}{{\mathbb{E}\left[ {{{\left| {{x_{P,m}}(t)} \right|}^2}} \right]}} = \frac{{\mathop {\max }\limits_t {{\left| {{x_{P,m}}(t)} \right|}^2}}}{{\frac{1}{2}{{\left\| {{{\mathbf{s}}_{P,m}}} \right\|}^2}}} \leqslant \eta
 \end{equation}
 
-Assume the optimum phases ${\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star $ in equation \ref{eqn:optimal_phases} are used in the optimization of ${{\mathbf{S}}_I},{{\mathbf{S}}_P}$. To transform inequation \ref{eqn:papr_power_waveform} into a solvable one, we introduce an oversampling factor ${O_s}$ to obtain the discrete version of the multisine signal at ${t_q} = qT/N{O_s}$ for $q = 0, \ldots ,N{O_s} - 1$ with $T = 1/\Delta f$. For a sufficiently large ${O_s}$, the PAPR constraint can be expressed as
+We assume the optimum phases ${\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star $ in \eqref{eqn:optimal_phases} are used in the optimization of ${{\mathbf{S}}_P},{{\mathbf{S}}_I}$. To handle the PAPR constraint \eqref{eqn:papr_power_waveform}, we introduce an oversampling factor ${O_s}$ to sample the power waveform at ${t_q} = qT/N{O_s}$ for $q = 0, \ldots ,N{O_s} - 1$ with $T = 1/\Delta f$. For a sufficiently large ${O_s}$, the PAPR constraint can be expressed as
 
 \begin{equation}\label{eqn:papr_sample}
   {\left| {{x_{P,m}}\left( {{t_q}} \right)} \right|^2} \leqslant \frac{1}{2}\eta {\left\| {{{\mathbf{s}}_{P,m}}} \right\|^2}
 \end{equation}
 
-where the l.h.s. can be deducted from equation \ref{eqn:power_waveform} as
+where the l.h.s. can be obtained from equation \eqref{eqn:power_waveform} 
 
 \begin{equation}\label{eqn:papr_average_sample}
-  {\left| {{x_{P,m}}\left( {{t_q}} \right)} \right|^2} = \sum\limits_{{n_0},{n_1}} {{s_{P,{n_0},m}}{s_{P,{n_1},m}}\cos \left( {{w_{{n_0}}}{t_q} + \phi _{P,{n_0},m}^ \star } \right)\cos \left( {{w_{{n_1}}}{t_q} + \phi _{P,{n_1},m}^ \star } \right)} 
+  {\left| {{x_{P,m}}\left( {{t_q}} \right)} \right|^2} = \sum\limits_{{n_0},{n_1}} {{s_{P,{n_0},m}}{s_{P,{n_1},m}}\cos \left( {{w_{{n_0}}}{t_q} + \phi _{P,{n_0},m}^ \star } \right)\cos \left( {{w_{{n_1}}}{t_q} + \phi _{P,{n_1},m}^ \star } \right)}
 \end{equation}
 
-However, ${\left| {{x_{P,m}}\left( {{t_q}} \right)} \right|^2}$ is no longer a posynomial because the time-varying arguments of the cosines produce some negative coefficients. Instead, it is actually a signomial which can be decomposed either as the sum of monomials with positive and negative coefficients, or as the difference of two posynomials
+However, ${\left| {{x_{P,m}}\left( {{t_q}} \right)} \right|^2}$ is no longer a posynomial as some coefficients can be negative due to the time-varying arguments. Such a signomial \cite{Boyd2007} and can be decomposed either as the sum of monomials or the difference of two posynomials
 
 \begin{equation}\label{eqn:papr_signomial}
   {\left| {{x_{P,m}}\left( {{t_q}} \right)} \right|^2} = {f_{mq}}\left( {{{\mathbf{S}}_P},{\mathbf{\Phi }}_P^ \star } \right) = {f_{mq1}}\left( {{{\mathbf{S}}_P},{\mathbf{\Phi }}_P^ \star } \right) - {f_{mq2}}\left( {{{\mathbf{S}}_P},{\mathbf{\Phi }}_P^ \star } \right)
@@ -28,19 +28,19 @@ Therefore, the PAPR constraint rewrites as
   \frac{{{f_{mq1}}\left( {{{\mathbf{S}}_P},{\mathbf{\Phi }}_P^ \star } \right)}}{{\frac{1}{2}\eta {{\left\| {{{\mathbf{s}}_{P,m}}} \right\|}^2} + {f_{mq2}}\left( {{{\mathbf{S}}_P},{\mathbf{\Phi }}_P^ \star } \right)}} \leqslant 1
 \end{equation}
 
-Similarly, denote the posynomial at the denominator as 
+Similarly, denote the posynomial at the denominator as
 
 \begin{equation}\label{eqn:papr_denominator}
   \frac{1}{2}\eta {\left\| {{{\mathbf{s}}_{P,m}}} \right\|^2} + {f_{mq2}}\left( {{{\mathbf{S}}_P},{\mathbf{\Phi }}_P^ \star } \right) = \sum\limits_{k = 1}^{{K_{mq2}}} {{g_{mq2k}}} \left( {{{\mathbf{S}}_P},{\mathbf{\Phi }}_P^ \star } \right)
 \end{equation}
 
-By a proper choice of nonnegative $\left\{ {{\gamma _{mq2k}}} \right\}$ with $\sum\nolimits_{k = 1}^{{K_{mq2}}} {{\gamma _{mq2k}}}  = 1$, we apply AM-GM inequality to \ref{eqn:papr_standard} and obtain an equivalent inequation
+With a proper choice of nonnegative $\left\{ {{\gamma _{mq2k}}} \right\}$ satisfying $\sum\nolimits_{k = 1}^{{K_{mq2}}} {{\gamma _{mq2k}}}  = 1$, we apply AM-GM inequality to \eqref{eqn:papr_standard} and obtain a new constraint
 
 \begin{equation}\label{eqn:papr_equivalent_inequality}
   {f_{mq1}}\left( {{{\mathbf{S}}_P},{\mathbf{\Phi }}_P^ \star } \right)\prod\limits_{k = 1}^{{K_{mq2}}} {{{\left( {\frac{{{g_{mq2k}}\left( {{{\mathbf{S}}_P},{\mathbf{\Phi }}_P^ \star } \right)}}{{{\gamma _{mq2k}}}}} \right)}^{ - {\gamma _{mq2k}}}}}  \leqslant 1
-\end{equation} 
+\end{equation}
 
-In this way, the optimization problem \ref{eqn:general_target} -- \ref{eqn:general_ratio_constraint} with an extra PAPR constraint \ref{eqn:papr_power_waveform} is replaced by a standard GP 
+In this way, the optimization problem \eqref{eqn:general_target} -- \eqref{eqn:general_ratio_constraint} with an extra PAPR constraint \eqref{eqn:papr_power_waveform} is replaced by a standard GP
 
 \begin{eqnarray}
   {\mathop {\min }\limits_{{{\mathbf{S}}_P},{{\mathbf{S}}_I},\rho ,\bar \rho ,{t_0}} }&{1/{t_0}} \label{eqn:papr_target} \\
@@ -51,19 +51,19 @@ In this way, the optimization problem \ref{eqn:general_target} -- \ref{eqn:gener
   {}&{\rho  + \bar \rho  \leqslant 1} \label{eqn:papr_ratio_constraint}
 \end{eqnarray}
 
-Algorithm \ref{alg:papr} shows the gist of the optimization procedure. For the system with multiple transmit antenna and valid PAPR constraints, the decoupling strategy is suboptimal since the argument of cosines are indeed frequency-dependent. Also, the multisine waveform is oversampled to satisfy the PAPR constraint, which further increases the overall computational complexity.
+Algorithm \ref{alg:papr} shows the gist of the optimization procedure. For the system with multiple transmit antenna and valid PAPR constraints, the decoupling strategy is suboptimal since the arguments of cosines are indeed frequency-dependent. Also, the multisine waveform is oversampled to satisfy the PAPR constraint, which further increases the overall computational complexity.
 
 \begin{algorithm}
   \caption{Waveform Design with PAPR Constraints}
   \label{alg:papr}
   \begin{algorithmic}[1]
-    \State \textbf{Initialize:} $i \leftarrow 0$, ${\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star $ in \ref{eqn:optimal_phases}, ${{{\mathbf{S}}_P},{{\mathbf{S}}_I}}$ in \ref{eqn:initial_amplitude}, $\rho ,\bar \rho  = 1 - \rho ,\bar R,z_{DC}^{(0)} = 0$
+    \State \textbf{Initialize:} $i \leftarrow 0$, ${\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star $ in \eqref{eqn:optimal_phases}, ${{{\mathbf{S}}_P},{{\mathbf{S}}_I}}$ in \eqref{eqn:initial_amplitude}, $\rho ,\bar \rho  = 1 - \rho ,\bar R,z_{DC}^{(0)} = 0$
     \Repeat
       \State $i \leftarrow i + 1,\mathop {{{\mathbf{S}}_P}}\limits^{..}  \leftarrow {{\mathbf{S}}_P},\mathop {{{\mathbf{S}}_P}}\limits^{..}  \leftarrow {{\mathbf{S}}_I},\ddot \rho  \leftarrow \rho ,\ddot \bar \rho  \leftarrow \bar \rho $
       \State ${\gamma _k} \leftarrow {g_k}\left( {\mathop {{{\mathbf{S}}_P}}\limits^{..} ,\mathop {{{\mathbf{S}}_I}}\limits^{..} ,{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\ddot \rho } \right)/{z_{DC}}\left( {\mathop {{{\mathbf{S}}_P}}\limits^{..} ,\mathop {{{\mathbf{S}}_I}}\limits^{..} ,{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\ddot \rho } \right),k = 1, \ldots ,K$
       \State ${\gamma _{nk}} \leftarrow {g_{nk}}\left( {\mathop {{{\mathbf{S}}_I}}\limits^{..} ,\ddot \bar \rho } \right)/\left( {1 + \frac{{\ddot \bar \rho }}{{\sigma _n^2}}{C_n}\left( {\mathop {{{\mathbf{S}}_I}}\limits^{..} } \right)} \right),n = 0, \ldots ,N - 1,k = 1, \ldots ,{K_n}$
       \State ${\gamma _{mq2k}} \leftarrow {g_{mq2k}}\left( {{{\mathbf{S}}_P},{\mathbf{\Phi }}_P^ \star } \right)/\left( {\frac{1}{2}\eta {{\left\| {{{\mathbf{s}}_{P,m}}} \right\|}^2} + {f_{mq2}}\left( {{{\mathbf{S}}_P},{\mathbf{\Phi }}_P^ \star } \right)} \right),m = 1, \ldots ,M,q = 0, \ldots ,N{O_s} - 1,k = 1, \ldots ,{K_{mq2}}$
-      \State ${{\mathbf{S}}_P},{{\mathbf{S}}_I},\rho ,\bar \rho  \leftarrow \arg \min $ \ref{eqn:papr_target} -- \ref{eqn:papr_ratio_constraint}
+      \State ${{\mathbf{S}}_P},{{\mathbf{S}}_I},\rho ,\bar \rho  \leftarrow \arg \min $ \eqref{eqn:papr_target} -- \eqref{eqn:papr_ratio_constraint}
       \State $z_{DC}^{(i)} \leftarrow {z_{DC}}\left( {{{\mathbf{S}}_P},{{\mathbf{S}}_I},{\mathbf{\Phi }}_P^ \star ,{\mathbf{\Phi }}_I^ \star ,\rho } \right)$
     \Until{$\left| {z_{DC}^{(i)} - z_{DC}^{(i - 1)}} \right| < $ or $i = {i_{\max }}$}
   \end{algorithmic}
