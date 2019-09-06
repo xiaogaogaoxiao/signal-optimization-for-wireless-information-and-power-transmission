@@ -54,7 +54,7 @@ It is worth noting that the tightness of the AM-GM inequality depends on the cho
 \end{gathered}
 \end{eqnarray}
 
-Once $\left\{ {{\gamma _k},{\gamma _{nk}}} \right\}$ are obtained, we solve \eqref{eqn:general_target} -- \eqref{eqn:general_ratio_constraint} to obtain ${\mathbf{S}}_P^{(i)},{\mathbf{S}}_I^{(i)},{\rho ^{(i)}}$. The iteration is repeated until it converges. Algorithm \ref{alg:general} summarizes the procedures involved in the optimization. The successive approximation approach is also known as inner approximation method \cite{Marks1978}, which cannot guarantee a global optimal solution but the result point satisfies the Karush–Kuhn–Tucker (KKT) conditions.
+Once $\left\{ {{\gamma _k},{\gamma _{nk}}} \right\}$ are obtained, we solve \eqref{eqn:general_target} -- \eqref{eqn:general_ratio_constraint} to obtain ${\mathbf{S}}_P^{(i)},{\mathbf{S}}_I^{(i)},{\rho ^{(i)}}$. The iteration is repeated until it converges. Algorithm \ref{alg:general} summarizes the procedures involved in the optimization. The successive approximation approach is also known as inner approximation method \cite{Marks1978}, which cannot guarantee a global optimal solution but the result satisfies the Karush–Kuhn–Tucker (KKT) conditions.
 
 \begin{algorithm}
   \caption{General Waveform Design}
@@ -302,13 +302,13 @@ It is mentioned in \cite{Clerckx2016} that a possible phase choice ${\mathbf{\Ph
   \phi _{P,n,m}^\prime  = \phi _{I,n,m}^\prime  = \angle {v_{{\text{max}},n,m}}
 \end{equation}
 
-where ${v_{{\text{max}},n,m}}$ is the $m$-th term of the dominant right singular vector ${{\mathbf{v}}_{{\text{max}},n}}$ that can be obtained by singular value decomposition of ${\widetilde {\mathbf{H}}_n}$. Also, the subband amplitudes can be initialized using the maximum eigenvalue ${\lambda _n}$
+where ${v_{{\text{max}},n,m}}$ is the $m$-th term of the dominant right singular vector ${{\mathbf{v}}_{{\text{max}},n}}$ that can be obtained by singular value decomposition of ${\widetilde {\mathbf{H}}_n}$. Also, the subband amplitudes can be initialized using the maximum eigenvalue $\sigma _n^\prime $
 
 \begin{equation}\label{eqn:mo_initial_amplitude}
-  {s_{P,n,m}} = {s_{I,n,m}} = c{\lambda _n}
+  {s_{P,n,m}} = {s_{I,n,m}} = c\sigma _n^\prime 
 \end{equation}
 
-where $c$ is the coefficient to guarantee the transmit power constraint. Note that the initialization is irrelevant to $m$.
+where $c$ is the coefficient to guarantee the transmit power constraint. Note the initialization is irrelevant to $m$.
 
 To convert the problem into a standard GP, we introduce an auxiliary variable ${t_0}$ and rewrite the signomial as the difference of two posynomials
 

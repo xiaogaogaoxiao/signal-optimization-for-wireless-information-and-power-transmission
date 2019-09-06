@@ -9,7 +9,7 @@ Denoting the information symbol carried by the modulated waveform on subband $n$
   {{\tilde x}_n} = \left| {{{\tilde x}_n}} \right|{e^{j{\phi _{{{\tilde x}_n}}}}}\sim\mathcal{C}\mathcal{N}(0,1)
 \end{equation}
 
-Hence, the modulated waveform on antenna $m = 1, \ldots ,M$ subband $n = 1, \ldots ,N$ writes as
+Hence, the modulated signal on antenna $m = 1, \ldots ,M$, subband $n = 1, \ldots ,N$ writes as
 
 \begin{equation}\label{eqn:modulated_symbol}
   {x_{n,m}} = {w_{I,n,m}}{{\tilde x}_n}
@@ -48,7 +48,7 @@ where ${{\mathbf{w}}_{I,n}} = {\left[ {{w_{I,n,1}} \cdots {w_{I,n,M}}} \right]^T
 
 
 \subsection{Transmitted Power Waveform}\label{sec:transmitted-power-waveform}
-Comparing with the information component, the multisine power component is unmodulated and deterministic, so there is no dependency on the distribution of input symbol $\tilde{x}_{n}(t)$. The power waveform on antenna $m$, subband $n$ is given by
+Compared with the information component, the multisine power component is unmodulated and deterministic. Hence, there is no dependency on the distribution of input symbol $\tilde{x}_{n}(t)$. The power waveform on antenna $m$, subband $n$ is given by
 
 \begin{equation}\label{eqn:unmodulated}
   {w_{P,n,m}} = {s_{P,n,m}}{e^{j{\phi _{P,n,m}}}}
@@ -84,7 +84,7 @@ The superposed signal containing modulated information waveform and multisine po
   {h_{n,m}} = \sum\limits_{l = 0}^{L - 1} {{\alpha _l}{e^{j\left( { - 2\pi {f_n}{\tau _l} + {\zeta _{n,m,l}}} \right)}}}  = {A_{n,m}}{e^{j{{\bar \psi }_{n,m}}}}
 \end{equation}
 
-We assume ${\max _{l \ne {l^\prime }}}\left| {{\tau _l} - {\tau _{{l^\prime }}}} \right| <  < 1/{B_{\text{s}}}$ to ensure $v_{n, m}(t)$ and $\tilde{x}_{n}(t)$ being narrowband signals. It is also supposed that ${v_{n,m}}\left( {t - {\tau _l}} \right) = {v_{n,m}}(t)$ and ${{\tilde x}_n}\left( {t - {\tau _l}} \right) = {{\tilde x}_n}(t)$. The received signal corresponding to transmit antenna $m$ contains the power component $y_{P, m}(t)$ and the information component $y_{I, m}(t)$
+We assume ${\max _{l \ne {l^\prime }}}\left| {{\tau _l} - {\tau _{{l^\prime }}}} \right| <  < 1/{B_{\text{s}}}$ to ensure $v_{n, m}(t)$ and $\tilde{x}_{n}(t)$ to be narrowband signals. It is also supposed that ${v_{n,m}}\left( {t - {\tau _l}} \right) = {v_{n,m}}(t)$ and ${{\tilde x}_n}\left( {t - {\tau _l}} \right) = {{\tilde x}_n}(t)$. The received component ${y_m}(t)$ corresponding to transmit antenna $m$ contains the power component $y_{P, m}(t)$ and the information component $y_{I, m}(t)$
 
 \begin{align}\label{eqn:received_signal_component}
   {y_m}(t) &= {y_{P,m}}(t) + {y_{I,m}}(t) \hfill \\
@@ -144,13 +144,13 @@ We then turn to the multi-carrier modulated waveform ${y_I}(t)$. It can be treat
   {i_{\text{out}}} \approx k_0^\prime  + \sum\limits_{i{\text{ even }},i \geqslant 2}^{{n_o}} {k_i^\prime } {\rho ^{i/2}}R_{\text{ant}}^{i/2}{\mathbb{E}_{\{ {{\tilde x}_n}\} }}\left[ {{y_I}{{(t)}^i}} \right]
 \end{equation}
 
-To obtain the expectation, we first extract the DC currents corresponding to a given set of amplitudes $\{ {{\tilde s}_{I,n,m}}\} $ and phases $\{ {{\tilde \phi }_{I,n,m}}\} $, then take the expectation over the distribution of the input symbol ${{\tilde x}_n}$. As an i.i.d. CSCG distribution ${{\tilde x}_n}\sim\mathcal{C}\mathcal{N}(0,1)$ is assumed, the amplitude square ${\left| {{{\tilde x}_n}} \right|^2}$ is exponentially distributed with $\mathbb{E}\left[ {{{\left| {{{\tilde x}_n}} \right|}^2}} \right] = 1$. Using the moment generating function, we also have 
+To obtain the expectation, we first extract the DC currents corresponding to a given set of amplitudes $\{ {{\tilde s}_{I,n,m}}\} $ and phases $\{ {{\tilde \phi }_{I,n,m}}\} $, then take the expectation over the distribution of the input symbol ${{\tilde x}_n}$. As an i.i.d. CSCG distribution ${{\tilde x}_n}\sim\mathcal{C}\mathcal{N}(0,1)$ is assumed, the amplitude square ${\left| {{{\tilde x}_n}} \right|^2}$ is exponentially distributed with $\mathbb{E}\left[ {{{\left| {{{\tilde x}_n}} \right|}^2}} \right] = 1$. Using the moment generating function, we have
 
 \begin{equation}\label{eqn:modulation_gain}
   \mathbb{E}\left[ {{{\left| {{{\tilde x}_n}} \right|}^4}} \right] = \mathbb{E}\left[ {{{\left( {{{\left| {{{\tilde x}_n}} \right|}^2}} \right)}^2}} \right] = 2
 \end{equation}
 
-Note this modulation gain applies to the output current, which measures the contribution of modulation and does not exist for multisine waveform. Following \cite{Clerckx2018}, we can obtain the expectation of the received information waveform to the second and fourth orders
+This modulation gain measures the contribution of modulated waveform on the output current, which does not apply to multisine waveform. Following \cite{Clerckx2018}, we can obtain the expectation of the received information waveform to the second and fourth orders
 
 \begin{align}\label{eqn:information_waveform_second_order}
   \mathbb{E}\left[ {{y_I}{{(t)}^2}} \right] &= \frac{1}{2}\sum\limits_{n = 0}^{N - 1} {\sum\limits_{{m_0},{m_1}} {{s_{I,n,{m_0}}}} } {s_{I,n,{m_1}}}{A_{n,{m_0}}}{A_{n,{m_1}}}\cos \left( {{\psi _{I,n,{m_0}}} - {\psi _{I,n,{m_1}}}} \right) \\
@@ -171,7 +171,7 @@ It is worth noting that the truncation order ${n_o}$ in \eqref{eqn:current_infor
       modeling the cross contribution of different frequencies (as indicated by ${{n_0},{n_1}}$ in \eqref{eqn:information_waveform_fourth_order} and \eqref{eqn:power_waveform_fourth_order}). The model is complicated but accurate, which especially fits the low power regime between -30 dBm and 0 dBm.
 \end{itemize}
 
-In the diode linear model corresponding to \eqref{eqn:power_waveform_second_order} and \eqref{eqn:information_waveform_second_order}, the output current is only a function of $\sum\limits_{n = 0}^{N - 1} {{{\left| {{{\mathbf{h}}_n}{{\mathbf{w}}_{P/I,n}}} \right|}^2}} $. Hence, it appears that multi-carrier multisine and modulated waveforms are equally suitable for WPT. On the other hand, the diode nonlinear model highlights a clear difference between the power delivered by both waveforms. For the modulated component, the second and fourth order terms in \eqref{eqn:information_waveform_second_order} and \eqref{eqn:information_waveform_fourth_order} share same dependencies on ${\sum\limits_{n = 0}^{N - 1} {{{\left| {{{\mathbf{h}}_n}{{\mathbf{w}}_{I,n}}} \right|}^2}} }$. It implies that for a modulated waveform with CSCG inputs, the higher order terms behave similarly to the second order term, and there is no essential difference between both models. In comparison, for the multisine waveform, the parts \eqref{eqn:power_waveform_second_order} and \eqref{eqn:power_waveform_fourth_order} are decomposed as the product of contributions from different subbands. Also, the second order term is linear as a sum over each frequency while the nonlinear fourth order term shows some cross correlation between different subbands.
+In the diode linear model corresponding to \eqref{eqn:power_waveform_second_order} and \eqref{eqn:information_waveform_second_order}, the output current is only a function of $\sum\limits_{n = 0}^{N - 1} {{{\left| {{{\mathbf{h}}_n}{{\mathbf{w}}_{P/I,n}}} \right|}^2}} $. Hence, it appears that multi-carrier multisine and modulated waveforms are equally suitable for WPT. On the other hand, the diode nonlinear model highlights a clear difference between the power delivered by both waveforms. For the modulated component, the second and fourth order terms in \eqref{eqn:information_waveform_second_order} and \eqref{eqn:information_waveform_fourth_order} share same dependencies on ${\sum\limits_{n = 0}^{N - 1} {{{\left| {{{\mathbf{h}}_n}{{\mathbf{w}}_{I,n}}} \right|}^2}} }$. It implies that for a modulated waveform with CSCG inputs, the higher order terms behave similarly to the second order term, and there is no essential difference between both models. In comparison, for the multisine waveform, the parts \eqref{eqn:power_waveform_second_order} and \eqref{eqn:power_waveform_fourth_order} are decomposed as the product of contributions from different subbands. Also, the second order term is a linear sum over each frequency while the nonlinear fourth order term shows some cross correlation between different subbands.
 
 In this paper, we set ${n_o} = 4$ to explore the fundamental nonlinear behaviour of the diode and its impact on the harvested current. Therefore, the approximated output DC current \eqref{eqn:output_current_function} reduces to
 
