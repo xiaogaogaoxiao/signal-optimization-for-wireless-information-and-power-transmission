@@ -2,11 +2,6 @@
 
 This project implements SWIPT optimization based on a nonlinear harvest model with superposed waveforms containing modulated information and multisine power components. Please check [this article](https://ieeexplore.ieee.org/document/8115220) for more details.
 
-## TODO
-
-- Results
-- Thesis
-
 ## Theory
 
 ### Topics
@@ -99,7 +94,21 @@ For the `R-E region vs SNR` plot, run
 ```
 >> re_snr
 ```
+For the `R-E region vs PAPR` plot, run
 
+```
+>> re_papr
+```
+For the MISO plot, run
+
+```
+>> re_miso
+```
+For the MIMO plot, run
+
+```
+>> re_mimo
+```
 ## Issues and Contributing
 
 Please submit an [issue](https://github.com/SnowzTail/signal-optimization-for-wireless-information-and-power-transmission/issues) or [pull request](https://github.com/SnowzTail/signal-optimization-for-wireless-information-and-power-transmission/pulls) for any potential problem. Thank you!
